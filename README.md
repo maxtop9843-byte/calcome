@@ -41,6 +41,8 @@ Calculator-specific routes, content, and engine modules will be added only when 
 
 CalcLab does not implement features directly from prompts. Every feature begins with an approved specification in `docs/features/`, which remains the source of truth for implementation, testing, documentation, and review. Follow [Feature Driven Development](./docs/FEATURE_DRIVEN_DEVELOPMENT.md) before starting feature work.
 
+Use the reusable [feature template](./docs/features/_TEMPLATE.md) for new specifications. The first feature, the [Korean Compound Interest Calculator](./docs/features/compound-interest.md), is currently a Draft and is not approved for implementation.
+
 ## Local development
 
 Requirements: Node.js 20.9 or newer and npm.
