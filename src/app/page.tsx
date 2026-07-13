@@ -20,7 +20,7 @@ const websiteStructuredData = {
 
 export default function Home() {
   return (
-    <main id="main-content" className="flex flex-1 items-center">
+    <main id="main-content" className="flex-1">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -36,29 +36,49 @@ export default function Home() {
             CALCLAB
           </p>
           <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-6xl">
-            더 나은 판단을 돕는 현대적인 계산 플랫폼
+            금융 계산을 쉽게.
           </h1>
           <p className="mt-6 max-w-2xl text-pretty text-lg leading-8 text-muted-foreground">
-            CalcLab은 빠르고 이해하기 쉬우며 신뢰할 수 있는 한국 금융 계산
-            경험을 제공합니다.
+            <span className="block">복리, 대출, 적금, 예금, ETF까지.</span>
+            <span className="block">
+              누구나 쉽게 사용할 수 있는 금융 계산기를 제공합니다.
+            </span>
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-8">
             <Link
-              href="/finance/compound-interest"
+              href="#calculators"
               className={cn(buttonVariants({ size: "lg" }), "h-11 px-5")}
             >
-              복리 계산기 사용하기
-            </Link>
-            <Link
-              href={siteConfig.repository}
-              className={cn(
-                buttonVariants({ variant: "outline", size: "lg" }),
-                "h-11 px-5",
-              )}
-            >
-              GitHub에서 보기
+              모든 계산기 보기
             </Link>
           </div>
+        </div>
+      </section>
+      <section
+        id="calculators"
+        aria-labelledby="calculators-heading"
+        className="border-t bg-muted/30"
+      >
+        <div className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8 sm:py-16">
+          <h2
+            id="calculators-heading"
+            className="text-2xl font-semibold tracking-tight sm:text-3xl"
+          >
+            금융 계산기
+          </h2>
+          <ul className="mt-6 max-w-xl">
+            <li>
+              <Link
+                href="/finance/compound-interest"
+                className="block rounded-xl border bg-card p-5 transition-colors hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none"
+              >
+                <span className="block text-lg font-semibold">복리 계산기</span>
+                <span className="mt-2 block leading-7 text-muted-foreground">
+                  초기 투자금과 정기 납입액의 예상 복리 성장을 계산합니다.
+                </span>
+              </Link>
+            </li>
+          </ul>
         </div>
       </section>
     </main>

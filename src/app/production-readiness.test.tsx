@@ -67,12 +67,27 @@ describe("production metadata routes", () => {
 });
 
 describe("production recovery and navigation", () => {
-  it("links the homepage directly to the published calculator", () => {
+  it("positions the homepage around the calculator catalog", () => {
     const { container } = render(<Home />);
 
     expect(
-      screen.getByRole("link", { name: "복리 계산기 사용하기" }),
-    ).toHaveAttribute("href", "/finance/compound-interest");
+      screen.getByRole("heading", { name: "금융 계산을 쉽게." }),
+    ).toBeVisible();
+    expect(screen.getByText("복리, 대출, 적금, 예금, ETF까지.")).toBeVisible();
+    expect(
+      screen.getByText("누구나 쉽게 사용할 수 있는 금융 계산기를 제공합니다."),
+    ).toBeVisible();
+    expect(
+      screen.getByRole("link", { name: "모든 계산기 보기" }),
+    ).toHaveAttribute("href", "#calculators");
+    expect(
+      screen.queryByRole("link", { name: "GitHub에서 보기" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "금융 계산기" })).toBeVisible();
+    expect(screen.getByRole("link", { name: /복리 계산기/ })).toHaveAttribute(
+      "href",
+      "/finance/compound-interest",
+    );
     const jsonLd = container.querySelector(
       'script[type="application/ld+json"]',
     );
