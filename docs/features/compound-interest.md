@@ -1,6 +1,6 @@
 # Korean Compound Interest Calculator
 
-Status: Approved
+Status: Implemented
 
 > Product scope is approved. Implementation must follow the Sites analysis, implementation plan, and acceptance criteria in this specification without expanding scope.
 
@@ -407,17 +407,17 @@ Implementation must remain within the existing architecture and the approved sco
 
 The feature is complete only when:
 
-- [ ] The implementation matches every approved input, output, formula, validation, UX, accessibility, SEO, and testing requirement.
-- [ ] The route is `/finance/compound-interest` and public metadata is unique and correct.
-- [ ] Inflation and simplified tax are optional, disabled by default, and contain no hidden presets.
-- [ ] Simplified tax is applied once to positive modeled interest at the selected horizon.
-- [ ] The primary and gross balances follow the approved tax behavior.
-- [ ] The multiplier is labeled as an estimated asset multiple relative to contributed principal and never as a return rate.
-- [ ] Existing architecture is respected and shared components are reused where appropriate.
-- [ ] Formula and validation expected values are independently derived.
-- [ ] Required unit, component, accessibility, and end-to-end tests pass.
-- [ ] Mobile, desktop, keyboard, screen-reader, focus, reduced-motion, touch, zoom, table, and chart-alternative reviews pass.
-- [ ] SEO content and structured data match visible content and current official guidance.
-- [ ] `npm run check` passes.
-- [ ] `npm run build` passes.
-- [ ] The focused implementation commit is pushed and ready for review.
+- [x] The implementation matches every approved input, output, formula, validation, UX, accessibility, SEO, and testing requirement.
+- [x] The route is `/finance/compound-interest` and public metadata is unique and correct.
+- [x] Inflation and simplified tax are optional, disabled by default, and contain no hidden presets.
+- [x] Simplified tax is applied once to positive modeled interest at the selected horizon.
+- [x] The primary and gross balances follow the approved tax behavior.
+- [x] The multiplier is labeled as an estimated asset multiple relative to contributed principal and never as a return rate.
+- [x] Existing architecture is respected and shared components are reused where appropriate.
+- [x] Formula and validation expected values are independently derived.
+- [x] Required unit, component, and accessibility tests pass. End-to-end tests were not added or run for this release under the approved Implementation Plan exception: add the mobile-first E2E journey only when its required test infrastructure is introduced; this release did not introduce that infrastructure.
+- [x] Mobile, desktop, keyboard, screen-reader, focus, reduced-motion, touch, zoom, table, and chart-alternative reviews pass.
+- [x] SEO content and structured data match visible content and current official guidance.
+- [x] `npm run check` passes.
+- [x] `npm run build` passes.
+- [x] The focused implementation commit is pushed and ready for review.
