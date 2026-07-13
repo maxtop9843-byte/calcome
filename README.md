@@ -21,6 +21,7 @@ Make useful calculations fast to find, easy to understand, accessible on any dev
 .
 ├── .github/               Pull request template and CI workflow
 ├── public/                 Static assets
+├── docs/                   Permanent standards and feature specifications
 ├── src/
 │   ├── app/                Routes, layouts, metadata, and global styles
 │   ├── components/
@@ -35,6 +36,10 @@ Make useful calculations fast to find, easy to understand, accessible on any dev
 ```
 
 Calculator-specific routes, content, and engine modules will be added only when the first calculator is designed. See [ARCHITECTURE.md](./ARCHITECTURE.md) for the intended boundaries.
+
+## Feature Driven Development
+
+CalcLab does not implement features directly from prompts. Every feature begins with an approved specification in `docs/features/`, which remains the source of truth for implementation, testing, documentation, and review. Follow [Feature Driven Development](./docs/FEATURE_DRIVEN_DEVELOPMENT.md) before starting feature work.
 
 ## Local development
 
