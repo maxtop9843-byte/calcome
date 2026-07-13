@@ -9,13 +9,36 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: siteConfig.name,
+    default: `${siteConfig.name} - 현대적인 계산 플랫폼`,
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
   applicationName: siteConfig.name,
   category: "finance",
-  robots: { index: true, follow: true },
+  openGraph: {
+    type: "website",
+    locale: siteConfig.locale,
+    siteName: siteConfig.name,
+    title: `${siteConfig.name} - 현대적인 계산 플랫폼`,
+    description: siteConfig.description,
+    url: "/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${siteConfig.name} - 현대적인 계산 플랫폼`,
+    description: siteConfig.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
 };
 
 export default function RootLayout({

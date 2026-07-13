@@ -10,6 +10,12 @@ describe("compound interest page SEO", () => {
     expect(metadata.alternates).toEqual({
       canonical: "/finance/compound-interest",
     });
+    expect(metadata.openGraph).toMatchObject({
+      images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
+    });
+    expect(metadata.twitter).toMatchObject({
+      images: [{ url: "/twitter-image", width: 1200, height: 630 }],
+    });
   });
 
   it("renders indexable explanations, breadcrumbs, and matching structured data", () => {
@@ -20,7 +26,7 @@ describe("compound interest page SEO", () => {
     ).toBeVisible();
     expect(
       screen.getByRole("navigation", { name: "현재 위치" }),
-    ).toHaveTextContent("홈/금융/복리 계산기");
+    ).toHaveTextContent("홈/복리 계산기");
     expect(screen.getByRole("heading", { name: "계산 방법" })).toBeVisible();
     expect(
       screen.getByRole("heading", { name: "자주 묻는 질문" }),
@@ -37,5 +43,6 @@ describe("compound interest page SEO", () => {
     ]);
     expect(data[0].name).toContain("복리 계산기");
     expect(data[1].itemListElement.at(-1).name).toBe("복리 계산기");
+    expect(data[1].itemListElement).toHaveLength(2);
   });
 });

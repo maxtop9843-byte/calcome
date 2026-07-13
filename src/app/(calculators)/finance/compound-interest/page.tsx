@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { siteConfig } from "@/config/site";
+import { absoluteUrl, siteConfig } from "@/config/site";
 import { CompoundInterestCalculator } from "@/features/compound-interest/components/compound-interest-calculator";
 
 const path = "/finance/compound-interest";
@@ -16,7 +16,31 @@ export const metadata: Metadata = {
     description:
       "초기 투자금과 정기 납입액을 바탕으로 연도별 복리 성장과 예상 자산을 확인하세요.",
     type: "website",
-    url: new URL(path, siteConfig.url).toString(),
+    url: absoluteUrl(path),
+    locale: siteConfig.locale,
+    siteName: siteConfig.name,
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "CalcLab - 더 나은 판단을 위한 현대적인 계산 플랫폼",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "복리 계산기 - 적립식 투자와 예상 이자 | CalcLab",
+    description:
+      "초기 투자금과 정기 납입액을 바탕으로 연도별 복리 성장과 예상 자산을 확인하세요.",
+    images: [
+      {
+        url: "/twitter-image",
+        width: 1200,
+        height: 630,
+        alt: "CalcLab - 더 나은 판단을 위한 현대적인 계산 플랫폼",
+      },
+    ],
   },
 };
 
@@ -61,23 +85,18 @@ const structuredData = [
     description:
       "초기 투자금과 정기 납입액을 바탕으로 복리 성장과 예상 자산을 계산합니다.",
     inLanguage: "ko-KR",
-    url: new URL(path, siteConfig.url).toString(),
+    url: absoluteUrl(path),
   },
   {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "홈", item: siteConfig.url },
+      { "@type": "ListItem", position: 1, name: "홈", item: absoluteUrl() },
       {
         "@type": "ListItem",
         position: 2,
-        name: "금융",
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
         name: "복리 계산기",
-        item: new URL(path, siteConfig.url).toString(),
+        item: absoluteUrl(path),
       },
     ],
   },
@@ -100,8 +119,6 @@ export default function CompoundInterestPage() {
                 홈
               </Link>
             </li>
-            <li aria-hidden="true">/</li>
-            <li>금융</li>
             <li aria-hidden="true">/</li>
             <li aria-current="page" className="text-foreground">
               복리 계산기

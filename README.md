@@ -80,6 +80,8 @@ npm run check        # Run static checks and tests
 
 Keep changes small, mobile-first, accessible, and consistent with the documented architecture and design system. Before opening a pull request, run `npm run check` and `npm run build`. Full branch, commit, and review conventions are in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
+Before a public deployment or launch announcement, complete the repository and production-domain gates in the [Production Readiness Checklist](./docs/PRODUCTION_READINESS_CHECKLIST.md).
+
 ## Roadmap
 
 1. Establish and validate the shared calculator contract with one Korean finance calculator.

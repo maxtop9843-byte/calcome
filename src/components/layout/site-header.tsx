@@ -12,7 +12,14 @@ export function SiteHeader() {
         >
           {siteConfig.name}
         </Link>
-        <span className="text-sm text-muted-foreground">Foundation</span>
+        <nav aria-label="주요 탐색">
+          <Link
+            href="/finance/compound-interest"
+            className="rounded-sm px-2 py-2 text-sm font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            복리 계산기
+          </Link>
+        </nav>
       </div>
     </header>
   );
