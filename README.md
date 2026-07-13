@@ -19,6 +19,7 @@ Make useful calculations fast to find, easy to understand, accessible on any dev
 
 ```text
 .
+├── .github/               Pull request template and CI workflow
 ├── public/                 Static assets
 ├── src/
 │   ├── app/                Routes, layouts, metadata, and global styles
