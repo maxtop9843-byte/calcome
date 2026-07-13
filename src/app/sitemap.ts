@@ -1,14 +1,24 @@
 import type { MetadataRoute } from "next";
 
+import { publishedCalculators } from "@/config/calculators";
 import { absoluteUrl } from "@/config/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: absoluteUrl(), changeFrequency: "monthly", priority: 1 },
     {
-      url: absoluteUrl("/finance/compound-interest"),
+      url: absoluteUrl("/calculators"),
       changeFrequency: "monthly",
       priority: 0.9,
     },
+    ...publishedCalculators.map((calculator) => ({
+      url: absoluteUrl(calculator.href),
+      changeFrequency: "monthly" as const,
+      priority: 0.9,
+    })),
+    { url: absoluteUrl("/about"), changeFrequency: "yearly", priority: 0.5 },
+    { url: absoluteUrl("/privacy"), changeFrequency: "yearly", priority: 0.3 },
+    { url: absoluteUrl("/terms"), changeFrequency: "yearly", priority: 0.3 },
+    { url: absoluteUrl("/contact"), changeFrequency: "yearly", priority: 0.4 },
   ];
 }
