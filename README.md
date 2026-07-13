@@ -1,6 +1,6 @@
 # CalcLab
 
-CalcLab is a modern calculator platform focused first on clear, trustworthy Korean finance calculators. The repository currently contains the product foundation only: application shell, design tokens, UI primitives, development tooling, and engineering documentation. It intentionally contains no calculator or financial business logic.
+CalcLab is a modern calculator platform focused first on clear, trustworthy Korean finance calculators. Its first available tool is a Korean compound-interest calculator built on the shared application foundation and permanent engineering standards.
 
 ## Vision
 
@@ -12,6 +12,8 @@ Make useful calculations fast to find, easy to understand, accessible on any dev
 - TypeScript in strict mode
 - Tailwind CSS
 - shadcn/ui primitives
+- Decimal.js for precision-safe financial calculations
+- Vitest and Testing Library
 - ESLint and Prettier
 - npm for dependency and lockfile management
 
@@ -28,6 +30,7 @@ Make useful calculations fast to find, easy to understand, accessible on any dev
 │   │   ├── layout/         Shared site chrome
 │   │   └── ui/             Reusable shadcn/ui primitives
 │   ├── config/             Typed product configuration
+│   ├── features/           Feature-local UI and framework-independent logic
 │   └── lib/                Framework-independent shared utilities
 ├── ARCHITECTURE.md         Technical boundaries and evolution
 ├── BOOTSTRAP.md            Engineering handbook
@@ -35,13 +38,13 @@ Make useful calculations fast to find, easy to understand, accessible on any dev
 └── CONTRIBUTING.md         Contribution workflow
 ```
 
-Calculator-specific routes, content, and engine modules will be added only when the first calculator is designed. See [ARCHITECTURE.md](./ARCHITECTURE.md) for the intended boundaries.
+Calculator routes compose server-rendered content with feature-local interactive UI and framework-independent domain modules. See [ARCHITECTURE.md](./ARCHITECTURE.md) for the intended boundaries.
 
 ## Feature Driven Development
 
 CalcLab does not implement features directly from prompts. Every feature begins with an approved specification in `docs/features/`, which remains the source of truth for implementation, testing, documentation, and review. Follow [Feature Driven Development](./docs/FEATURE_DRIVEN_DEVELOPMENT.md) before starting feature work.
 
-Use the reusable [feature template](./docs/features/_TEMPLATE.md) for new specifications. The first feature, the [Korean Compound Interest Calculator](./docs/features/compound-interest.md), has an approved specification and is ready for implementation through the documented workflow.
+Use the reusable [feature template](./docs/features/_TEMPLATE.md) for new specifications. The [Korean Compound Interest Calculator](./docs/features/compound-interest.md) is the first implementation of this workflow.
 
 ## Local development
 
@@ -49,10 +52,14 @@ Requirements: Node.js 20.9 or newer and npm.
 
 ```bash
 npm install
+npm run test
 npm run dev
 ```
 
 Open `http://localhost:3000`.
+
+Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL` to the public
+origin when checking canonical URLs or building for deployment.
 
 ## Commands
 
@@ -64,7 +71,9 @@ npm run lint         # Run ESLint with zero warnings allowed
 npm run typecheck    # Check TypeScript
 npm run format       # Format tracked source and documentation
 npm run format:check # Verify formatting
-npm run check        # Run all static checks
+npm run test         # Run unit and component tests
+npm run test:watch   # Run tests in watch mode
+npm run check        # Run static checks and tests
 ```
 
 ## Contributing
