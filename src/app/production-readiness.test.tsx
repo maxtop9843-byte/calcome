@@ -58,9 +58,34 @@ describe("production metadata routes", () => {
         priority: 1,
       },
       {
+        url: "http://localhost:3000/calculators",
+        changeFrequency: "monthly",
+        priority: 0.9,
+      },
+      {
         url: "http://localhost:3000/finance/compound-interest",
         changeFrequency: "monthly",
         priority: 0.9,
+      },
+      {
+        url: "http://localhost:3000/about",
+        changeFrequency: "yearly",
+        priority: 0.5,
+      },
+      {
+        url: "http://localhost:3000/privacy",
+        changeFrequency: "yearly",
+        priority: 0.3,
+      },
+      {
+        url: "http://localhost:3000/terms",
+        changeFrequency: "yearly",
+        priority: 0.3,
+      },
+      {
+        url: "http://localhost:3000/contact",
+        changeFrequency: "yearly",
+        priority: 0.4,
       },
     ]);
   });
@@ -79,11 +104,11 @@ describe("production recovery and navigation", () => {
     ).toBeVisible();
     expect(
       screen.getByRole("link", { name: "모든 계산기 보기" }),
-    ).toHaveAttribute("href", "#calculators");
+    ).toHaveAttribute("href", "/calculators");
     expect(
       screen.queryByRole("link", { name: "GitHub에서 보기" }),
     ).not.toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "금융 계산기" })).toBeVisible();
+    expect(screen.getByRole("heading", { name: "인기 계산기" })).toBeVisible();
     expect(screen.getByRole("link", { name: /복리 계산기/ })).toHaveAttribute(
       "href",
       "/finance/compound-interest",
@@ -100,16 +125,45 @@ describe("production recovery and navigation", () => {
 
   it("keeps shared navigation limited to valid destinations", () => {
     const { unmount } = render(<SiteHeader />);
+    const headerNavigation = screen.getByRole("navigation", {
+      name: "주요 탐색",
+    });
+    expect(headerNavigation).toHaveTextContent("계산기");
+    expect(screen.getByRole("link", { name: "계산기" })).toHaveAttribute(
+      "href",
+      "/calculators",
+    );
     expect(
-      screen.getByRole("navigation", { name: "주요 탐색" }),
-    ).toHaveTextContent("복리 계산기");
+      screen.queryByRole("link", { name: "복리 계산기" }),
+    ).not.toBeInTheDocument();
     unmount();
 
     render(<SiteFooter />);
     const footerNavigation = screen.getByRole("navigation", {
       name: "하단 탐색",
     });
-    expect(footerNavigation).toHaveTextContent("홈복리 계산기GitHub");
+    expect(footerNavigation).toHaveTextContent(
+      "계산기소개개인정보처리방침이용약관문의GitHub",
+    );
+    expect(screen.getByRole("link", { name: "계산기" })).toHaveAttribute(
+      "href",
+      "/calculators",
+    );
+    expect(screen.getByRole("link", { name: "소개" })).toHaveAttribute(
+      "href",
+      "/about",
+    );
+    expect(
+      screen.getByRole("link", { name: "개인정보처리방침" }),
+    ).toHaveAttribute("href", "/privacy");
+    expect(screen.getByRole("link", { name: "이용약관" })).toHaveAttribute(
+      "href",
+      "/terms",
+    );
+    expect(screen.getByRole("link", { name: "문의" })).toHaveAttribute(
+      "href",
+      "/contact",
+    );
   });
 
   it("offers useful recovery from a missing page", () => {

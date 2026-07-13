@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { CalculatorCard } from "@/components/calculators/calculator-card";
 import { buttonVariants } from "@/components/ui/button";
+import { publishedCalculators } from "@/config/calculators";
 import { absoluteUrl, siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
@@ -46,7 +48,7 @@ export default function Home() {
           </p>
           <div className="mt-8">
             <Link
-              href="#calculators"
+              href="/calculators"
               className={cn(buttonVariants({ size: "lg" }), "h-11 px-5")}
             >
               모든 계산기 보기
@@ -64,20 +66,14 @@ export default function Home() {
             id="calculators-heading"
             className="text-2xl font-semibold tracking-tight sm:text-3xl"
           >
-            금융 계산기
+            인기 계산기
           </h2>
-          <ul className="mt-6 max-w-xl">
-            <li>
-              <Link
-                href="/finance/compound-interest"
-                className="block rounded-xl border bg-card p-5 transition-colors hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none"
-              >
-                <span className="block text-lg font-semibold">복리 계산기</span>
-                <span className="mt-2 block leading-7 text-muted-foreground">
-                  초기 투자금과 정기 납입액의 예상 복리 성장을 계산합니다.
-                </span>
-              </Link>
-            </li>
+          <ul className="mt-6 grid max-w-xl gap-4">
+            {publishedCalculators.map((calculator) => (
+              <li key={calculator.id}>
+                <CalculatorCard calculator={calculator} />
+              </li>
+            ))}
           </ul>
         </div>
       </section>

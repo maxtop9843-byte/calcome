@@ -10,16 +10,43 @@ export function SiteFooter() {
         <nav aria-label="하단 탐색">
           <ul className="flex flex-wrap gap-x-5 gap-y-2">
             <li>
-              <Link href="/" className="hover:text-foreground hover:underline">
-                홈
+              <Link
+                href="/calculators"
+                className="hover:text-foreground hover:underline"
+              >
+                계산기
               </Link>
             </li>
             <li>
               <Link
-                href="/finance/compound-interest"
+                href="/about"
                 className="hover:text-foreground hover:underline"
               >
-                복리 계산기
+                소개
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/privacy"
+                className="hover:text-foreground hover:underline"
+              >
+                개인정보처리방침
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/terms"
+                className="hover:text-foreground hover:underline"
+              >
+                이용약관
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/contact"
+                className="hover:text-foreground hover:underline"
+              >
+                문의
               </Link>
             </li>
             <li>
