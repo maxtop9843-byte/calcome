@@ -1,8 +1,8 @@
 # Korean Compound Interest Calculator
 
-Status: Draft
+Status: Approved
 
-> This specification is not approved for implementation. Implementation must not begin until product review explicitly changes the status to `Approved`.
+> Product scope is approved. Implementation must follow the Sites analysis, implementation plan, and acceptance criteria in this specification without expanding scope.
 
 ## Overview
 
@@ -26,6 +26,7 @@ Users need a clear way to compare long-term growth scenarios without building sp
 - Support contributions at the beginning or end of each contribution period.
 - Use a whole-year duration in the initial scope.
 - Allow optional non-negative inflation and simplified tax rates.
+- Present inflation and simplified tax as optional advanced settings, disabled by default and without hidden presets.
 - Present gross, tax-adjusted, and inflation-adjusted results with explicit labels and assumptions.
 - Provide a yearly breakdown and an equivalent chart-ready yearly dataset.
 - Explain formulas, timing, precision, and simplifications in plain Korean.
@@ -35,7 +36,7 @@ Users need a clear way to compare long-term growth scenarios without building sp
 
 ## Inputs
 
-All monetary inputs use Korean won and accept whole-won values. Percentage inputs are entered as percentages and converted to decimal rates for calculation.
+All monetary inputs use Korean won and accept whole-won values. Percentage inputs are entered as percentages and converted to decimal rates for calculation. Inflation and simplified tax belong in an explicitly labeled optional advanced-settings group; both remain empty and inactive until the user enters a value.
 
 | Input                        | Type            | Unit/Format                         | Required | Default               | Allowed Range                                                          | Validation Behavior                                                                                                                                                   |
 | ---------------------------- | --------------- | ----------------------------------- | -------- | --------------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -49,7 +50,7 @@ All monetary inputs use Korean won and accept whole-won values. Percentage input
 | Inflation rate               | Number or empty | Percent per year                    | No       | Empty (no adjustment) | 0%-100%                                                                | Empty disables the adjustment; zero is valid and produces no change. Reject negative, non-numeric, non-finite, and out-of-range values.                               |
 | Simplified tax rate on gains | Number or empty | Percent of modeled gross interest   | No       | Empty (no tax)        | 0%-100%                                                                | Empty disables tax; zero is valid. Reject negative, non-numeric, non-finite, and out-of-range values. Label this as a simplified scenario rate, not a statutory rate. |
 
-At least one of initial principal or recurring contribution must be greater than zero. Defaults are Draft product decisions and require approval.
+At least one of initial principal or recurring contribution must be greater than zero. The listed defaults and ranges are approved product decisions.
 
 ## Outputs
 
@@ -62,7 +63,7 @@ At least one of initial principal or recurring contribution must be greater than
 | Estimated tax                 | Money                    | KRW, nearest won                   | Simplified tax applied once to positive modeled gross interest. Zero when tax is disabled.                                                                                                                                          |
 | Estimated net gain            | Money                    | KRW, nearest won                   | Estimated gross interest minus estimated tax.                                                                                                                                                                                       |
 | Inflation-adjusted value      | Money                    | Present-value KRW, nearest won     | Estimated final balance discounted by the optional constant inflation assumption. Equals estimated final balance when inflation is disabled.                                                                                        |
-| Growth multiplier             | Decimal                  | `0.00×`                            | Estimated final balance divided by total contributed principal. This is descriptive and must not be labeled as a return rate.                                                                                                       |
+| Growth multiplier             | Decimal                  | `0.00×`                            | Label as `예상 자산 배수 (납입 원금 대비)`: estimated final balance divided by total contributed principal. It is descriptive only and must never be labeled or described as a return rate.                                         |
 | Yearly breakdown              | Table rows               | KRW and percent                    | One row per completed year with year, opening balance, contributions during year, interest during year, cumulative principal, gross closing balance, estimated terminal tax, net closing balance, and inflation-adjusted net value. |
 | Chart-ready yearly data       | Structured yearly series | Unrounded numeric values plus year | Uses the same yearly source data as the table for cumulative principal, gross balance, net balance, and inflation-adjusted value. It is not a separately calculated result.                                                         |
 
@@ -71,7 +72,7 @@ At least one of initial principal or recurring contribution must be greater than
 - Display won amounts using the Korean locale, the won symbol, grouping separators, and no decimal fraction (for example, `₩12,345,678`).
 - Retain full supported calculation precision throughout the model and do not round each compounding or contribution period.
 - Round displayed money to the nearest won only at the presentation boundary using one documented, deterministic half-up rule.
-- Display percentage assumptions with up to two decimal places and the growth multiplier with two decimal places.
+- Display percentage assumptions with up to two decimal places and the growth multiplier with two decimal places. Always pair the multiplier with the label `예상 자산 배수 (납입 원금 대비)` or an equivalently explicit approved Korean label.
 - Keep underlying chart and table values unrounded until formatting so every output reconciles to the same calculation.
 - If total contributed principal is zero, the growth multiplier is undefined and must display as unavailable rather than infinity or `NaN`.
 
@@ -216,7 +217,7 @@ These sources establish general mathematics and terminology. They do not validat
 - **Empty fields:** required empty fields block calculation; optional empty fields disable their adjustment.
 - **Unsupported values:** reject unknown contribution frequencies, compounding frequencies, timing values, and enum casing variants not explicitly normalized.
 - **Near-zero rate:** follow the zero-rate behavior when the normalized rate is exactly zero and verify numerical stability for very small positive rates.
-- **URL parameters:** if shareable parameters are later approved, parse them as untrusted input, enforce the same schema and ranges, ignore or reject unknown keys, prevent duplicate-key ambiguity, and never render unsanitized values. URL behavior is not part of this Draft.
+- **URL parameters:** if shareable parameters are later approved, parse them as untrusted input, enforce the same schema and ranges, ignore or reject unknown keys, prevent duplicate-key ambiguity, and never render unsanitized values. URL behavior is not part of the first release.
 
 ## Mobile UX
 
@@ -235,6 +236,7 @@ Use a single-column, mobile-first flow in this order:
 Requirements:
 
 - Group core inputs before optional adjustments and disclose optional inflation and tax without hiding their meaning.
+- Place inflation and simplified tax in an optional advanced-settings disclosure that is collapsed or inactive by default, clearly indicates when an adjustment is active, and contains no hidden or preselected rate.
 - Keep persistent labels, units, defaults, and concise help text visible.
 - Use appropriate numeric input modes without preventing keyboard or assistive-technology entry.
 - Place the primary action after the final input; do not require horizontal scrolling for the form or result summary.
@@ -265,7 +267,7 @@ Desktop may use a left input panel and right result panel while preserving the m
 
 - **Primary search intent:** `복리 계산기`
 - **Supporting topics:** `복리 이자 계산`, `월 적립 복리`, `적립식 투자 계산`, `투자 수익 계산`, `물가 반영 복리`
-- **Proposed route slug:** `/finance/compound-interest`
+- **Approved route slug:** `/finance/compound-interest`
 - **Page title direction:** Lead with `복리 계산기`, then describe 적립식 투자 and 예상 이자 concisely, followed by `CalcLab` through the global title template.
 - **Meta description direction:** Explain that users can estimate growth from initial principal, monthly or yearly contributions, rate, duration, compounding, and optional inflation or simplified tax. State or imply estimation, not guaranteed returns.
 - **Visible explanatory content:** Define compound interest, explain contribution timing and compounding frequency, distinguish principal from gain, document inflation and simplified tax assumptions, show formulas and worked interpretation guidance, and include an estimate disclaimer.
@@ -286,7 +288,7 @@ Potential future relationships, only after those calculators have approved speci
 - Inflation calculator
 - Loan calculator
 
-No related calculator or link is part of this Draft's implementation scope.
+No related calculator or link is part of the approved first-release implementation scope.
 
 ## Testing Requirements
 
@@ -309,34 +311,113 @@ Expected values must be derived independently from the production calculation pa
 - **Accessibility behavior:** cover labels, grouped controls, validation associations, error summary, result announcement, keyboard operation, and chart alternatives.
 - **SEO behavior:** verify unique metadata, canonical direction, indexable explanatory content, breadcrumbs when available, and structured data matching visible content.
 
+## Sites Analysis
+
+Analysis completed on 2026-07-13. The review focused on interaction, usability, accessible content structure, responsive information hierarchy, SEO content, and performance-conscious scope. Public page structure was reviewed; no reference is assumed to meet every accessibility requirement without implementation-stage testing.
+
+### References analyzed
+
+1. [Investor.gov Compound Interest Calculator](https://www.investor.gov/financial-tools-calculators/calculators/compound-interest-calculator)
+   - Uses a short staged flow: initial investment, contribution and duration, estimated rate, then compounding frequency.
+   - Keeps persistent field names and short descriptions close to inputs.
+   - Demonstrates the value of a focused calculator surface with related education separated below the task.
+2. [Bankrate Compound Interest Calculator](https://www.bankrate.com/banking/savings/compound-savings-calculator/)
+   - Frames the task around initial savings, duration, expected rate, recurring contributions, and compounding frequency.
+   - Prioritizes final balance, total contributions, and interest earned, then supports interpretation with jump-linked explanations and related tools.
+   - Shows why CalcLab should keep educational content useful but avoid promotional interruptions inside the calculator flow.
+3. [TransUnion Compound Interest Calculator](https://www.transunion.com/tools/compound-interest-calculator)
+   - Makes contribution frequency and timing assumptions explicit and separates total value, principal, and interest.
+   - Provides a growth view and schedule breakdown, followed by result definitions, limitations, and FAQs.
+   - Reinforces using one shared yearly dataset for summary, chart, and table, with the table as a meaningful chart alternative.
+4. [Moneysmart Compound Interest Calculator](https://moneysmart.gov.au/budgeting/compound-interest-calculator)
+   - States that the calculator is a model rather than a prediction and places assumptions and disclaimers in visible, structured sections.
+   - Explicitly documents deposit timing, interest-crediting assumptions, and the absence of inflation adjustment.
+   - Reinforces concise, neutral guidance and clear separation between results, assumptions, and financial advice.
+
+### Synthesized direction
+
+- Use a mobile-first sequence with concise persistent labels, nearby units and help, and optional advanced settings after core inputs.
+- Keep one primary result, then separate contributed principal, gross interest, simplified tax, net gain, inflation-adjusted value, and the clearly qualified estimated asset multiple.
+- Surface the estimate disclaimer and active assumptions beside the result instead of burying them in long content.
+- Use progressive disclosure for advanced inflation and tax settings, formula detail, and FAQs; never hide an applied assumption.
+- Build the chart and yearly table from the same records. The table and text summary remain complete alternatives to visual output.
+- Keep explanatory content server-rendered and organized with descriptive headings and useful internal navigation.
+- Avoid copied layouts, reference branding, promotional detours, account prompts, and content that implies specific financial action.
+- During implementation, test keyboard flow, focus, announcements, zoom, touch targets, and chart alternatives directly; reference-site behavior is not an accessibility substitute.
+
+## Approved Product Decisions
+
+1. The current default values and maximum ranges are approved.
+2. The first release is limited to whole-year duration; partial years and months are out of scope.
+3. Inflation and simplified tax are disabled by default.
+4. Simplified tax is applied once to positive modeled interest at the selected horizon and does not reduce interim compounding.
+5. When tax is enabled, the tax-adjusted balance is the primary result and gross balance is shown separately.
+6. The growth multiplier remains, labeled as an estimated asset multiple relative to contributed principal and never as a return rate.
+7. The approved route is `/finance/compound-interest`.
+8. Inflation and tax are optional advanced settings with no hidden presets.
+
 ## Implementation Plan
 
-**Pending Sites analysis and specification approval.**
+Implementation must remain within the existing architecture and the approved scope.
 
-Do not create implementation details, application code, tests, dependencies, routes, or UI until this specification has been reviewed and explicitly changed to `Approved`.
+1. **Confirm implementation baseline**
+   - Re-read this approved specification and current project documentation.
+   - Review the installed Next.js documentation required by `AGENTS.md` before writing application code.
+   - Confirm the working tree is clean and do not mix unrelated refactoring into the feature.
+2. **Create the route and server-rendered content shell**
+   - Add the approved `/finance/compound-interest` route within the existing App Router and calculator route-group convention.
+   - Keep the route component focused on composition, metadata, visible educational content, and structured data.
+   - Render the title, concise estimate disclaimer, formula explanation, assumptions, FAQ, and related-calculator section on the server.
+3. **Create a feature-local domain module**
+   - Define explicit input, normalized-input, result, yearly-record, and validation types within the compound-interest feature.
+   - Implement parsing, validation, formula calculation, yearly-record generation, and formatting as separate modules.
+   - Keep formulas deterministic and framework-independent. Keep feature-specific logic local until a proven second use justifies promotion to shared calculator utilities.
+4. **Implement and verify the calculation model**
+   - Implement the approved lump-sum, ordinary-annuity, annuity-due, zero-rate, inflation, and terminal simplified-tax rules exactly as specified.
+   - Produce one raw yearly dataset consumed by summary metrics, chart, and table.
+   - Preserve full calculation precision until presentation and explicitly guard non-finite or unsupported results.
+5. **Build the accessible calculator interaction**
+   - Use the smallest client boundary needed for form state, validation, calculation submission, and result updates.
+   - Reuse existing shared components and design tokens; add shared primitives only when the need is genuinely generic.
+   - Present core fields first and inflation/tax in a clearly labeled optional advanced-settings disclosure with no preset value.
+   - Implement persistent labels, field groups, visible focus, associated errors, an error summary, keyboard operation, touch targets, and a concise result announcement.
+6. **Build result, chart, and table presentation**
+   - Make tax-adjusted final balance primary only when tax is active and show gross balance separately.
+   - Label the multiplier `예상 자산 배수 (납입 원금 대비)` and include explanatory text that it is not a return rate.
+   - Use a lightweight chart approach that supports keyboard and touch access without making the chart the only source of information. Evaluate mature permissively licensed options before adding any dependency and prefer existing capabilities when sufficient.
+   - Provide the complete semantic yearly table and a concise text summary as chart alternatives.
+7. **Add SEO and content requirements**
+   - Add unique Korean metadata, canonical URL behavior, indexable explanatory content, and visible breadcrumb navigation for the approved route.
+   - Emit only structured data supported by current official guidance and matching visible content.
+   - Add internal links only to routes that exist; omit unpublished related calculators.
+8. **Add tests with the behavior they verify**
+   - Introduce only the minimum testing dependencies required by the repository testing strategy when the tests are added.
+   - Cover formulas, independently derived reference values, validation boundaries, timing differences, inflation, simplified tax, precision, large values, yearly reconciliation, and Korean formatting.
+   - Cover form interaction, validation associations, result announcements, keyboard flow, advanced-settings behavior, semantic table output, chart alternatives, metadata, and structured data.
+   - Add a small mobile-first end-to-end journey only when the required test infrastructure is introduced.
+9. **Review and validate**
+   - Compare implementation behavior against every requirement and approved product decision in this specification.
+   - Review narrow and wide layouts, both themes, 200% zoom, keyboard-only use, screen-reader semantics, reduced motion, touch behavior, and invalid states.
+   - Run all relevant tests, `npm run check`, and `npm run build`; resolve every failure before committing.
+10. **Deliver the feature**
+    - Update documentation only if implementation changes an approved contract or architecture.
+    - Create one focused feature commit, push it, and open a reviewable pull request with verification evidence.
 
 ## Definition of Done
 
-This Draft is ready for approval only when:
+The feature is complete only when:
 
-- [ ] Product approves the inputs, defaults, ranges, and whole-year duration.
-- [ ] Product approves contribution timing and cross-frequency assumptions.
-- [ ] Product approves the primary result, simplified tax treatment, inflation basis, and growth multiplier definition.
-- [ ] Product approves the route, Korean metadata direction, visible explanation, FAQ scope, and related-calculator policy.
-- [ ] Mathematical formulas and authoritative references are reviewed.
-- [ ] Validation, edge cases, accessibility, and testing requirements are accepted.
-- [ ] Sites analysis is completed after specification approval and before implementation planning.
-- [ ] The Implementation Plan is written after Sites analysis.
-- [ ] The specification status is explicitly changed to `Approved` before implementation.
-- [ ] `npm run check` and `npm run build` pass for this documentation change.
-- [ ] The focused specification commit is pushed.
-
-## Questions Requiring Product Approval
-
-1. Are the Draft defaults and maximum ranges appropriate for CalcLab's Korean audience?
-2. Should the first release remain whole-year only, or is partial-year/month input necessary enough to justify the additional timing rules?
-3. Should optional inflation and tax remain empty by default, or should the UI provide explicit opt-in presets with dated sources?
-4. Is terminal simplified tax on gross interest acceptable, with no tax drag during compounding and no claim of statutory accuracy?
-5. Should the primary estimated final balance be tax-adjusted when tax is enabled, with the gross balance shown separately?
-6. Should the growth multiplier use tax-adjusted final balance divided by total contributed principal, despite not being a time-weighted return?
-7. Is `/finance/compound-interest` the approved route within the future finance taxonomy?
+- [ ] The implementation matches every approved input, output, formula, validation, UX, accessibility, SEO, and testing requirement.
+- [ ] The route is `/finance/compound-interest` and public metadata is unique and correct.
+- [ ] Inflation and simplified tax are optional, disabled by default, and contain no hidden presets.
+- [ ] Simplified tax is applied once to positive modeled interest at the selected horizon.
+- [ ] The primary and gross balances follow the approved tax behavior.
+- [ ] The multiplier is labeled as an estimated asset multiple relative to contributed principal and never as a return rate.
+- [ ] Existing architecture is respected and shared components are reused where appropriate.
+- [ ] Formula and validation expected values are independently derived.
+- [ ] Required unit, component, accessibility, and end-to-end tests pass.
+- [ ] Mobile, desktop, keyboard, screen-reader, focus, reduced-motion, touch, zoom, table, and chart-alternative reviews pass.
+- [ ] SEO content and structured data match visible content and current official guidance.
+- [ ] `npm run check` passes.
+- [ ] `npm run build` passes.
+- [ ] The focused implementation commit is pushed and ready for review.
