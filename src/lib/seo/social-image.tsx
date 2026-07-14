@@ -1,7 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const socialImageAlt =
-  "CalcLab - 더 나은 판단을 위한 현대적인 계산 플랫폼";
+export const socialImageAlt = "CalCome - 금융 계산을 쉽게.";
 export const socialImageSize = { width: 1200, height: 630 };
 export const socialImageContentType = "image/png";
 
@@ -40,7 +39,7 @@ export function createSocialImage() {
           fontWeight: 700,
         }}
       >
-        CalcLab
+        CalCome
       </div>
       <div
         style={{
@@ -59,12 +58,12 @@ export function createSocialImage() {
             lineHeight: 1.2,
           }}
         >
-          Modern calculators
+          금융 계산을
           <br />
-          for better decisions
+          쉽게.
         </div>
         <div style={{ color: "#5c667a", display: "flex", fontSize: 28 }}>
-          Clear. Fast. Accessible.
+          복리 · 대출 · 적금 · 예금
         </div>
       </div>
       <div

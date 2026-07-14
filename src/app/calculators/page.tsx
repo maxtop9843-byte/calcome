@@ -7,7 +7,7 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 
 const path = "/calculators";
 const description =
-  "CalcLab에서 현재 제공하는 한국 금융 계산기를 한곳에서 확인하세요.";
+  "CalCome에서 현재 제공하는 한국 금융 계산기를 한곳에서 확인하세요.";
 
 export const metadata = createPageMetadata({
   title: "금융 계산기 모음",
@@ -18,7 +18,7 @@ export const metadata = createPageMetadata({
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  name: "CalcLab 금융 계산기 모음",
+  name: "CalCome 금융 계산기 모음",
   description,
   inLanguage: "ko-KR",
   url: absoluteUrl(path),
@@ -60,7 +60,7 @@ export default function CalculatorsPage() {
 
         <header className="mt-7 max-w-3xl">
           <p className="text-sm font-semibold tracking-wide text-primary">
-            CALCLAB
+            CalCome
           </p>
           <h1 className="mt-3 text-balance text-4xl font-semibold tracking-tight sm:text-5xl">
             모든 계산기

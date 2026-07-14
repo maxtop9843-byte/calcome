@@ -17,14 +17,14 @@ import sitemap from "./sitemap";
 describe("production metadata routes", () => {
   it("defines consistent global metadata and social cards", () => {
     expect(metadata.title).toMatchObject({
-      default: "CalcLab - 현대적인 계산 플랫폼",
-      template: "%s | CalcLab",
+      default: "CalCome - 금융 계산을 쉽게.",
+      template: "%s | CalCome",
     });
     expect(metadata.alternates).toBeUndefined();
     expect(homeMetadata.alternates).toEqual({ canonical: "/" });
     expect(metadata.openGraph).toMatchObject({
       locale: "ko_KR",
-      siteName: "CalcLab",
+      siteName: "CalCome",
       url: "/",
     });
     expect(metadata.twitter).toMatchObject({ card: "summary_large_image" });
@@ -33,7 +33,8 @@ describe("production metadata routes", () => {
 
   it("provides a Korean web app manifest with branded icons", () => {
     expect(manifest()).toMatchObject({
-      short_name: "CalcLab",
+      name: "CalCome - 금융 계산을 쉽게.",
+      short_name: "CalCome",
       start_url: "/",
       scope: "/",
       display: "standalone",
@@ -48,62 +49,62 @@ describe("production metadata routes", () => {
   it("publishes crawl rules and only canonical public routes", () => {
     expect(robots()).toEqual({
       rules: { userAgent: "*", allow: "/" },
-      sitemap: "http://localhost:3000/sitemap.xml",
-      host: "http://localhost:3000",
+      sitemap: "https://calcome.com/sitemap.xml",
+      host: "https://calcome.com",
     });
     expect(sitemap()).toEqual([
       {
-        url: "http://localhost:3000/",
+        url: "https://calcome.com/",
         changeFrequency: "monthly",
         priority: 1,
       },
       {
-        url: "http://localhost:3000/calculators",
+        url: "https://calcome.com/calculators",
         changeFrequency: "monthly",
         priority: 0.9,
       },
       {
-        url: "http://localhost:3000/finance/cagr",
+        url: "https://calcome.com/finance/cagr",
         changeFrequency: "monthly",
         priority: 0.9,
       },
       {
-        url: "http://localhost:3000/finance/deposit",
+        url: "https://calcome.com/finance/deposit",
         changeFrequency: "monthly",
         priority: 0.9,
       },
       {
-        url: "http://localhost:3000/finance/savings",
+        url: "https://calcome.com/finance/savings",
         changeFrequency: "monthly",
         priority: 0.9,
       },
       {
-        url: "http://localhost:3000/finance/loan",
+        url: "https://calcome.com/finance/loan",
         changeFrequency: "monthly",
         priority: 0.9,
       },
       {
-        url: "http://localhost:3000/finance/compound-interest",
+        url: "https://calcome.com/finance/compound-interest",
         changeFrequency: "monthly",
         priority: 0.9,
       },
       {
-        url: "http://localhost:3000/about",
+        url: "https://calcome.com/about",
         changeFrequency: "yearly",
         priority: 0.5,
       },
       {
-        url: "http://localhost:3000/privacy",
+        url: "https://calcome.com/privacy",
         changeFrequency: "yearly",
         priority: 0.3,
       },
       {
-        url: "http://localhost:3000/terms",
+        url: "https://calcome.com/terms",
         changeFrequency: "yearly",
         priority: 0.3,
       },
       {
-        url: "http://localhost:3000/contact",
+        url: "https://calcome.com/contact",
         changeFrequency: "yearly",
         priority: 0.4,
       },
@@ -118,6 +119,7 @@ describe("production recovery and navigation", () => {
     expect(
       screen.getByRole("heading", { name: "금융 계산을 쉽게." }),
     ).toBeVisible();
+    expect(screen.getByText("CalCome")).toBeVisible();
     expect(screen.getByText("복리, 대출, 적금, 예금, ETF까지.")).toBeVisible();
     expect(
       screen.getByText("누구나 쉽게 사용할 수 있는 금융 계산기를 제공합니다."),
@@ -146,8 +148,8 @@ describe("production recovery and navigation", () => {
     );
     expect(JSON.parse(jsonLd!.textContent!)).toMatchObject({
       "@type": "WebSite",
-      name: "CalcLab",
-      url: "http://localhost:3000/",
+      name: "CalCome",
+      url: "https://calcome.com/",
     });
   });
 
@@ -191,6 +193,10 @@ describe("production recovery and navigation", () => {
     expect(screen.getByRole("link", { name: "문의" })).toHaveAttribute(
       "href",
       "/contact",
+    );
+    expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute(
+      "href",
+      "https://github.com/maxtop9843-byte/calcome",
     );
   });
 

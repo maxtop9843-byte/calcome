@@ -9,7 +9,7 @@ describe("deposit page", () => {
     expect(metadata.description).toContain("단리");
     expect(metadata.alternates).toEqual({ canonical: "/finance/deposit" });
     expect(metadata.openGraph).toMatchObject({
-      url: "http://localhost:3000/finance/deposit",
+      url: "https://calcome.com/finance/deposit",
     });
     expect(metadata.twitter).toMatchObject({ card: "summary_large_image" });
   });
@@ -54,7 +54,7 @@ describe("deposit page", () => {
     ]);
     expect(data[1].itemListElement.at(-1)).toMatchObject({
       name: "예금 계산기",
-      item: "http://localhost:3000/finance/deposit",
+      item: "https://calcome.com/finance/deposit",
     });
   });
 });

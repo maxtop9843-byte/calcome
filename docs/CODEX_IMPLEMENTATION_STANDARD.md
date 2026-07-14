@@ -1,10 +1,10 @@
-# CalcLab Implementation Standard
+# CalCome Implementation Standard
 
-This document is the permanent implementation standard for every future CalcLab feature. Every implementation task must follow this standard before code is written.
+This document is the permanent implementation standard for every future CalCome feature. Every implementation task must follow this standard before code is written.
 
 ## Purpose
 
-CalcLab values quality, maintainability, consistency, accessibility, SEO, and performance over implementation speed. Delivery pressure does not justify bypassing project conventions, weakening user experience, or creating avoidable long-term maintenance work.
+CalCome values quality, maintainability, consistency, accessibility, SEO, and performance over implementation speed. Delivery pressure does not justify bypassing project conventions, weakening user experience, or creating avoidable long-term maintenance work.
 
 ## Standard Workflow
 
@@ -15,9 +15,9 @@ Every feature must follow this sequence:
 3. Use the Sites tool before implementing any visible feature.
 4. Analyze at least three mature, high-quality reference websites relevant to the feature.
 5. Extract lessons about UX, accessibility, responsive layout, SEO, and information architecture.
-6. Never copy layouts, branding, graphics, copyrighted content, or source code. Learn from references, then synthesize an original CalcLab solution.
+6. Never copy layouts, branding, graphics, copyrighted content, or source code. Learn from references, then synthesize an original CalCome solution.
 7. Create a short implementation specification covering scope, user flow, states, architecture, accessibility, SEO, performance, and tests.
-8. Implement using the CalcLab Design System in `DESIGN_SYSTEM.md`.
+8. Implement using the CalCome Design System in `DESIGN_SYSTEM.md`.
 9. Reuse existing shared components before creating new ones.
 10. Create tests appropriate to the behavior and risk.
 11. Run `npm run check` and `npm run build`, and resolve every failure.
@@ -30,7 +30,7 @@ The steps are sequential. Do not begin implementation before the research and sp
 
 Always use the Sites tool before implementing any visible feature. Analyze mature industry references and focus on what can be learned from their interaction design, usability, accessibility, responsiveness, and performance.
 
-Never imitate a reference. Always synthesize the findings into an original solution that follows CalcLab's architecture, visual language, content, and product requirements.
+Never imitate a reference. Always synthesize the findings into an original solution that follows CalCome's architecture, visual language, content, and product requirements.
 
 ## Open Source Rules
 

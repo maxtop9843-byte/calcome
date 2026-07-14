@@ -1,6 +1,6 @@
-# CalcLab Production Readiness Checklist
+# CalCome Production Readiness Checklist
 
-This checklist is the launch gate for CalcLab's public web application. It records repository-verifiable readiness separately from deployment and operational checks that must be completed against the final production domain.
+This checklist is the launch gate for CalCome's public web application. It records repository-verifiable readiness separately from deployment and operational checks that must be completed against the final production domain.
 
 ## Repository readiness
 
@@ -22,13 +22,14 @@ This checklist is the launch gate for CalcLab's public web application. It recor
 
 ## Sites analysis
 
-Reviewed on 2026-07-13. Stripe, Linear, and Omni Calculator were used only as mature references for clear page purpose, descriptive navigation, useful footer paths, and focused information hierarchy. CalcLab synthesizes those qualities through its own design system and does not copy their layout, branding, graphics, content, or code.
+Reviewed on 2026-07-13. Stripe, Linear, and Omni Calculator were used only as mature references for clear page purpose, descriptive navigation, useful footer paths, and focused information hierarchy. CalCome synthesizes those qualities through its own design system and does not copy their layout, branding, graphics, content, or code.
 
 ## Production-domain verification
 
 Complete these against the final public deployment before announcing launch:
 
-- [ ] Set `NEXT_PUBLIC_SITE_URL` to the final HTTPS origin with no path component and rebuild.
+- [x] The repository defaults canonical URL generation to `https://calcome.com` and documents `NEXT_PUBLIC_SITE_URL=https://calcome.com`.
+- [ ] Set `NEXT_PUBLIC_SITE_URL=https://calcome.com` in the Vercel production environment and redeploy.
 - [ ] Confirm DNS, TLS, HTTPS redirects, and the preferred `www` or apex host.
 - [ ] Fetch `/`, `/finance/compound-interest`, `/manifest.webmanifest`, `/robots.txt`, and `/sitemap.xml` from the public origin and verify successful responses.
 - [ ] Confirm canonical, Open Graph, Twitter/X, icon, and manifest URLs resolve to the production origin.

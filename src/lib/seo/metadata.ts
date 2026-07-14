@@ -12,7 +12,7 @@ export function createPageMetadata({
   path: `/${string}`;
 }): Metadata {
   const socialTitle = `${title} | ${siteConfig.name}`;
-  const socialImageAlt = "CalcLab - 더 나은 판단을 위한 현대적인 계산 플랫폼";
+  const socialImageAlt = "CalCome - 금융 계산을 쉽게.";
 
   return {
     title,

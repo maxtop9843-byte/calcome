@@ -1,6 +1,6 @@
-# Contributing to CalcLab
+# Contributing to CalCome
 
-Thank you for improving CalcLab. Contributions should be focused, accessible, mobile-first, and consistent with [BOOTSTRAP.md](./BOOTSTRAP.md), [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md), and [ARCHITECTURE.md](./ARCHITECTURE.md).
+Thank you for improving CalCome. Contributions should be focused, accessible, mobile-first, and consistent with [BOOTSTRAP.md](./BOOTSTRAP.md), [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md), and [ARCHITECTURE.md](./ARCHITECTURE.md).
 
 ## Branches
 

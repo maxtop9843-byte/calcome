@@ -4,7 +4,7 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 export const metadata = createPageMetadata({
   title: "소개",
   description:
-    "CalcLab이 제공하는 한국 금융 계산기와 계산 결과의 한계를 안내합니다.",
+    "CalCome이 제공하는 한국 금융 계산기와 계산 결과의 한계를 안내합니다.",
   path: "/about",
 });
 
@@ -12,8 +12,8 @@ export default function AboutPage() {
   return (
     <InfoPage
       eyebrow="ABOUT"
-      title="CalcLab 소개"
-      description="CalcLab은 누구나 쉽게 사용할 수 있는 한국 금융 계산기를 제공합니다."
+      title="CalCome 소개"
+      description="CalCome(캘컴)은 누구나 쉽게 사용할 수 있는 한국 금융 계산기를 제공합니다."
     >
       <section>
         <h2 className="text-2xl font-semibold tracking-tight">
@@ -40,7 +40,7 @@ export default function AboutPage() {
       <section>
         <h2 className="text-2xl font-semibold tracking-tight">운영 원칙</h2>
         <p className="mt-4 leading-8 text-muted-foreground">
-          CalcLab은 접근성, 성능, 명확한 설명과 재현 가능한 계산을 우선합니다.
+          CalCome은 접근성, 성능, 명확한 설명과 재현 가능한 계산을 우선합니다.
           기능과 정책이 달라지면 사용자에게 필요한 설명도 함께 갱신합니다.
         </p>
       </section>

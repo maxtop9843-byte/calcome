@@ -9,7 +9,7 @@ describe("savings page", () => {
     expect(metadata.description).toContain("단리");
     expect(metadata.alternates).toEqual({ canonical: "/finance/savings" });
     expect(metadata.openGraph).toMatchObject({
-      url: "http://localhost:3000/finance/savings",
+      url: "https://calcome.com/finance/savings",
     });
     expect(metadata.twitter).toMatchObject({ card: "summary_large_image" });
   });
@@ -53,7 +53,7 @@ describe("savings page", () => {
     ]);
     expect(data[1].itemListElement.at(-1)).toMatchObject({
       name: "적금 계산기",
-      item: "http://localhost:3000/finance/savings",
+      item: "https://calcome.com/finance/savings",
     });
   });
 });

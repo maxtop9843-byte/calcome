@@ -9,7 +9,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} - 현대적인 계산 플랫폼`,
+    default: `${siteConfig.name} - ${siteConfig.slogan}`,
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
@@ -19,13 +19,13 @@ export const metadata: Metadata = {
     type: "website",
     locale: siteConfig.locale,
     siteName: siteConfig.name,
-    title: `${siteConfig.name} - 현대적인 계산 플랫폼`,
+    title: `${siteConfig.name} - ${siteConfig.slogan}`,
     description: siteConfig.description,
     url: "/",
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.name} - 현대적인 계산 플랫폼`,
+    title: `${siteConfig.name} - ${siteConfig.slogan}`,
     description: siteConfig.description,
   },
   robots: {

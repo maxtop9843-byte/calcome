@@ -21,8 +21,8 @@ describe("trust page metadata", () => {
       expect(metadata.description).toBeTruthy();
       expect(metadata.alternates).toEqual({ canonical: path });
       expect(metadata.openGraph).toMatchObject({
-        url: `http://localhost:3000${path}`,
-        siteName: "CalcLab",
+        url: `https://calcome.com${path}`,
+        siteName: "CalCome",
       });
       expect(metadata.twitter).toMatchObject({ card: "summary_large_image" });
     },
@@ -33,7 +33,7 @@ describe("trust page content", () => {
   it("states the product purpose and estimate limitations", () => {
     render(<AboutPage />);
 
-    expect(screen.getByRole("heading", { name: "CalcLab 소개" })).toBeVisible();
+    expect(screen.getByRole("heading", { name: "CalCome 소개" })).toBeVisible();
     expect(screen.getByText(/한국 금융 계산기를 제공합니다/)).toBeVisible();
     expect(
       screen.getByText(/금융, 투자, 세금 또는 법률 자문이 아니며/),
@@ -50,7 +50,7 @@ describe("trust page content", () => {
     expect(screen.getByText(/광고 네트워크/)).toBeVisible();
 
     for (const fabricatedDetail of [
-      "주식회사 CalcLab",
+      "주식회사 CalCome",
       "사업자등록번호",
       "대표자",
     ]) {
@@ -67,7 +67,7 @@ describe("trust page content", () => {
     ).toBeVisible();
 
     for (const fabricatedDetail of [
-      "주식회사 CalcLab",
+      "주식회사 CalCome",
       "사업자등록번호",
       "대표자",
     ]) {
@@ -82,7 +82,7 @@ describe("trust page content", () => {
       screen.getByRole("link", { name: "GitHub Issues 열기" }),
     ).toHaveAttribute(
       "href",
-      "https://github.com/maxtop9843-byte/calclab/issues",
+      "https://github.com/maxtop9843-byte/calcome/issues",
     );
     expect(screen.getByText(/민감한 개인정보를 게시하지 마세요/)).toBeVisible();
   });

@@ -268,7 +268,7 @@ Desktop may use a left input panel and right result panel while preserving the m
 - **Primary search intent:** `복리 계산기`
 - **Supporting topics:** `복리 이자 계산`, `월 적립 복리`, `적립식 투자 계산`, `투자 수익 계산`, `물가 반영 복리`
 - **Approved route slug:** `/finance/compound-interest`
-- **Page title direction:** Lead with `복리 계산기`, then describe 적립식 투자 and 예상 이자 concisely, followed by `CalcLab` through the global title template.
+- **Page title direction:** Lead with `복리 계산기`, then describe 적립식 투자 and 예상 이자 concisely, followed by `CalCome` through the global title template.
 - **Meta description direction:** Explain that users can estimate growth from initial principal, monthly or yearly contributions, rate, duration, compounding, and optional inflation or simplified tax. State or imply estimation, not guaranteed returns.
 - **Visible explanatory content:** Define compound interest, explain contribution timing and compounding frequency, distinguish principal from gain, document inflation and simplified tax assumptions, show formulas and worked interpretation guidance, and include an estimate disclaimer.
 - **FAQ requirements:** Answer genuine visible questions about compound interest, monthly contributions, beginning versus end timing, compounding frequency, inflation adjustment, simplified tax, and why actual outcomes differ. Answers must be concise, non-promotional, and non-advisory.
@@ -324,7 +324,7 @@ Analysis completed on 2026-07-13. The review focused on interaction, usability, 
 2. [Bankrate Compound Interest Calculator](https://www.bankrate.com/banking/savings/compound-savings-calculator/)
    - Frames the task around initial savings, duration, expected rate, recurring contributions, and compounding frequency.
    - Prioritizes final balance, total contributions, and interest earned, then supports interpretation with jump-linked explanations and related tools.
-   - Shows why CalcLab should keep educational content useful but avoid promotional interruptions inside the calculator flow.
+   - Shows why CalCome should keep educational content useful but avoid promotional interruptions inside the calculator flow.
 3. [TransUnion Compound Interest Calculator](https://www.transunion.com/tools/compound-interest-calculator)
    - Makes contribution frequency and timing assumptions explicit and separates total value, principal, and interest.
    - Provides a growth view and schedule breakdown, followed by result definitions, limitations, and FAQs.

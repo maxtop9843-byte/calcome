@@ -1,6 +1,6 @@
-# CalcLab Architecture
+# CalCome Architecture
 
-CalcLab is a statically optimized Next.js application using the App Router. Server components render content and metadata by default. Small client boundaries provide only the interaction a calculator needs. The calculation domain remains independent of React and Next.js so it can be tested, reused, and moved without rewriting formulas.
+CalCome is a statically optimized Next.js application using the App Router. Server components render content and metadata by default. Small client boundaries provide only the interaction a calculator needs. The calculation domain remains independent of React and Next.js so it can be tested, reused, and moved without rewriting formulas.
 
 ## Recommended layout
 

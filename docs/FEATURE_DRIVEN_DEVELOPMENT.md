@@ -1,21 +1,21 @@
 # Feature Driven Development
 
-This document defines the permanent workflow for adding every new feature to CalcLab. CalcLab does not develop features directly from prompts. Every feature begins with an approved feature specification, and that specification remains the single source of truth throughout delivery.
+This document defines the permanent workflow for adding every new feature to CalCome. CalCome does not develop features directly from prompts. Every feature begins with an approved feature specification, and that specification remains the single source of truth throughout delivery.
 
 ## Philosophy
 
-CalcLab follows Feature Driven Development. Every feature starts with a written specification that drives implementation, testing, documentation, and review. The specification is the contract: the delivered behavior must match it, and changes to scope or expected behavior must be reflected in the specification before implementation continues.
+CalCome follows Feature Driven Development. Every feature starts with a written specification that drives implementation, testing, documentation, and review. The specification is the contract: the delivered behavior must match it, and changes to scope or expected behavior must be reflected in the specification before implementation continues.
 
 ## Feature Lifecycle
 
 Every feature moves through the following lifecycle in order:
 
-1. **Idea** — State the user outcome without prescribing an implementation. Confirm that the idea fits CalcLab's mission and current scope.
+1. **Idea** — State the user outcome without prescribing an implementation. Confirm that the idea fits CalCome's mission and current scope.
 2. **Research** — Investigate the user problem, terminology, authoritative domain sources, mature open-source options, and known constraints. Keep temporary research outside the product repository.
 3. **Feature Specification** — Create and approve the feature specification in `docs/features/`. Define behavior, inputs, outputs, formulas, validation, user experience, accessibility, SEO, tests, and completion criteria.
 4. **Sites Analysis** — Use Sites and analyze at least three mature reference websites as required by `CODEX_IMPLEMENTATION_STANDARD.md`. Extract relevant principles without copying protected or identifying elements.
 5. **Implementation Plan** — Add a concise, implementation-ready plan to the feature specification. Map requirements to existing architecture, shared components, tests, and verification without changing the approved product contract.
-6. **Implementation** — Build only the approved scope, following the architecture and CalcLab Design System. Update the specification first if a necessary behavior change is discovered.
+6. **Implementation** — Build only the approved scope, following the architecture and CalCome Design System. Update the specification first if a necessary behavior change is discovered.
 7. **Testing** — Implement the specification's required unit, component, accessibility, integration, or end-to-end coverage and verify relevant edge cases.
 8. **Review** — Compare the implementation against the specification. Review code quality, UX, accessibility, SEO, responsiveness, performance, tests, and documentation.
 9. **Merge** — Merge one focused, approved feature pull request only after every required check and review passes.

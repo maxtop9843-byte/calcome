@@ -6,7 +6,9 @@ export function SiteFooter() {
   return (
     <footer className="border-t">
       <div className="mx-auto flex max-w-6xl flex-col gap-4 px-5 py-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:px-8">
-        <p>© {new Date().getFullYear()} CalcLab</p>
+        <p>
+          © {new Date().getFullYear()} {siteConfig.name}
+        </p>
         <nav aria-label="하단 탐색">
           <ul className="flex flex-wrap gap-x-5 gap-y-2">
             <li>

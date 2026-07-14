@@ -4,7 +4,7 @@ import { siteConfig } from "@/config/site";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: `${siteConfig.name} - 현대적인 계산 플랫폼`,
+    name: `${siteConfig.name} - ${siteConfig.slogan}`,
     short_name: siteConfig.name,
     description: siteConfig.description,
     start_url: "/",

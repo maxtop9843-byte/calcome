@@ -4,7 +4,7 @@ Status: Implemented
 
 ## Overview
 
-Create a scalable directory for CalcLab's published calculators and add factual public pages that explain the product, privacy behavior, terms, and verified contact path. This work changes discovery and trust surfaces only; calculator behavior remains unchanged.
+Create a scalable directory for CalCome's published calculators and add factual public pages that explain the product, privacy behavior, terms, and verified contact path. This work changes discovery and trust surfaces only; calculator behavior remains unchanged.
 
 ## Requirements
 
@@ -22,7 +22,7 @@ Create a scalable directory for CalcLab's published calculators and add factual 
 
 - No calculator formulas, validation, inputs, outputs, or financial logic change.
 - No unpublished calculators, placeholders, search, analytics, advertising, cookies, tracking, or new dependencies.
-- No CalcLab rename or fabricated business identity, address, representative, or contact detail.
+- No CalCome rename or fabricated business identity, address, representative, or contact detail.
 
 ## Mobile and Desktop UX
 
@@ -44,7 +44,7 @@ Reviewed on 2026-07-14:
 2. [Omni Calculator](https://www.omnicalculator.com/) uses concise category and popular-calculator lists with a clear title and description for each published tool.
 3. [Moneysmart](https://moneysmart.gov.au/) presents calculator cards with outcome-focused descriptions while keeping global navigation organized around durable topics rather than individual tools.
 
-CalcLab synthesizes these information-architecture principles within its own design system. No layout, branding, graphics, content, or source code is copied.
+CalCome synthesizes these information-architecture principles within its own design system. No layout, branding, graphics, content, or source code is copied.
 
 ## Implementation Plan
 

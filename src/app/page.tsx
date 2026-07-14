@@ -35,7 +35,7 @@ export default function Home() {
       <section className="mx-auto w-full max-w-6xl px-5 py-20 sm:px-8 sm:py-28">
         <div className="max-w-3xl">
           <p className="mb-4 text-sm font-semibold tracking-wide text-primary">
-            CALCLAB
+            CalCome
           </p>
           <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-6xl">
             금융 계산을 쉽게.

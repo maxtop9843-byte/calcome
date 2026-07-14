@@ -19,7 +19,7 @@ export default function Icon() {
         width: "100%",
       }}
     >
-      CL
+      CC
     </div>,
     size,
   );

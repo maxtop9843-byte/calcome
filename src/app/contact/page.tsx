@@ -7,7 +7,7 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 export const metadata = createPageMetadata({
   title: "문의",
   description:
-    "CalcLab 오류 제보와 서비스 관련 문의를 위한 공개 GitHub Issues 경로를 안내합니다.",
+    "CalCome 오류 제보와 서비스 관련 문의를 위한 공개 GitHub Issues 경로를 안내합니다.",
   path: "/contact",
 });
 
@@ -16,7 +16,7 @@ export default function ContactPage() {
     <InfoPage
       eyebrow="CONTACT"
       title="문의"
-      description="현재 확인된 공개 문의 경로는 CalcLab GitHub Issues입니다."
+      description="현재 확인된 공개 문의 경로는 CalCome GitHub Issues입니다."
     >
       <section>
         <h2 className="text-2xl font-semibold tracking-tight">

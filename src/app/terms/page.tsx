@@ -4,7 +4,7 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 export const metadata = createPageMetadata({
   title: "이용약관",
   description:
-    "CalcLab의 허용된 이용, 계산 결과의 한계, 지식재산권과 서비스 변경 원칙을 안내합니다.",
+    "CalCome의 허용된 이용, 계산 결과의 한계, 지식재산권과 서비스 변경 원칙을 안내합니다.",
   path: "/terms",
 });
 
@@ -13,14 +13,14 @@ export default function TermsPage() {
     <InfoPage
       eyebrow="TERMS"
       title="이용약관"
-      description="CalcLab을 이용하기 전에 계산 결과의 성격과 서비스 이용 조건을 확인해 주세요."
+      description="CalCome을 이용하기 전에 계산 결과의 성격과 서비스 이용 조건을 확인해 주세요."
     >
       <p className="text-sm text-muted-foreground">시행일: 2026년 7월 14일</p>
 
       <section>
         <h2 className="text-2xl font-semibold tracking-tight">서비스 이용</h2>
         <p className="mt-4 leading-8 text-muted-foreground">
-          CalcLab은 개인적이고 합법적인 정보 확인 목적으로 이용할 수 있습니다.
+          CalCome은 개인적이고 합법적인 정보 확인 목적으로 이용할 수 있습니다.
           서비스의 정상적인 운영을 방해하거나, 보안을 침해하거나, 관련 법령을
           위반하는 방식으로 이용해서는 안 됩니다.
         </p>
@@ -41,7 +41,7 @@ export default function TermsPage() {
       <section>
         <h2 className="text-2xl font-semibold tracking-tight">지식재산권</h2>
         <p className="mt-4 leading-8 text-muted-foreground">
-          CalcLab 저장소의 소스 코드는 저장소에 포함된 MIT 라이선스에 따라
+          CalCome 저장소의 소스 코드는 저장소에 포함된 MIT 라이선스에 따라
           이용할 수 있습니다. 제3자의 상표, 자료와 오픈소스 구성요소에는 각
           권리자의 조건이 적용됩니다.
         </p>

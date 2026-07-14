@@ -1,6 +1,12 @@
-# CalcLab
+# CalCome
 
-CalcLab is a modern calculator platform focused first on clear, trustworthy Korean finance calculators. Its first available tool is a Korean compound-interest calculator built on the shared application foundation and permanent engineering standards.
+CalCome is a modern calculator platform focused first on clear, trustworthy Korean finance calculators. Its first available tool is a Korean compound-interest calculator built on the shared application foundation and permanent engineering standards.
+
+**CalCome · 금융 계산을 쉽게.**
+
+- Production domain: <https://calcome.com>
+- Repository: <https://github.com/maxtop9843-byte/calcome>
+- Issues: <https://github.com/maxtop9843-byte/calcome/issues>
 
 ## Vision
 
@@ -42,7 +48,7 @@ Calculator routes compose server-rendered content with feature-local interactive
 
 ## Feature Driven Development
 
-CalcLab does not implement features directly from prompts. Every feature begins with an approved specification in `docs/features/`, which remains the source of truth for implementation, testing, documentation, and review. Follow [Feature Driven Development](./docs/FEATURE_DRIVEN_DEVELOPMENT.md) before starting feature work.
+CalCome does not implement features directly from prompts. Every feature begins with an approved specification in `docs/features/`, which remains the source of truth for implementation, testing, documentation, and review. Follow [Feature Driven Development](./docs/FEATURE_DRIVEN_DEVELOPMENT.md) before starting feature work.
 
 Use the reusable [feature template](./docs/features/_TEMPLATE.md) for new specifications. The [Korean Compound Interest Calculator](./docs/features/compound-interest.md) is the first implementation of this workflow.
 
@@ -58,8 +64,9 @@ npm run dev
 
 Open `http://localhost:3000`.
 
-Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL` to the public
-origin when checking canonical URLs or building for deployment.
+Copy `.env.example` to `.env.local`. Production builds use
+`NEXT_PUBLIC_SITE_URL=https://calcome.com`; local development can override it
+with `http://localhost:3000` when explicitly testing local absolute URLs.
 
 ## Commands
 

@@ -1,8 +1,8 @@
-# CalcLab Engineering Handbook
+# CalCome Engineering Handbook
 
 ## Project philosophy
 
-CalcLab turns calculations into understandable decisions. Every feature should be quick on a mobile connection, usable without a manual, explicit about assumptions, and accessible by keyboard and assistive technology. Advertising, when considered in a later phase, must never interrupt the primary task.
+CalCome turns calculations into understandable decisions. Every feature should be quick on a mobile connection, usable without a manual, explicit about assumptions, and accessible by keyboard and assistive technology. Advertising, when considered in a later phase, must never interrupt the primary task.
 
 Build the simplest structure that supports the current product. Prefer stable open-source tools over custom infrastructure when they meet the need. Add abstractions after a repeated pattern is understood, not in anticipation of one.
 

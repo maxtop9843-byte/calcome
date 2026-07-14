@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     "초기 투자금과 정기 납입액, 기간, 연이율을 입력해 복리로 늘어나는 예상 자산과 이자를 계산해 보세요.",
   alternates: { canonical: path },
   openGraph: {
-    title: "복리 계산기 - 적립식 투자와 예상 이자 | CalcLab",
+    title: "복리 계산기 - 적립식 투자와 예상 이자 | CalCome",
     description:
       "초기 투자금과 정기 납입액을 바탕으로 연도별 복리 성장과 예상 자산을 확인하세요.",
     type: "website",
@@ -24,13 +24,13 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "CalcLab - 더 나은 판단을 위한 현대적인 계산 플랫폼",
+        alt: "CalCome - 금융 계산을 쉽게.",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "복리 계산기 - 적립식 투자와 예상 이자 | CalcLab",
+    title: "복리 계산기 - 적립식 투자와 예상 이자 | CalCome",
     description:
       "초기 투자금과 정기 납입액을 바탕으로 연도별 복리 성장과 예상 자산을 확인하세요.",
     images: [
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
         url: "/twitter-image",
         width: 1200,
         height: 630,
-        alt: "CalcLab - 더 나은 판단을 위한 현대적인 계산 플랫폼",
+        alt: "CalCome - 금융 계산을 쉽게.",
       },
     ],
   },

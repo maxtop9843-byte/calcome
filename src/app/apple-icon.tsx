@@ -19,7 +19,7 @@ export default function AppleIcon() {
         width: "100%",
       }}
     >
-      CL
+      CC
     </div>,
     size,
   );

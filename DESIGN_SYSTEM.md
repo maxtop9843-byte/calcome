@@ -1,6 +1,6 @@
-# CalcLab Design System
+# CalCome Design System
 
-CalcLab uses a calm, precise visual language inspired by high-trust financial and productivity products. Interfaces should feel modern and polished without decoration competing with the calculation. The system is mobile-first and token-driven.
+CalCome uses a calm, precise visual language inspired by high-trust financial and productivity products. Interfaces should feel modern and polished without decoration competing with the calculation. The system is mobile-first and token-driven.
 
 ## Typography
 

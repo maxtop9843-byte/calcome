@@ -8,8 +8,8 @@ describe("calculator directory", () => {
     expect(metadata.title).toBe("금융 계산기 모음");
     expect(metadata.alternates).toEqual({ canonical: "/calculators" });
     expect(metadata.openGraph).toMatchObject({
-      url: "http://localhost:3000/calculators",
-      siteName: "CalcLab",
+      url: "https://calcome.com/calculators",
+      siteName: "CalCome",
     });
     expect(metadata.twitter).toMatchObject({ card: "summary_large_image" });
   });
@@ -61,22 +61,22 @@ describe("calculator directory", () => {
           {
             position: 2,
             name: "예금 계산기",
-            url: "http://localhost:3000/finance/deposit",
+            url: "https://calcome.com/finance/deposit",
           },
           {
             position: 3,
             name: "적금 계산기",
-            url: "http://localhost:3000/finance/savings",
+            url: "https://calcome.com/finance/savings",
           },
           {
             position: 4,
             name: "대출 계산기",
-            url: "http://localhost:3000/finance/loan",
+            url: "https://calcome.com/finance/loan",
           },
           {
             position: 5,
             name: "복리 계산기",
-            url: "http://localhost:3000/finance/compound-interest",
+            url: "https://calcome.com/finance/compound-interest",
           },
         ],
       },
