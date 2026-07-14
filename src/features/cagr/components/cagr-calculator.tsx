@@ -1,0 +1,269 @@
+"use client";
+
+import { type ChangeEvent, type FormEvent, useRef, useState } from "react";
+
+import { Button } from "@/components/ui/button";
+
+import { calculateCagr } from "../calculate";
+import { DEFAULT_CAGR_VALUES } from "../constants";
+import {
+  describeAnnualizedGrowth,
+  formatCagrPercent,
+  formatCagrWon,
+} from "../format";
+import type {
+  CagrField,
+  CagrFormValues,
+  CagrResult,
+  CagrValidationErrors,
+} from "../types";
+import { validateCagrForm } from "../validation";
+
+const initialValidation = validateCagrForm(DEFAULT_CAGR_VALUES);
+if (!initialValidation.data)
+  throw new Error("기본 CAGR 조건이 올바르지 않습니다.");
+const initialResult = calculateCagr(initialValidation.data);
+
+const controlClass =
+  "mt-2 h-11 w-full rounded-lg border bg-background px-3 text-base tabular-nums shadow-sm outline-none transition focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20";
+
+type NumberFieldProps = {
+  field: CagrField;
+  label: string;
+  value: string;
+  unit: string;
+  help: string;
+  error?: string;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onBlur: () => void;
+};
+
+function NumberField({
+  field,
+  label,
+  value,
+  unit,
+  help,
+  error,
+  onChange,
+  onBlur,
+}: NumberFieldProps) {
+  const describedBy = `${field}-help${error ? ` ${field}-error` : ""}`;
+  return (
+    <div>
+      <label htmlFor={field} className="text-sm font-medium">
+        {label} <span className="text-destructive">*</span>
+      </label>
+      <div className="relative">
+        <input
+          id={field}
+          name={field}
+          value={value}
+          onChange={onChange}
+          onBlur={onBlur}
+          inputMode="decimal"
+          autoComplete="off"
+          aria-invalid={Boolean(error)}
+          aria-describedby={describedBy}
+          className={`${controlClass} pr-14`}
+        />
+        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center pt-2 text-sm text-muted-foreground">
+          {unit}
+        </span>
+      </div>
+      <p
+        id={`${field}-help`}
+        className="mt-1.5 text-xs leading-5 text-muted-foreground"
+      >
+        {help}
+      </p>
+      {error ? (
+        <p id={`${field}-error`} className="mt-1.5 text-sm text-destructive">
+          {error}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+export function CagrCalculator() {
+  const [values, setValues] = useState<CagrFormValues>(DEFAULT_CAGR_VALUES);
+  const [errors, setErrors] = useState<CagrValidationErrors>({});
+  const [result, setResult] = useState<CagrResult>(initialResult);
+  const [appliedValues, setAppliedValues] = useState(DEFAULT_CAGR_VALUES);
+  const [announcement, setAnnouncement] = useState("");
+  const formRef = useRef<HTMLFormElement>(null);
+
+  function updateValue(field: CagrField, value: string) {
+    setValues((current) => ({ ...current, [field]: value }));
+  }
+
+  function validateField(field: CagrField) {
+    const validation = validateCagrForm(values);
+    setErrors((current) => {
+      const next = { ...current };
+      if (validation.errors[field]) next[field] = validation.errors[field];
+      else delete next[field];
+      return next;
+    });
+  }
+
+  function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const validation = validateCagrForm(values);
+    setErrors(validation.errors);
+    setAnnouncement("");
+    if (!validation.data) {
+      const first = Object.keys(validation.errors)[0];
+      requestAnimationFrame(() =>
+        formRef.current?.querySelector<HTMLElement>(`#${first}`)?.focus(),
+      );
+      return;
+    }
+    const next = calculateCagr(validation.data);
+    setResult(next);
+    setAppliedValues(values);
+    setAnnouncement(
+      `계산이 완료되었습니다. 연평균 복합성장률은 ${formatCagrPercent(next.cagrPercent)}입니다.`,
+    );
+  }
+
+  return (
+    <section aria-labelledby="cagr-calculator-title">
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
+        <form
+          ref={formRef}
+          noValidate
+          onSubmit={submit}
+          className="rounded-2xl border bg-card p-5 shadow-sm sm:p-7"
+        >
+          <p className="text-sm font-semibold text-primary">입력</p>
+          <h2
+            id="cagr-calculator-title"
+            className="mt-1 text-2xl font-semibold tracking-tight"
+          >
+            투자 성과 설정
+          </h2>
+          <p className="mt-2 text-sm leading-6 text-muted-foreground">
+            별표(*) 항목은 필수입니다. 추가 현금흐름이 없는 두 시점의 값을
+            입력하세요.
+          </p>
+          {Object.keys(errors).length ? (
+            <div
+              role="alert"
+              className="mt-5 rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm"
+            >
+              입력값을 확인해 주세요. 첫 번째 오류 항목으로 이동했습니다.
+            </div>
+          ) : null}
+          <div className="mt-6 grid gap-5 sm:grid-cols-2">
+            <NumberField
+              field="initialValue"
+              label="시작값"
+              value={values.initialValue}
+              unit="원"
+              help="투자나 지표의 최초 평가액"
+              error={errors.initialValue}
+              onChange={(event) =>
+                updateValue("initialValue", event.target.value)
+              }
+              onBlur={() => validateField("initialValue")}
+            />
+            <NumberField
+              field="finalValue"
+              label="종료값"
+              value={values.finalValue}
+              unit="원"
+              help="투자 기간이 끝난 시점의 평가액"
+              error={errors.finalValue}
+              onChange={(event) =>
+                updateValue("finalValue", event.target.value)
+              }
+              onBlur={() => validateField("finalValue")}
+            />
+            <NumberField
+              field="investmentPeriod"
+              label="투자 기간"
+              value={values.investmentPeriod}
+              unit={values.periodUnit === "years" ? "년" : "개월"}
+              help="최대 100년 또는 1,200개월"
+              error={errors.investmentPeriod}
+              onChange={(event) =>
+                updateValue("investmentPeriod", event.target.value)
+              }
+              onBlur={() => validateField("investmentPeriod")}
+            />
+            <div>
+              <label htmlFor="periodUnit" className="text-sm font-medium">
+                기간 단위 <span className="text-destructive">*</span>
+              </label>
+              <select
+                id="periodUnit"
+                value={values.periodUnit}
+                onChange={(event) =>
+                  updateValue("periodUnit", event.target.value)
+                }
+                className={controlClass}
+              >
+                <option value="years">년</option>
+                <option value="months">개월</option>
+              </select>
+            </div>
+          </div>
+          <Button type="submit" size="lg" className="mt-6 h-11 w-full px-5">
+            CAGR 계산하기
+          </Button>
+        </form>
+
+        <section
+          aria-labelledby="cagr-result-title"
+          className="rounded-2xl border bg-card p-5 shadow-sm sm:p-7 lg:sticky lg:top-6"
+        >
+          <p className="text-sm font-semibold text-primary">계산 결과</p>
+          <h2
+            id="cagr-result-title"
+            className="mt-1 text-2xl font-semibold tracking-tight"
+          >
+            연평균 복합성장률(CAGR)
+          </h2>
+          <p className="mt-4 break-words text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl">
+            {formatCagrPercent(result.cagrPercent)}
+          </p>
+          <p className="mt-3 text-sm leading-6 text-muted-foreground">
+            매년 같은 복리 비율로 변했다고 가정한 연환산 값입니다.
+          </p>
+          <dl className="mt-6 grid gap-3 sm:grid-cols-2">
+            <div className="rounded-xl border bg-background p-4">
+              <dt className="text-xs text-muted-foreground">총수익률</dt>
+              <dd className="mt-1 font-semibold tabular-nums">
+                {formatCagrPercent(result.totalReturnPercent)}
+              </dd>
+            </div>
+            <div className="rounded-xl border bg-background p-4">
+              <dt className="text-xs text-muted-foreground">절대 손익</dt>
+              <dd className="mt-1 font-semibold tabular-nums">
+                {formatCagrWon(result.absoluteProfit)}
+              </dd>
+            </div>
+          </dl>
+          <div className="mt-5 rounded-xl bg-muted p-4 text-sm leading-6">
+            <p className="font-medium">연환산 성장 요약</p>
+            <p className="mt-1 text-muted-foreground">
+              {describeAnnualizedGrowth(result.cagrPercent)}{" "}
+              {formatCagrPercent(result.cagrPercent)} · 전체 변화{" "}
+              {formatCagrPercent(result.totalReturnPercent)}
+            </p>
+            <p className="mt-1 text-muted-foreground">
+              {appliedValues.investmentPeriod}
+              {appliedValues.periodUnit === "years" ? "년" : "개월"} 동안{" "}
+              {formatCagrWon(result.absoluteProfit)} 변화
+            </p>
+          </div>
+          <p className="sr-only" aria-live="polite" aria-atomic="true">
+            {announcement}
+          </p>
+        </section>
+      </div>
+    </section>
+  );
+}
