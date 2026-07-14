@@ -8,6 +8,13 @@ export type PublishedCalculator = {
 
 export const publishedCalculators = [
   {
+    id: "deposit",
+    name: "예금 계산기",
+    description: "목돈 예금의 세전·세후 이자와 예상 만기액을 계산합니다.",
+    category: "금융",
+    href: "/finance/deposit",
+  },
+  {
     id: "savings",
     name: "적금 계산기",
     description: "정기 납입 적금의 세전·세후 이자와 예상 만기액을 계산합니다.",

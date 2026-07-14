@@ -63,6 +63,11 @@ describe("production metadata routes", () => {
         priority: 0.9,
       },
       {
+        url: "http://localhost:3000/finance/deposit",
+        changeFrequency: "monthly",
+        priority: 0.9,
+      },
+      {
         url: "http://localhost:3000/finance/savings",
         changeFrequency: "monthly",
         priority: 0.9,
@@ -119,6 +124,10 @@ describe("production recovery and navigation", () => {
       screen.queryByRole("link", { name: "GitHub에서 보기" }),
     ).not.toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "인기 계산기" })).toBeVisible();
+    expect(screen.getByRole("link", { name: /예금 계산기/ })).toHaveAttribute(
+      "href",
+      "/finance/deposit",
+    );
     expect(screen.getByRole("link", { name: /적금 계산기/ })).toHaveAttribute(
       "href",
       "/finance/savings",

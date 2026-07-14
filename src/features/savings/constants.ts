@@ -1,6 +1,6 @@
 import type { SavingsFormValues } from "./types";
 
-export const GENERAL_SAVINGS_TAX_RATE = "15.4";
+export { GENERAL_INTEREST_TAX_RATE as GENERAL_SAVINGS_TAX_RATE } from "@/lib/finance/tax";
 
 export const DEFAULT_SAVINGS_VALUES: SavingsFormValues = {
   regularDeposit: "100000",

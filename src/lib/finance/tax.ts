@@ -1,0 +1,1 @@
+export const GENERAL_INTEREST_TAX_RATE = "15.4";
