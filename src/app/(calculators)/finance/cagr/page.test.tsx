@@ -9,7 +9,7 @@ describe("CAGR page", () => {
     expect(metadata.description).toContain("연평균 복합성장률");
     expect(metadata.alternates).toEqual({ canonical: "/finance/cagr" });
     expect(metadata.openGraph).toMatchObject({
-      url: "http://localhost:3000/finance/cagr",
+      url: "https://calcome.com/finance/cagr",
     });
     expect(metadata.twitter).toMatchObject({ card: "summary_large_image" });
   });
@@ -50,7 +50,7 @@ describe("CAGR page", () => {
     ]);
     expect(data[1].itemListElement.at(-1)).toMatchObject({
       name: "CAGR 계산기",
-      item: "http://localhost:3000/finance/cagr",
+      item: "https://calcome.com/finance/cagr",
     });
   });
 });

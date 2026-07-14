@@ -56,7 +56,7 @@ describe("calculator directory", () => {
           {
             position: 1,
             name: "CAGR 계산기",
-            url: "http://localhost:3000/finance/cagr",
+            url: "https://calcome.com/finance/cagr",
           },
           {
             position: 2,
