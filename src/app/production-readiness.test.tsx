@@ -63,6 +63,11 @@ describe("production metadata routes", () => {
         priority: 0.9,
       },
       {
+        url: "http://localhost:3000/finance/cagr",
+        changeFrequency: "monthly",
+        priority: 0.9,
+      },
+      {
         url: "http://localhost:3000/finance/deposit",
         changeFrequency: "monthly",
         priority: 0.9,

@@ -8,6 +8,13 @@ export type PublishedCalculator = {
 
 export const publishedCalculators = [
   {
+    id: "cagr",
+    name: "CAGR 계산기",
+    description: "시작값과 종료값의 연평균 복합성장률과 총수익률을 계산합니다.",
+    category: "금융",
+    href: "/finance/cagr",
+  },
+  {
     id: "deposit",
     name: "예금 계산기",
     description: "목돈 예금의 세전·세후 이자와 예상 만기액을 계산합니다.",
