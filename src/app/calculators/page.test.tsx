@@ -14,7 +14,7 @@ describe("calculator directory", () => {
     expect(metadata.twitter).toMatchObject({ card: "summary_large_image" });
   });
 
-  it("lists only the currently published calculator", () => {
+  it("lists the currently published calculators", () => {
     const { container } = render(<CalculatorsPage />);
 
     expect(screen.getByRole("heading", { name: "모든 계산기" })).toBeVisible();
@@ -22,7 +22,11 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(1);
+    ).toHaveLength(2);
+    expect(screen.getByRole("link", { name: /대출 계산기/ })).toHaveAttribute(
+      "href",
+      "/finance/loan",
+    );
     expect(screen.getByRole("link", { name: /복리 계산기/ })).toHaveAttribute(
       "href",
       "/finance/compound-interest",
@@ -35,10 +39,15 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 1,
+        numberOfItems: 2,
         itemListElement: [
           {
             position: 1,
+            name: "대출 계산기",
+            url: "http://localhost:3000/finance/loan",
+          },
+          {
+            position: 2,
             name: "복리 계산기",
             url: "http://localhost:3000/finance/compound-interest",
           },

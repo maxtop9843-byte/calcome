@@ -8,6 +8,13 @@ export type PublishedCalculator = {
 
 export const publishedCalculators = [
   {
+    id: "loan",
+    name: "대출 계산기",
+    description: "상환 방식별 월 납부액, 총 이자와 상환 일정을 계산합니다.",
+    category: "금융",
+    href: "/finance/loan",
+  },
+  {
     id: "compound-interest",
     name: "복리 계산기",
     description: "초기 투자금과 정기 납입액의 예상 복리 성장을 계산합니다.",
