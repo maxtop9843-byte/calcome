@@ -18,8 +18,7 @@ describe("CalCome brand migration", () => {
       name: "CalCome",
       slogan: "금융 계산을 쉽게.",
       url: "https://calcome.com",
-      repository: "https://github.com/maxtop9843-byte/calcome",
-      issues: "https://github.com/maxtop9843-byte/calcome/issues",
+      description: "금융 계산을 쉽게. 누구나 이해하기 쉬운 금융 계산기입니다.",
     });
     expect(socialImageAlt).toBe("CalCome - 금융 계산을 쉽게.");
   });
@@ -40,5 +39,7 @@ describe("CalCome brand migration", () => {
     expect(container).toHaveTextContent("CalCome");
     expect(container).toHaveTextContent("금융 계산을 쉽게.");
     expect(container).not.toHaveTextContent(staleBrand);
+    expect(container).not.toHaveTextContent("한국 금융 계산기");
+    expect(container.textContent).not.toMatch(/@gmail\.com/i);
   });
 });

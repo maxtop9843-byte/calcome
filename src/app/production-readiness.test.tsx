@@ -173,7 +173,7 @@ describe("production recovery and navigation", () => {
       name: "하단 탐색",
     });
     expect(footerNavigation).toHaveTextContent(
-      "계산기소개개인정보처리방침이용약관문의GitHub",
+      "계산기소개개인정보처리방침이용약관문의",
     );
     expect(screen.getByRole("link", { name: "계산기" })).toHaveAttribute(
       "href",
@@ -194,10 +194,9 @@ describe("production recovery and navigation", () => {
       "href",
       "/contact",
     );
-    expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute(
-      "href",
-      "https://github.com/maxtop9843-byte/calcome",
-    );
+    expect(
+      screen.queryByRole("link", { name: "GitHub" }),
+    ).not.toBeInTheDocument();
   });
 
   it("offers useful recovery from a missing page", () => {

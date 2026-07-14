@@ -24,8 +24,8 @@ export default function PrivacyPage() {
         <p className="mt-4 leading-8 text-muted-foreground">
           현재 계산기 입력값과 계산 결과는 사용자의 브라우저에서 처리됩니다.
           CalCome은 이 값을 의도적으로 서버에 전송하거나 계정과 연결해 저장하지
-          않습니다. 사용자가 GitHub Issues 같은 외부 채널에 직접 입력한 내용은
-          해당 외부 서비스의 처리 방식이 적용됩니다.
+          않습니다. 사용자가 문의 이메일로 직접 보낸 내용은 이메일 서비스
+          제공자의 처리 방식이 적용됩니다.
         </p>
       </section>
 

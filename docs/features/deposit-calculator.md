@@ -1,4 +1,4 @@
-# Korean Deposit Calculator
+# Deposit Calculator
 
 Status: Implemented
 

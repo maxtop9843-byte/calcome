@@ -1,4 +1,4 @@
-# Korean CAGR Calculator
+# CAGR Calculator
 
 Status: Implemented
 

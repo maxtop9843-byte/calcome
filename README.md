@@ -1,6 +1,6 @@
 # CalCome
 
-CalCome is a modern calculator platform focused first on clear, trustworthy Korean finance calculators. Its first available tool is a Korean compound-interest calculator built on the shared application foundation and permanent engineering standards.
+CalCome is a modern calculator platform focused first on clear, trustworthy finance calculators. Its calculators are built on a shared application foundation and permanent engineering standards.
 
 **CalCome · 금융 계산을 쉽게.**
 
@@ -50,7 +50,7 @@ Calculator routes compose server-rendered content with feature-local interactive
 
 CalCome does not implement features directly from prompts. Every feature begins with an approved specification in `docs/features/`, which remains the source of truth for implementation, testing, documentation, and review. Follow [Feature Driven Development](./docs/FEATURE_DRIVEN_DEVELOPMENT.md) before starting feature work.
 
-Use the reusable [feature template](./docs/features/_TEMPLATE.md) for new specifications. The [Korean Compound Interest Calculator](./docs/features/compound-interest.md) is the first implementation of this workflow.
+Use the reusable [feature template](./docs/features/_TEMPLATE.md) for new specifications. The [Compound Interest Calculator](./docs/features/compound-interest.md) is the first implementation of this workflow.
 
 ## Local development
 
@@ -91,8 +91,8 @@ Before a public deployment or launch announcement, complete the repository and p
 
 ## Roadmap
 
-1. Establish and validate the shared calculator contract with one Korean finance calculator.
-2. Expand the Korean finance calculator catalog using the proven pattern.
+1. Establish and validate the shared calculator contract with one finance calculator.
+2. Expand the finance calculator catalog using the proven pattern.
 3. Improve discovery, explanations, comparison tools, and platform-wide quality signals.
 4. Consider additional calculator categories only after the finance foundation is mature.
 

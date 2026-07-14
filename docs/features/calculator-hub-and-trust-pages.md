@@ -13,8 +13,8 @@ Create a scalable directory for CalCome's published calculators and add factual 
 - List every published calculator on `/calculators` from one shared registry; initially this is only the compound-interest calculator.
 - Replace the calculator-specific header link with a scalable directory link.
 - Publish `/about`, `/privacy`, `/terms`, and `/contact` with modest, accurate Korean content.
-- Use GitHub Issues as the verified contact method and warn against posting sensitive personal information.
-- Add calculator, trust, policy, contact, and GitHub links to the global footer.
+- Use `hello@calcome.com` as the visible contact method and warn against sending sensitive personal information.
+- Add calculator, trust, policy, and contact links to the global footer.
 - Add unique metadata, canonical URLs, appropriate structured data, and every public route to the sitemap.
 - Keep robots behavior and all existing production-readiness features intact.
 

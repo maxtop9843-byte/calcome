@@ -41,9 +41,9 @@ export default function TermsPage() {
       <section>
         <h2 className="text-2xl font-semibold tracking-tight">지식재산권</h2>
         <p className="mt-4 leading-8 text-muted-foreground">
-          CalCome 저장소의 소스 코드는 저장소에 포함된 MIT 라이선스에 따라
-          이용할 수 있습니다. 제3자의 상표, 자료와 오픈소스 구성요소에는 각
-          권리자의 조건이 적용됩니다.
+          공개된 CalCome 소스 코드는 함께 제공된 MIT 라이선스에 따라 이용할 수
+          있습니다. 제3자의 상표, 자료와 오픈소스 구성요소에는 각 권리자의
+          조건이 적용됩니다.
         </p>
       </section>
 

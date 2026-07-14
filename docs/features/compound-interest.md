@@ -1,4 +1,4 @@
-# Korean Compound Interest Calculator
+# Compound Interest Calculator
 
 Status: Implemented
 
@@ -6,11 +6,11 @@ Status: Implemented
 
 ## Overview
 
-The Korean Compound Interest Calculator estimates how an initial principal and fixed recurring contributions may grow under a constant annual interest rate and selected compounding schedule. Optional inflation and simplified tax inputs show additional estimate views without representing an actual product, portfolio, or tax outcome.
+The Compound Interest Calculator estimates how an initial principal and fixed recurring contributions may grow under a constant annual interest rate and selected compounding schedule. Optional inflation and simplified tax inputs show additional estimate views without representing an actual product, portfolio, or tax outcome.
 
 ### Purpose
 
-Help Korean savers, long-term investors, workers planning future assets, and users comparing contribution and return scenarios understand the possible effect of time, contribution frequency, compounding frequency, contribution timing, inflation, and simplified tax.
+Help savers, long-term investors, workers planning future assets, and users comparing contribution and return scenarios understand the possible effect of time, contribution frequency, compounding frequency, contribution timing, inflation, and simplified tax.
 
 Every result must be labeled as an estimate, never a guarantee or personalized financial recommendation.
 

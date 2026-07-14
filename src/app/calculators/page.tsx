@@ -7,7 +7,7 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 
 const path = "/calculators";
 const description =
-  "CalCome에서 현재 제공하는 한국 금융 계산기를 한곳에서 확인하세요.";
+  "CalCome에서 현재 제공하는 금융 계산기를 한곳에서 확인하세요.";
 
 export const metadata = createPageMetadata({
   title: "금융 계산기 모음",
