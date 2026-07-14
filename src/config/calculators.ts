@@ -8,6 +8,13 @@ export type PublishedCalculator = {
 
 export const publishedCalculators = [
   {
+    id: "savings",
+    name: "적금 계산기",
+    description: "정기 납입 적금의 세전·세후 이자와 예상 만기액을 계산합니다.",
+    category: "금융",
+    href: "/finance/savings",
+  },
+  {
     id: "loan",
     name: "대출 계산기",
     description: "상환 방식별 월 납부액, 총 이자와 상환 일정을 계산합니다.",

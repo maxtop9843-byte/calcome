@@ -34,6 +34,10 @@ describe("loan page", () => {
       "href",
       "/finance/compound-interest",
     );
-    expect(screen.getAllByText("Coming Soon")).toHaveLength(2);
+    expect(screen.getByRole("link", { name: /적금 계산기/ })).toHaveAttribute(
+      "href",
+      "/finance/savings",
+    );
+    expect(screen.queryByText("Coming Soon")).not.toBeInTheDocument();
   });
 });

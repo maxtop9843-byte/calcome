@@ -302,14 +302,13 @@ export default function LoanPage() {
               <span className="font-semibold">복리 계산기</span>
               <span className="mt-2 block text-sm text-primary">계산하기</span>
             </Link>
-            {["적금 계산기", "예금 계산기"].map((name) => (
-              <div key={name} className="rounded-xl border bg-muted/30 p-5">
-                <span className="font-semibold">{name}</span>
-                <span className="mt-2 block text-sm text-muted-foreground">
-                  Coming Soon
-                </span>
-              </div>
-            ))}
+            <Link
+              href="/finance/savings"
+              className="rounded-xl border bg-card p-5 transition-colors hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <span className="font-semibold">적금 계산기</span>
+              <span className="mt-2 block text-sm text-primary">계산하기</span>
+            </Link>
           </div>
         </section>
       </div>
