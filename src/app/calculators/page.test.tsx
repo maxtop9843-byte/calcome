@@ -22,7 +22,11 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(3);
+    ).toHaveLength(4);
+    expect(screen.getByRole("link", { name: /예금 계산기/ })).toHaveAttribute(
+      "href",
+      "/finance/deposit",
+    );
     expect(screen.getByRole("link", { name: /적금 계산기/ })).toHaveAttribute(
       "href",
       "/finance/savings",
@@ -43,20 +47,25 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 3,
+        numberOfItems: 4,
         itemListElement: [
           {
             position: 1,
+            name: "예금 계산기",
+            url: "http://localhost:3000/finance/deposit",
+          },
+          {
+            position: 2,
             name: "적금 계산기",
             url: "http://localhost:3000/finance/savings",
           },
           {
-            position: 2,
+            position: 3,
             name: "대출 계산기",
             url: "http://localhost:3000/finance/loan",
           },
           {
-            position: 3,
+            position: 4,
             name: "복리 계산기",
             url: "http://localhost:3000/finance/compound-interest",
           },
