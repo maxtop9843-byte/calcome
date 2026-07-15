@@ -25,14 +25,14 @@ import { CompoundGrowthChart } from "./compound-growth-chart";
 
 const INITIAL_COMPOUND_INTEREST_VALUES: CompoundInterestFormValues = {
   ...DEFAULT_COMPOUND_INTEREST_VALUES,
-  initialPrincipal: "10000000",
-  recurringContribution: "500000",
-  durationYears: "10",
-  annualInterestRate: "5",
+  initialPrincipal: "",
+  recurringContribution: "",
+  durationYears: "",
+  annualInterestRate: "",
 };
 
 const inputClassName =
-  "mt-1.5 h-10 w-full rounded-lg border bg-background px-3 text-sm tabular-nums shadow-sm outline-none transition focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20";
+  "mt-1.5 h-10 w-full rounded-lg border bg-background px-3 text-sm tabular-nums shadow-sm outline-none transition placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20";
 
 type NumberFieldProps = {
   field: CompoundInterestField;
@@ -117,6 +117,7 @@ export function CompoundInterestCalculator() {
   );
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [result, setResult] = useState<CompoundInterestResult | null>(null);
+  const [yearlyDetailsOpen, setYearlyDetailsOpen] = useState(false);
   const [announcement, setAnnouncement] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -150,6 +151,7 @@ export function CompoundInterestCalculator() {
 
     const nextResult = calculateCompoundInterest(validation.data);
     setResult(nextResult);
+    setYearlyDetailsOpen(true);
     setAnnouncement(
       `계산이 완료되었습니다. 예상 최종 금액은 ${formatWon(nextResult.estimatedFinalBalance)}입니다.`,
     );
@@ -159,6 +161,7 @@ export function CompoundInterestCalculator() {
     setValues(INITIAL_COMPOUND_INTEREST_VALUES);
     setErrors({});
     setResult(null);
+    setYearlyDetailsOpen(false);
     setAnnouncement("입력값과 계산 결과를 초기화했습니다.");
   }
 
@@ -196,13 +199,13 @@ export function CompoundInterestCalculator() {
           <div className="grid gap-x-3 gap-y-4 sm:grid-cols-2">
             <NumberField
               field="initialPrincipal"
-              label="초기 원금"
+              label="초기 투자금"
               value={values.initialPrincipal}
               unit="원"
               required
               help="처음 투자하거나 저축하는 금액"
               error={errors.initialPrincipal}
-              placeholder="예: 1,000,000"
+              placeholder="예: 10,000,000"
               money
               className="sm:order-1 sm:col-span-2"
               onChange={(event) =>
@@ -218,7 +221,7 @@ export function CompoundInterestCalculator() {
               required
               help="선택한 주기마다 추가하는 고정 금액"
               error={errors.recurringContribution}
-              placeholder="예: 100,000"
+              placeholder="예: 500,000"
               money
               className="sm:order-2 sm:col-span-2"
               onChange={(event) =>
@@ -419,7 +422,11 @@ export function CompoundInterestCalculator() {
             </p>
           </section>
           <CompoundGrowthChart records={result?.yearlyData} />
-          <details className="rounded-xl border bg-card p-4 shadow-sm">
+          <details
+            open={yearlyDetailsOpen}
+            onToggle={(event) => setYearlyDetailsOpen(event.currentTarget.open)}
+            className="rounded-xl border bg-card p-4 shadow-sm"
+          >
             <summary className="cursor-pointer text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
               연도별 상세 내역 보기
             </summary>
