@@ -3,8 +3,7 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 
 export const metadata = createPageMetadata({
   title: "소개",
-  description:
-    "CalCome이 제공하는 한국 금융 계산기와 계산 결과의 한계를 안내합니다.",
+  description: "CalCome의 금융 계산기와 계산 결과의 한계를 안내합니다.",
   path: "/about",
 });
 
@@ -13,7 +12,7 @@ export default function AboutPage() {
     <InfoPage
       eyebrow="ABOUT"
       title="CalCome 소개"
-      description="CalCome(캘컴)은 누구나 쉽게 사용할 수 있는 한국 금융 계산기를 제공합니다."
+      description="CalCome(캘컴)은 누구나 이해하기 쉬운 금융 계산기를 제공합니다."
     >
       <section>
         <h2 className="text-2xl font-semibold tracking-tight">

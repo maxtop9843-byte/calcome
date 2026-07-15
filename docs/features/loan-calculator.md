@@ -1,4 +1,4 @@
-# Korean Loan Calculator Foundation
+# Loan Calculator Foundation
 
 Status: Implemented
 

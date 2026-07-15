@@ -44,6 +44,9 @@ describe("deposit page", () => {
       "href",
       "/finance/savings",
     );
+    expect(
+      screen.getAllByText(/소득세 14%와.*개인지방소득세 1\.4%/).length,
+    ).toBeGreaterThan(0);
     const data = JSON.parse(
       container.querySelector('script[type="application/ld+json"]')!
         .textContent!,

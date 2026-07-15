@@ -1,4 +1,4 @@
-# Korean Installment Savings Calculator
+# Installment Savings Calculator
 
 Status: Implemented
 

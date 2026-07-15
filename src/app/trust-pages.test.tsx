@@ -34,7 +34,9 @@ describe("trust page content", () => {
     render(<AboutPage />);
 
     expect(screen.getByRole("heading", { name: "CalCome 소개" })).toBeVisible();
-    expect(screen.getByText(/한국 금융 계산기를 제공합니다/)).toBeVisible();
+    expect(
+      screen.getByText(/이해하기 쉬운 금융 계산기를 제공합니다/),
+    ).toBeVisible();
     expect(
       screen.getByText(/금융, 투자, 세금 또는 법률 자문이 아니며/),
     ).toBeVisible();
@@ -75,15 +77,18 @@ describe("trust page content", () => {
     }
   });
 
-  it("uses the verified GitHub Issues contact path", () => {
-    render(<ContactPage />);
+  it("uses the public contact email without exposing sensitive details", () => {
+    const { container } = render(<ContactPage />);
 
     expect(
-      screen.getByRole("link", { name: "GitHub Issues 열기" }),
-    ).toHaveAttribute(
-      "href",
-      "https://github.com/maxtop9843-byte/calcome/issues",
+      screen.getByRole("link", { name: "hello@calcome.com" }),
+    ).toHaveAttribute("href", "mailto:hello@calcome.com");
+    expect(screen.getAllByText(/서비스 이용 문의/).length).toBeGreaterThan(0);
+    expect(screen.getByText(/비밀번호, 계정 인증 정보/)).toBeVisible();
+    expect(container.textContent).not.toMatch(/@gmail\.com/i);
+    expect(container).not.toHaveTextContent("GitHub Issues");
+    expect(contactMetadata.description).toBe(
+      "CalCome 서비스 이용 문의, 오류 제보, 개선 의견과 제휴 문의 방법을 안내합니다.",
     );
-    expect(screen.getByText(/민감한 개인정보를 게시하지 마세요/)).toBeVisible();
   });
 });

@@ -51,14 +51,6 @@ export function SiteFooter() {
                 문의
               </Link>
             </li>
-            <li>
-              <Link
-                href={siteConfig.repository}
-                className="hover:text-foreground hover:underline"
-              >
-                GitHub
-              </Link>
-            </li>
           </ul>
         </nav>
       </div>
