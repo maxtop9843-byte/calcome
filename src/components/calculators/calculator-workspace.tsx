@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 
 export const calculatorWorkspaceClass =
   "grid gap-6 md:grid-cols-[minmax(16rem,0.36fr)_minmax(0,0.64fr)] md:items-start";
+export const dashboardCalculatorWorkspaceClass =
+  "grid gap-6 lg:grid-cols-[20rem_minmax(0,1fr)] lg:items-start";
 export const calculatorSettingsClass =
   "rounded-2xl border bg-card p-5 shadow-sm sm:p-7 lg:sticky lg:top-6";
 export const compactCalculatorSettingsClass =

@@ -5,8 +5,8 @@ import { type ChangeEvent, type FormEvent, useRef, useState } from "react";
 import {
   CalculatorActions,
   PrimaryResults,
-  calculatorWorkspaceClass,
   compactCalculatorSettingsClass,
+  dashboardCalculatorWorkspaceClass,
 } from "@/components/calculators/calculator-workspace";
 import { formatMoneyInput } from "@/lib/input/money";
 
@@ -161,7 +161,7 @@ export function CompoundInterestCalculator() {
 
   return (
     <section aria-labelledby="calculator-title" className="space-y-8">
-      <div className={calculatorWorkspaceClass}>
+      <div className={dashboardCalculatorWorkspaceClass}>
         <form
           ref={formRef}
           noValidate

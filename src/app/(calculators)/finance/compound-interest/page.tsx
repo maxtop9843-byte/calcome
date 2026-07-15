@@ -111,7 +111,7 @@ export default function CompoundInterestPage() {
           __html: JSON.stringify(structuredData).replaceAll("<", "\\u003c"),
         }}
       />
-      <div className="mx-auto w-full max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
+      <div className="mx-auto w-full max-w-7xl px-5 py-6 sm:px-8">
         <nav aria-label="현재 위치" className="text-sm text-muted-foreground">
           <ol className="flex flex-wrap items-center gap-2">
             <li>
@@ -126,24 +126,24 @@ export default function CompoundInterestPage() {
           </ol>
         </nav>
 
-        <header className="mt-4 max-w-3xl">
+        <header className="mt-3 max-w-3xl">
           <p className="text-sm font-semibold tracking-wide text-primary">
             금융 계산기
           </p>
-          <h1 className="mt-2 text-balance text-4xl font-semibold tracking-tight sm:text-5xl">
+          <h1 className="mt-1 text-balance text-4xl font-semibold tracking-tight sm:text-5xl">
             복리 계산기
           </h1>
-          <p className="mt-3 text-pretty text-base leading-7 text-muted-foreground sm:text-lg">
+          <p className="mt-2 text-pretty text-base leading-7 text-muted-foreground sm:text-lg">
             초기 투자금과 정기 납입액이 복리로 어떻게 성장하는지 계산하고,
             원금과 이자의 변화를 연도별로 확인하세요.
           </p>
-          <p className="mt-2 text-xs leading-5 text-muted-foreground sm:text-sm">
+          <p className="mt-1 text-xs leading-5 text-muted-foreground sm:text-sm">
             계산 결과는 입력값에 따른 수학적 추정치이며 투자 성과, 금융상품
             수익, 실제 세금 또는 구매력을 보장하지 않습니다.
           </p>
         </header>
 
-        <div className="mt-6">
+        <div className="mt-4">
           <CompoundInterestCalculator />
         </div>
 
