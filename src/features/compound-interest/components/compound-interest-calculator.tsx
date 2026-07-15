@@ -1,6 +1,5 @@
 "use client";
 
-import Decimal from "decimal.js";
 import { type ChangeEvent, type FormEvent, useRef, useState } from "react";
 
 import {
@@ -21,6 +20,7 @@ import type {
   ValidationErrors,
 } from "../types";
 import { validateCompoundInterestForm } from "../validation";
+import { CompoundGrowthChart } from "./compound-growth-chart";
 
 const INITIAL_COMPOUND_INTEREST_VALUES: CompoundInterestFormValues = {
   ...DEFAULT_COMPOUND_INTEREST_VALUES,
@@ -161,12 +161,6 @@ export function CompoundInterestCalculator() {
     setResult(null);
     setAnnouncement("입력값과 계산 결과를 초기화했습니다.");
   }
-
-  const maxBalance = result
-    ? new Decimal(
-        result.yearlyData.at(-1)?.netBalance ?? result.estimatedFinalBalance,
-      )
-    : new Decimal(0);
 
   return (
     <section aria-labelledby="calculator-title" className="space-y-8">
@@ -421,70 +415,7 @@ export function CompoundInterestCalculator() {
           </section>
           {result ? (
             <>
-              <section className="rounded-2xl border bg-card p-5 sm:p-7">
-                <h2
-                  id="growth-chart-title"
-                  className="text-2xl font-semibold tracking-tight"
-                >
-                  연도별 자산 성장
-                </h2>
-                <p
-                  id="growth-chart-description"
-                  className="mt-2 text-sm text-muted-foreground"
-                >
-                  막대는 각 연도의 총 납입 원금과 예상 총자산을 마지막 연도
-                  잔액에 상대적으로 표시합니다.
-                </p>
-                <div className="mt-4 flex flex-wrap gap-4 text-xs">
-                  <span className="flex items-center gap-2">
-                    <span className="size-3 rounded-sm bg-chart-2" />
-                    누적 납입 원금
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <span className="size-3 rounded-sm bg-primary" />
-                    예상 총자산
-                  </span>
-                </div>
-                <div
-                  role="img"
-                  aria-labelledby="growth-chart-title growth-chart-description"
-                  className="mt-5 max-h-96 space-y-3 overflow-y-auto pr-2"
-                >
-                  {result.yearlyData.map((record) => {
-                    const assetWidth = new Decimal(record.netBalance)
-                      .div(maxBalance)
-                      .mul(100)
-                      .toNumber();
-                    const principalWidth = new Decimal(
-                      record.cumulativePrincipal,
-                    )
-                      .div(maxBalance)
-                      .mul(100)
-                      .toNumber();
-                    return (
-                      <div
-                        key={record.year}
-                        aria-hidden="true"
-                        className="grid grid-cols-[3rem_1fr] items-center gap-3"
-                      >
-                        <span className="text-xs text-muted-foreground">
-                          {record.year}년
-                        </span>
-                        <div className="relative h-7 rounded-md bg-muted">
-                          <div
-                            className="absolute inset-y-0 left-0 rounded-md bg-primary/80"
-                            style={{ width: `${assetWidth}%` }}
-                          />
-                          <div
-                            className="absolute inset-y-1 left-0 rounded-sm bg-chart-2"
-                            style={{ width: `${principalWidth}%` }}
-                          />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </section>
+              <CompoundGrowthChart records={result.yearlyData} />
 
               <section className="rounded-2xl border bg-card p-5 sm:p-7">
                 <h2 className="text-2xl font-semibold tracking-tight">
