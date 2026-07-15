@@ -1,13 +1,14 @@
 "use client";
 
 import { type ChangeEvent, type FormEvent, useRef, useState } from "react";
+import { Calculator, ChartNoAxesCombined } from "lucide-react";
 
 import {
-  CalculatorActions,
   PrimaryResults,
   compactCalculatorSettingsClass,
   dashboardCalculatorWorkspaceClass,
 } from "@/components/calculators/calculator-workspace";
+import { Button } from "@/components/ui/button";
 import { formatMoneyInput } from "@/lib/input/money";
 
 import { calculateCompoundInterest } from "../calculate";
@@ -24,10 +25,10 @@ import { CompoundGrowthChart } from "./compound-growth-chart";
 
 const INITIAL_COMPOUND_INTEREST_VALUES: CompoundInterestFormValues = {
   ...DEFAULT_COMPOUND_INTEREST_VALUES,
-  initialPrincipal: "",
-  recurringContribution: "",
-  durationYears: "",
-  annualInterestRate: "",
+  initialPrincipal: "10000000",
+  recurringContribution: "500000",
+  durationYears: "10",
+  annualInterestRate: "5",
 };
 
 const inputClassName =
@@ -43,6 +44,7 @@ type NumberFieldProps = {
   required?: boolean;
   placeholder: string;
   money?: boolean;
+  className?: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onBlur: () => void;
 };
@@ -57,6 +59,7 @@ function NumberField({
   required = false,
   placeholder,
   money = false,
+  className,
   onChange,
   onBlur,
 }: NumberFieldProps) {
@@ -68,7 +71,7 @@ function NumberField({
     .join(" ");
 
   return (
-    <div>
+    <div className={className}>
       <label htmlFor={field} className="text-sm font-medium">
         {label} {required ? <span className="text-destructive">*</span> : null}
       </label>
@@ -168,16 +171,16 @@ export function CompoundInterestCalculator() {
           onSubmit={handleSubmit}
           className={compactCalculatorSettingsClass}
         >
-          <div className="mb-4">
-            <p className="text-sm font-semibold text-primary">입력</p>
+          <div className="mb-5">
             <h2
               id="calculator-title"
-              className="mt-1 text-2xl font-semibold tracking-tight"
+              className="flex items-center gap-2 text-lg font-semibold"
             >
-              복리 조건 설정
+              <Calculator className="size-5 text-primary" aria-hidden="true" />
+              입력 정보
             </h2>
-            <p className="mt-1 text-xs leading-5 text-muted-foreground">
-              별표(*) 항목은 필수입니다.
+            <p className="mt-3 text-xs leading-5 text-muted-foreground">
+              미래의 자산을 계산하기 위한 정보를 입력하세요.
             </p>
           </div>
 
@@ -190,7 +193,7 @@ export function CompoundInterestCalculator() {
             </div>
           ) : null}
 
-          <div className="grid gap-x-4 gap-y-3 sm:grid-cols-2">
+          <div className="grid gap-x-3 gap-y-4 sm:grid-cols-2">
             <NumberField
               field="initialPrincipal"
               label="초기 원금"
@@ -201,6 +204,7 @@ export function CompoundInterestCalculator() {
               error={errors.initialPrincipal}
               placeholder="예: 1,000,000"
               money
+              className="sm:order-1 sm:col-span-2"
               onChange={(event) =>
                 updateValue("initialPrincipal", event.target.value)
               }
@@ -216,12 +220,13 @@ export function CompoundInterestCalculator() {
               error={errors.recurringContribution}
               placeholder="예: 100,000"
               money
+              className="sm:order-2 sm:col-span-2"
               onChange={(event) =>
                 updateValue("recurringContribution", event.target.value)
               }
               onBlur={() => validateField("recurringContribution")}
             />
-            <div>
+            <div className="sm:order-6">
               <label
                 htmlFor="contributionFrequency"
                 className="text-sm font-medium"
@@ -253,6 +258,7 @@ export function CompoundInterestCalculator() {
                 updateValue("durationYears", event.target.value)
               }
               onBlur={() => validateField("durationYears")}
+              className="sm:order-5"
             />
             <NumberField
               field="annualInterestRate"
@@ -267,8 +273,9 @@ export function CompoundInterestCalculator() {
                 updateValue("annualInterestRate", event.target.value)
               }
               onBlur={() => validateField("annualInterestRate")}
+              className="sm:order-3"
             />
-            <div>
+            <div className="sm:order-4">
               <label
                 htmlFor="compoundingFrequency"
                 className="text-sm font-medium"
@@ -318,11 +325,20 @@ export function CompoundInterestCalculator() {
             </div>
           </fieldset>
 
-          <CalculatorActions
-            submitLabel="예상 결과 계산하기"
-            onReset={reset}
-            compact
-          />
+          <div className="mt-4 grid gap-2">
+            <Button type="submit" size="lg" className="h-11 w-full">
+              예상 결과 계산하기
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="lg"
+              className="h-11 w-full"
+              onClick={reset}
+            >
+              초기화
+            </Button>
+          </div>
 
           <details className="mt-3 rounded-xl border bg-muted/30 px-3 py-2">
             <summary className="min-h-9 cursor-pointer content-center text-sm font-medium">
@@ -365,62 +381,52 @@ export function CompoundInterestCalculator() {
         <div className="space-y-3">
           <section
             aria-labelledby="result-title"
-            className="rounded-xl border bg-card p-5 shadow-sm"
+            className="rounded-xl border bg-card p-4 shadow-sm"
           >
-            <p className="text-sm font-semibold text-primary">예상 결과</p>
             <h2
               id="result-title"
-              className="mt-1 text-2xl font-semibold tracking-tight"
+              className="flex items-center gap-2 text-lg font-semibold"
             >
-              {result
-                ? result.taxEnabled
-                  ? "세금 반영 예상 최종 금액"
-                  : "예상 최종 금액"
-                : "복리 계산 결과"}
+              <ChartNoAxesCombined
+                className="size-5 text-primary"
+                aria-hidden="true"
+              />
+              예상 결과
             </h2>
             <PrimaryResults
               metrics={[
                 {
-                  label: "예상 최종 금액",
-                  value: result ? formatWon(result.estimatedFinalBalance) : "—",
+                  label: "예상 자산",
+                  value: result
+                    ? formatWon(result.estimatedFinalBalance)
+                    : "0원",
                   featured: true,
                 },
                 {
-                  label: "총 납입 원금",
+                  label: "총 납입 금액",
                   value: result
                     ? formatWon(result.totalContributedPrincipal)
-                    : "—",
+                    : "0원",
                 },
                 {
-                  label: "예상 순증가액",
-                  value: result ? formatWon(result.estimatedNetGain) : "—",
+                  label: "총 이자 금액",
+                  value: result ? formatWon(result.estimatedNetGain) : "0원",
                 },
               ]}
             />
-            <p className="mt-3 text-sm leading-6 text-muted-foreground">
-              고정 이자율을 가정한 시나리오 추정치이며 실제 수익이나 금융 결과를
-              보장하지 않습니다.
-            </p>
             <p className="sr-only" aria-live="polite" aria-atomic="true">
               {announcement}
             </p>
           </section>
           <CompoundGrowthChart records={result?.yearlyData} />
-          <details className="rounded-xl border bg-card p-5 shadow-sm">
-            <summary className="cursor-pointer font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+          <details className="rounded-xl border bg-card p-4 shadow-sm">
+            <summary className="cursor-pointer text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
               연도별 상세 내역 보기
             </summary>
             {result ? (
               <>
-                <h2 className="mt-5 text-2xl font-semibold tracking-tight">
-                  연도별 상세 내역
-                </h2>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  모든 금액은 원 단위로 반올림해 표시합니다. 표는 위 차트의 전체
-                  대체 정보를 제공합니다.
-                </p>
-                <div className="mt-5 overflow-x-auto rounded-xl border">
-                  <table className="w-full min-w-[1100px] border-collapse text-right text-sm tabular-nums">
+                <div className="mt-4 overflow-x-auto rounded-lg border">
+                  <table className="w-full min-w-[640px] border-collapse text-right text-sm tabular-nums">
                     <caption className="sr-only">
                       연도별 복리 계산 상세 내역
                     </caption>
@@ -428,14 +434,10 @@ export function CompoundInterestCalculator() {
                       <tr>
                         {[
                           "연도",
-                          "기초 잔액",
+                          "연말 자산",
                           "연간 납입",
                           "연간 이자",
                           "누적 원금",
-                          "세전 잔액",
-                          "간이 세금",
-                          "세후 잔액",
-                          "물가 반영 가치",
                         ].map((heading) => (
                           <th
                             key={heading}
@@ -457,7 +459,7 @@ export function CompoundInterestCalculator() {
                             {record.year}년
                           </th>
                           <td className="px-3 py-3">
-                            {formatWon(record.openingBalance)}
+                            {formatWon(record.netBalance)}
                           </td>
                           <td className="px-3 py-3">
                             {formatWon(record.contributions)}
@@ -467,18 +469,6 @@ export function CompoundInterestCalculator() {
                           </td>
                           <td className="px-3 py-3">
                             {formatWon(record.cumulativePrincipal)}
-                          </td>
-                          <td className="px-3 py-3">
-                            {formatWon(record.grossBalance)}
-                          </td>
-                          <td className="px-3 py-3">
-                            {formatWon(record.estimatedTax)}
-                          </td>
-                          <td className="px-3 py-3">
-                            {formatWon(record.netBalance)}
-                          </td>
-                          <td className="px-3 py-3">
-                            {formatWon(record.inflationAdjustedValue)}
                           </td>
                         </tr>
                       ))}
@@ -495,10 +485,10 @@ export function CompoundInterestCalculator() {
 
           {result ? (
             <>
-              <section className="rounded-2xl border bg-card p-5 sm:p-7">
-                <h2 className="text-2xl font-semibold tracking-tight">
+              <details className="rounded-xl border bg-card p-4 shadow-sm">
+                <summary className="cursor-pointer text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                   추가 결과와 적용 가정
-                </h2>
+                </summary>
                 <dl className="mt-5 grid gap-3 sm:grid-cols-2">
                   {[
                     ["세전 예상 잔액", result.grossFinalBalance],
@@ -540,7 +530,7 @@ export function CompoundInterestCalculator() {
                       : " · 세금 미반영"}
                   </p>
                 </div>
-              </section>
+              </details>
             </>
           ) : null}
         </div>

@@ -18,9 +18,10 @@ export type CompoundGrowthPoint = {
   year: number;
   principal: number;
   assets: number;
+  interest: number;
   principalValue: string;
   assetsValue: string;
-  interest: string;
+  interestValue: string;
 };
 
 export function createGrowthChartData(
@@ -32,7 +33,10 @@ export function createGrowthChartData(
     assets: Number(record.netBalance),
     principalValue: record.cumulativePrincipal,
     assetsValue: record.netBalance,
-    interest: new Decimal(record.netBalance)
+    interest: Number(
+      new Decimal(record.netBalance).minus(record.cumulativePrincipal),
+    ),
+    interestValue: new Decimal(record.netBalance)
       .minus(record.cumulativePrincipal)
       .toString(),
   }));
@@ -69,7 +73,7 @@ export function CompoundGrowthTooltip({
         </div>
         <div className="flex justify-between gap-5">
           <dt className="text-muted-foreground">누적 이자</dt>
-          <dd>{formatWon(point.interest)}</dd>
+          <dd>{formatWon(point.interestValue)}</dd>
         </div>
       </dl>
     </div>
@@ -90,34 +94,47 @@ export function CompoundGrowthChart({
   const ticks = getYearTicks(data);
 
   return (
-    <section className="rounded-xl border bg-card p-5 shadow-sm">
+    <section className="rounded-xl border bg-card p-4 shadow-sm">
       <h2
         id="growth-chart-title"
-        className="text-2xl font-semibold tracking-tight"
+        className="text-lg font-semibold tracking-tight"
       >
-        연도별 자산 성장
+        자산 성장 그래프
       </h2>
-      <p
-        id="growth-chart-description"
-        className="mt-2 text-sm text-muted-foreground"
-      >
+      <p id="growth-chart-description" className="sr-only">
         누적 납입 원금과 예상 총자산의 간격으로 복리 수익이 커지는 흐름을 보여
         줍니다. 정확한 금액은 아래 연도별 상세 내역에서 확인할 수 있습니다.
       </p>
-      <div className="mt-4 flex flex-wrap gap-4 text-xs" aria-label="차트 범례">
-        <span className="flex items-center gap-2" data-series="principal">
-          <span className="h-0.5 w-5 bg-chart-2" aria-hidden="true" />
-          누적 납입 원금
-        </span>
+      <div
+        className="mt-5 flex flex-wrap justify-center gap-6 text-xs"
+        aria-label="차트 범례"
+      >
         <span className="flex items-center gap-2" data-series="assets">
-          <span className="h-0.5 w-5 bg-primary" aria-hidden="true" />
-          예상 총자산
+          <span
+            className="size-2.5 rounded-full bg-primary"
+            aria-hidden="true"
+          />
+          예상 자산
+        </span>
+        <span className="flex items-center gap-2" data-series="principal">
+          <span
+            className="size-2.5 rounded-full bg-chart-2"
+            aria-hidden="true"
+          />
+          납입 금액
+        </span>
+        <span className="flex items-center gap-2" data-series="interest">
+          <span
+            className="size-2.5 rounded-full bg-chart-3"
+            aria-hidden="true"
+          />
+          이자 금액
         </span>
       </div>
       <div
         role="img"
         aria-labelledby="growth-chart-title growth-chart-description"
-        className="mt-5 h-[300px] min-w-0 sm:h-80 lg:h-[340px]"
+        className="mt-4 h-[300px] min-w-0"
         data-testid="compound-growth-chart"
       >
         {records?.length ? (
@@ -178,6 +195,16 @@ export function CompoundGrowthChart({
                 isAnimationActive={false}
               />
               <Line
+                dataKey="interest"
+                name="이자 금액"
+                type="monotone"
+                stroke="var(--chart-3)"
+                strokeWidth={2}
+                dot={false}
+                activeDot={{ r: 4 }}
+                isAnimationActive={false}
+              />
+              <Line
                 dataKey="assets"
                 name="예상 총자산"
                 type="monotone"
@@ -190,7 +217,12 @@ export function CompoundGrowthChart({
             </LineChart>
           </ResponsiveContainer>
         ) : (
-          <div className="flex h-full items-center justify-center rounded-xl border border-dashed bg-muted/20 px-6 text-center text-sm leading-6 text-muted-foreground">
+          <div className="flex h-full flex-col items-center justify-center rounded-lg border bg-muted/10 px-6 text-center text-sm leading-6 text-muted-foreground">
+            <span className="mb-4 flex h-9 items-end gap-1" aria-hidden="true">
+              <span className="h-3 w-1.5 border border-foreground/70" />
+              <span className="h-6 w-1.5 border border-foreground/70" />
+              <span className="h-9 w-1.5 border border-foreground/70" />
+            </span>
             값을 입력하고 계산하면 자산 성장 그래프가 표시됩니다.
           </div>
         )}
