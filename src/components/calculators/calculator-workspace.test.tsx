@@ -30,8 +30,9 @@ describe("calculator workspace", () => {
   });
 
   it("provides a compact settings variant with desktop sticky positioning", () => {
-    expect(compactCalculatorSettingsClass).toContain("p-4");
+    expect(compactCalculatorSettingsClass).toContain("p-5");
+    expect(compactCalculatorSettingsClass).toContain("rounded-xl");
     expect(compactCalculatorSettingsClass).toContain("lg:sticky");
-    expect(compactCalculatorSettingsClass).toContain("lg:top-4");
+    expect(compactCalculatorSettingsClass).toContain("lg:top-6");
   });
 });

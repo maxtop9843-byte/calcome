@@ -7,7 +7,7 @@ export const calculatorWorkspaceClass =
 export const calculatorSettingsClass =
   "rounded-2xl border bg-card p-5 shadow-sm sm:p-7 lg:sticky lg:top-6";
 export const compactCalculatorSettingsClass =
-  "rounded-2xl border bg-card p-4 shadow-sm lg:sticky lg:top-4";
+  "rounded-xl border bg-card p-5 shadow-sm lg:sticky lg:top-6";
 
 export function CalculatorActions({
   submitLabel,
@@ -45,7 +45,7 @@ export function PrimaryResults({
 }) {
   return (
     <dl
-      className="mt-6 grid gap-3 sm:grid-cols-3"
+      className="mt-4 grid gap-3 sm:grid-cols-3"
       data-testid="primary-results"
     >
       {metrics.map((metric) => (

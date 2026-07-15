@@ -90,7 +90,7 @@ export function CompoundGrowthChart({
   const ticks = getYearTicks(data);
 
   return (
-    <section className="rounded-2xl border bg-card p-5 sm:p-7">
+    <section className="rounded-xl border bg-card p-5 shadow-sm">
       <h2
         id="growth-chart-title"
         className="text-2xl font-semibold tracking-tight"
@@ -117,7 +117,7 @@ export function CompoundGrowthChart({
       <div
         role="img"
         aria-labelledby="growth-chart-title growth-chart-description"
-        className="mt-5 h-64 min-w-0 sm:h-80 lg:h-96"
+        className="mt-5 h-[300px] min-w-0 sm:h-80 lg:h-[340px]"
         data-testid="compound-growth-chart"
       >
         {records?.length ? (
@@ -191,8 +191,7 @@ export function CompoundGrowthChart({
           </ResponsiveContainer>
         ) : (
           <div className="flex h-full items-center justify-center rounded-xl border border-dashed bg-muted/20 px-6 text-center text-sm leading-6 text-muted-foreground">
-            투자 조건을 계산하면 이곳에 원금과 예상 총자산의 성장 흐름이
-            표시됩니다.
+            값을 입력하고 계산하면 자산 성장 그래프가 표시됩니다.
           </div>
         )}
       </div>

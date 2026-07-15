@@ -362,10 +362,10 @@ export function CompoundInterestCalculator() {
             </div>
           </details>
         </form>
-        <div className="space-y-6">
+        <div className="space-y-3">
           <section
             aria-labelledby="result-title"
-            className="rounded-2xl border bg-card p-5 shadow-sm sm:p-7"
+            className="rounded-xl border bg-card p-5 shadow-sm"
           >
             <p className="text-sm font-semibold text-primary">예상 결과</p>
             <h2
@@ -406,12 +406,12 @@ export function CompoundInterestCalculator() {
             </p>
           </section>
           <CompoundGrowthChart records={result?.yearlyData} />
-          {result ? (
-            <>
-              <details className="rounded-2xl border bg-card p-5 sm:p-7">
-                <summary className="cursor-pointer font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-                  연도별 상세 내역 보기
-                </summary>
+          <details className="rounded-xl border bg-card p-5 shadow-sm">
+            <summary className="cursor-pointer font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              연도별 상세 내역 보기
+            </summary>
+            {result ? (
+              <>
                 <h2 className="mt-5 text-2xl font-semibold tracking-tight">
                   연도별 상세 내역
                 </h2>
@@ -485,8 +485,16 @@ export function CompoundInterestCalculator() {
                     </tbody>
                   </table>
                 </div>
-              </details>
+              </>
+            ) : (
+              <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                계산 후 연도별 원금, 이자, 예상 잔액을 표로 확인할 수 있습니다.
+              </p>
+            )}
+          </details>
 
+          {result ? (
+            <>
               <section className="rounded-2xl border bg-card p-5 sm:p-7">
                 <h2 className="text-2xl font-semibold tracking-tight">
                   추가 결과와 적용 가정

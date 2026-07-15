@@ -21,7 +21,8 @@ describe("CompoundInterestCalculator", () => {
     expect(
       screen.getByRole("img", { name: /누적 납입 원금과 예상 총자산/ }),
     ).toBeVisible();
-    expect(screen.getByText(/투자 조건을 계산하면 이곳에/)).toBeVisible();
+    expect(screen.getByText(/값을 입력하고 계산하면/)).toBeVisible();
+    expect(screen.getByText("연도별 상세 내역 보기")).toBeVisible();
     expect(screen.queryByRole("table")).not.toBeInTheDocument();
   });
 

@@ -54,7 +54,7 @@ describe("CompoundGrowthChart", () => {
     render(<CompoundGrowthChart records={[record(1), record(2)]} />);
     expect(
       screen.getByRole("img", { name: /누적 납입 원금과 예상 총자산/ }),
-    ).toHaveClass("h-64", "sm:h-80", "lg:h-96", "min-w-0");
+    ).toHaveClass("h-[300px]", "sm:h-80", "lg:h-[340px]", "min-w-0");
     expect(document.querySelectorAll("[data-series]")).toHaveLength(2);
     expect(
       screen.getByText(/정확한 금액은 아래 연도별 상세 내역/),
@@ -64,10 +64,10 @@ describe("CompoundGrowthChart", () => {
   it("reserves chart space without drawing fake data", () => {
     render(<CompoundGrowthChart />);
     expect(screen.getByTestId("compound-growth-chart")).toHaveClass(
-      "h-64",
-      "lg:h-96",
+      "h-[300px]",
+      "lg:h-[340px]",
     );
-    expect(screen.getByText(/투자 조건을 계산하면 이곳에/)).toBeVisible();
+    expect(screen.getByText(/값을 입력하고 계산하면/)).toBeVisible();
     expect(document.querySelector(".recharts-wrapper")).not.toBeInTheDocument();
   });
 
