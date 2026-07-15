@@ -31,7 +31,7 @@ describe("calculator workspace", () => {
   });
 
   it("provides a compact settings variant with desktop sticky positioning", () => {
-    expect(compactCalculatorSettingsClass).toContain("p-5");
+    expect(compactCalculatorSettingsClass).toContain("p-4");
     expect(compactCalculatorSettingsClass).toContain("rounded-xl");
     expect(compactCalculatorSettingsClass).toContain("lg:sticky");
     expect(compactCalculatorSettingsClass).toContain("lg:top-6");
@@ -39,7 +39,7 @@ describe("calculator workspace", () => {
 
   it("provides a dashboard variant with a narrow fixed settings sidebar", () => {
     expect(dashboardCalculatorWorkspaceClass).toContain(
-      "lg:grid-cols-[20rem_minmax(0,1fr)]",
+      "lg:grid-cols-[21rem_minmax(0,1fr)]",
     );
     expect(dashboardCalculatorWorkspaceClass).not.toContain("0.36fr");
   });

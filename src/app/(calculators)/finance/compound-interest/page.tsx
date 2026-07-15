@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BookOpen, CircleHelp, ShieldCheck } from "lucide-react";
 
 import { absoluteUrl, siteConfig } from "@/config/site";
 import { CompoundInterestCalculator } from "@/features/compound-interest/components/compound-interest-calculator";
@@ -111,8 +112,8 @@ export default function CompoundInterestPage() {
           __html: JSON.stringify(structuredData).replaceAll("<", "\\u003c"),
         }}
       />
-      <div className="mx-auto w-full max-w-7xl px-5 py-6 sm:px-8">
-        <nav aria-label="현재 위치" className="text-sm text-muted-foreground">
+      <div className="mx-auto w-full max-w-[1440px] px-5 py-5 sm:px-6">
+        <nav aria-label="현재 위치" className="text-xs text-muted-foreground">
           <ol className="flex flex-wrap items-center gap-2">
             <li>
               <Link href="/" className="hover:text-foreground hover:underline">
@@ -126,20 +127,13 @@ export default function CompoundInterestPage() {
           </ol>
         </nav>
 
-        <header className="mt-3 max-w-3xl">
-          <p className="text-sm font-semibold tracking-wide text-primary">
-            금융 계산기
-          </p>
-          <h1 className="mt-1 text-balance text-4xl font-semibold tracking-tight sm:text-5xl">
+        <header className="mt-4 max-w-3xl">
+          <h1 className="text-balance text-3xl font-bold tracking-tight">
             복리 계산기
           </h1>
-          <p className="mt-2 text-pretty text-base leading-7 text-muted-foreground sm:text-lg">
-            초기 투자금과 정기 납입액이 복리로 어떻게 성장하는지 계산하고,
-            원금과 이자의 변화를 연도별로 확인하세요.
-          </p>
-          <p className="mt-1 text-xs leading-5 text-muted-foreground sm:text-sm">
-            계산 결과는 입력값에 따른 수학적 추정치이며 투자 성과, 금융상품
-            수익, 실제 세금 또는 구매력을 보장하지 않습니다.
+          <p className="mt-2 text-sm leading-6 text-muted-foreground">
+            복리의 미래를 경험해보세요. 시간이 지날수록 자산이 기하급수적으로
+            성장합니다.
           </p>
         </header>
 
@@ -147,15 +141,18 @@ export default function CompoundInterestPage() {
           <CompoundInterestCalculator />
         </div>
 
-        <div className="mt-14 grid gap-8 lg:grid-cols-2">
-          <section className="rounded-2xl border bg-card p-5 sm:p-7">
-            <h2 className="text-2xl font-semibold tracking-tight">계산 방법</h2>
-            <div className="mt-4 space-y-4 text-sm leading-7 text-muted-foreground">
+        <div className="mt-4 grid gap-4 lg:grid-cols-2">
+          <section className="rounded-xl border bg-card p-5 shadow-sm">
+            <h2 className="flex items-center gap-2 text-lg font-semibold">
+              <BookOpen className="size-5 text-primary" aria-hidden="true" />
+              계산 방법
+            </h2>
+            <div className="mt-4 space-y-3 text-sm leading-6 text-muted-foreground">
               <p>
                 초기 투자금은 선택한 복리 주기마다 이자가 붙는다고 가정합니다.
                 정기 납입액은 월 또는 연 단위로, 선택한 납입 시점에 추가됩니다.
               </p>
-              <p className="overflow-x-auto rounded-xl bg-muted p-4 font-mono text-xs text-foreground">
+              <p className="overflow-x-auto rounded-lg bg-muted p-3 font-mono text-xs text-foreground">
                 미래가치 = 초기 투자금의 복리 가치 + 정기 납입금의 복리 가치
               </p>
               <p>
@@ -166,11 +163,12 @@ export default function CompoundInterestPage() {
             </div>
           </section>
 
-          <section className="rounded-2xl border bg-card p-5 sm:p-7">
-            <h2 className="text-2xl font-semibold tracking-tight">
+          <section className="rounded-xl border bg-card p-5 shadow-sm">
+            <h2 className="flex items-center gap-2 text-lg font-semibold">
+              <ShieldCheck className="size-5 text-primary" aria-hidden="true" />
               계산 전 확인하세요
             </h2>
-            <ul className="mt-4 list-disc space-y-3 pl-5 text-sm leading-6 text-muted-foreground">
+            <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-muted-foreground">
               <li>첫 버전의 투자 기간은 1년 단위로만 입력할 수 있습니다.</li>
               <li>
                 이율과 납입액은 전체 기간 동안 변하지 않는다고 가정합니다.
@@ -187,17 +185,21 @@ export default function CompoundInterestPage() {
           </section>
         </div>
 
-        <section className="mt-14 max-w-3xl">
-          <h2 className="text-3xl font-semibold tracking-tight">
+        <section className="mt-4 rounded-xl border bg-card p-5 shadow-sm">
+          <h2 className="flex items-center gap-2 text-lg font-semibold">
+            <CircleHelp className="size-5 text-primary" aria-hidden="true" />
             자주 묻는 질문
           </h2>
-          <div className="mt-5 divide-y rounded-2xl border bg-card px-5 sm:px-7">
+          <div className="mt-4 grid gap-3 md:grid-cols-2">
             {faqItems.map((item) => (
-              <details key={item.question} className="group py-5">
-                <summary className="cursor-pointer list-none pr-8 font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              <details
+                key={item.question}
+                className="group rounded-lg border px-4 py-3"
+              >
+                <summary className="cursor-pointer list-none pr-8 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                   {item.question}
                 </summary>
-                <p className="mt-3 text-sm leading-7 text-muted-foreground">
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
                   {item.answer}
                 </p>
               </details>

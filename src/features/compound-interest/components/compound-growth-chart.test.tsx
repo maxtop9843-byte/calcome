@@ -32,9 +32,10 @@ describe("CompoundGrowthChart", () => {
       year: 2,
       principal: 2000000,
       assets: 2040000,
+      interest: 40000,
       principalValue: "2000000",
       assetsValue: "2040000",
-      interest: "40000",
+      interestValue: "40000",
     });
   });
 
@@ -50,12 +51,12 @@ describe("CompoundGrowthChart", () => {
     expect(ticks.at(-1)).toBe(30);
   });
 
-  it("renders exactly two series, responsive sizing, and accessible context", () => {
+  it("renders the three specified series, fixed sizing, and accessible context", () => {
     render(<CompoundGrowthChart records={[record(1), record(2)]} />);
     expect(
       screen.getByRole("img", { name: /누적 납입 원금과 예상 총자산/ }),
-    ).toHaveClass("h-[300px]", "sm:h-80", "lg:h-[340px]", "min-w-0");
-    expect(document.querySelectorAll("[data-series]")).toHaveLength(2);
+    ).toHaveClass("h-[300px]", "min-w-0");
+    expect(document.querySelectorAll("[data-series]")).toHaveLength(3);
     expect(
       screen.getByText(/정확한 금액은 아래 연도별 상세 내역/),
     ).toBeVisible();
@@ -65,7 +66,7 @@ describe("CompoundGrowthChart", () => {
     render(<CompoundGrowthChart />);
     expect(screen.getByTestId("compound-growth-chart")).toHaveClass(
       "h-[300px]",
-      "lg:h-[340px]",
+      "h-[300px]",
     );
     expect(screen.getByText(/값을 입력하고 계산하면/)).toBeVisible();
     expect(document.querySelector(".recharts-wrapper")).not.toBeInTheDocument();
@@ -81,7 +82,8 @@ describe("CompoundGrowthChart", () => {
           assets: 6100000,
           principalValue: "5000000",
           assetsValue: "6100000",
-          interest: "1100000",
+          interest: 1100000,
+          interestValue: "1100000",
         }}
       />,
     );

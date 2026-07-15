@@ -6,18 +6,26 @@ import { CompoundInterestCalculator } from "./compound-interest-calculator";
 
 describe("CompoundInterestCalculator", () => {
   async function fillRequired(user: ReturnType<typeof userEvent.setup>) {
-    await user.type(screen.getByLabelText("초기 원금 *"), "1000000");
-    await user.type(screen.getByLabelText("정기 납입액 *"), "100000");
-    await user.type(screen.getByLabelText("투자 기간 *"), "10");
-    await user.type(screen.getByLabelText("연 이자율 *"), "5");
+    const principal = screen.getByLabelText("초기 원금 *");
+    const contribution = screen.getByLabelText("정기 납입액 *");
+    const duration = screen.getByLabelText("투자 기간 *");
+    const rate = screen.getByLabelText("연 이자율 *");
+    await user.clear(principal);
+    await user.type(principal, "1000000");
+    await user.clear(contribution);
+    await user.type(contribution, "100000");
+    await user.clear(duration);
+    await user.type(duration, "10");
+    await user.clear(rate);
+    await user.type(rate, "5");
   }
-  it("renders empty inputs with reserved result and chart space", () => {
+  it("renders preset inputs with reserved result and chart space", () => {
     render(<CompoundInterestCalculator />);
 
-    expect(screen.getByLabelText("초기 원금 *")).toHaveValue("");
+    expect(screen.getByLabelText("초기 원금 *")).toHaveValue("10000000");
     expect(screen.getByPlaceholderText("예: 1,000,000")).toBeVisible();
     expect(screen.getByTestId("primary-results").children).toHaveLength(3);
-    expect(screen.getAllByText("—")).toHaveLength(3);
+    expect(screen.getAllByText("0원")).toHaveLength(3);
     expect(
       screen.getByRole("img", { name: /누적 납입 원금과 예상 총자산/ }),
     ).toBeVisible();
@@ -46,8 +54,12 @@ describe("CompoundInterestCalculator", () => {
     await user.type(principal, "0");
     await user.clear(contribution);
     await user.type(contribution, "0");
-    await user.type(screen.getByLabelText("투자 기간 *"), "10");
-    await user.type(screen.getByLabelText("연 이자율 *"), "5");
+    const duration = screen.getByLabelText("투자 기간 *");
+    const rate = screen.getByLabelText("연 이자율 *");
+    await user.clear(duration);
+    await user.type(duration, "10");
+    await user.clear(rate);
+    await user.type(rate, "5");
     await user.click(
       screen.getByRole("button", { name: "예상 결과 계산하기" }),
     );
@@ -69,15 +81,14 @@ describe("CompoundInterestCalculator", () => {
       screen.getByRole("button", { name: "예상 결과 계산하기" }),
     );
 
-    expect(
-      screen.getByRole("heading", { name: "세금 반영 예상 최종 금액" }),
-    ).toBeVisible();
+    expect(screen.getByRole("heading", { name: "예상 결과" })).toBeVisible();
     const resultRegion = screen.getByRole("region", {
-      name: "세금 반영 예상 최종 금액",
+      name: "예상 결과",
     });
     expect(
       within(resultRegion).getByTestId("primary-results").children,
     ).toHaveLength(3);
+    await user.click(screen.getByText("추가 결과와 적용 가정"));
     expect(screen.getByText("세전 예상 잔액")).toBeVisible();
     expect(screen.getByText(/간이 세율 20%/)).toBeVisible();
     expect(

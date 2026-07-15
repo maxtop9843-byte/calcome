@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 export const calculatorWorkspaceClass =
   "grid gap-6 md:grid-cols-[minmax(16rem,0.36fr)_minmax(0,0.64fr)] md:items-start";
 export const dashboardCalculatorWorkspaceClass =
-  "grid gap-6 lg:grid-cols-[20rem_minmax(0,1fr)] lg:items-start";
+  "grid gap-4 lg:grid-cols-[21rem_minmax(0,1fr)] lg:items-start";
 export const calculatorSettingsClass =
   "rounded-2xl border bg-card p-5 shadow-sm sm:p-7 lg:sticky lg:top-6";
 export const compactCalculatorSettingsClass =
-  "rounded-xl border bg-card p-5 shadow-sm lg:sticky lg:top-6";
+  "rounded-xl border bg-card p-4 shadow-sm lg:sticky lg:top-6";
 
 export function CalculatorActions({
   submitLabel,
@@ -47,18 +47,18 @@ export function PrimaryResults({
 }) {
   return (
     <dl
-      className="mt-4 grid gap-3 sm:grid-cols-3"
+      className="mt-4 grid gap-2 sm:grid-cols-3"
       data-testid="primary-results"
     >
       {metrics.map((metric) => (
         <div
           key={metric.label}
-          className={`rounded-xl border p-4 ${metric.featured ? "border-primary/30 bg-primary/5" : "bg-background"}`}
+          className={`min-h-24 rounded-lg border p-4 ${metric.featured ? "border-primary/30 bg-primary/5" : "bg-background"}`}
         >
           <dt className="text-xs leading-5 text-muted-foreground">
             {metric.label}
           </dt>
-          <dd className="mt-1 break-words text-lg font-semibold tabular-nums">
+          <dd className="mt-2 break-words text-xl font-bold tabular-nums">
             {metric.value}
           </dd>
         </div>
