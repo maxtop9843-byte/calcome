@@ -84,9 +84,9 @@ const compactWon = new Intl.NumberFormat("ko-KR", {
 export function CompoundGrowthChart({
   records,
 }: {
-  records: readonly YearlyCompoundInterestRecord[];
+  records?: readonly YearlyCompoundInterestRecord[];
 }) {
-  const data = createGrowthChartData(records);
+  const data = createGrowthChartData(records ?? []);
   const ticks = getYearTicks(data);
 
   return (
@@ -120,72 +120,81 @@ export function CompoundGrowthChart({
         className="mt-5 h-64 min-w-0 sm:h-80 lg:h-96"
         data-testid="compound-growth-chart"
       >
-        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
-          <LineChart
-            data={data}
-            margin={{ top: 8, right: 8, bottom: 4, left: 4 }}
-            accessibilityLayer
-          >
-            <CartesianGrid
-              vertical={false}
-              stroke="var(--border)"
-              strokeDasharray="3 5"
-            />
-            <XAxis
-              dataKey="year"
-              type="number"
-              domain={[1, "dataMax"]}
-              ticks={ticks}
-              tickFormatter={(year) => `${year}년`}
-              tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
-              axisLine={{ stroke: "var(--border)" }}
-              tickLine={false}
-            />
-            <YAxis
-              width={58}
-              tickCount={5}
-              tickFormatter={(value) => `₩${compactWon.format(Number(value))}`}
-              tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <Tooltip
-              cursor={{
-                stroke: "var(--muted-foreground)",
-                strokeDasharray: "3 3",
-              }}
-              animationDuration={0}
-              content={({ active, payload }) => (
-                <CompoundGrowthTooltip
-                  active={active}
-                  point={
-                    payload?.[0]?.payload as CompoundGrowthPoint | undefined
-                  }
-                />
-              )}
-            />
-            <Line
-              dataKey="principal"
-              name="누적 납입 원금"
-              type="monotone"
-              stroke="var(--chart-2)"
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 4 }}
-              isAnimationActive={false}
-            />
-            <Line
-              dataKey="assets"
-              name="예상 총자산"
-              type="monotone"
-              stroke="var(--primary)"
-              strokeWidth={3}
-              dot={false}
-              activeDot={{ r: 4 }}
-              isAnimationActive={false}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+        {records?.length ? (
+          <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+            <LineChart
+              data={data}
+              margin={{ top: 8, right: 8, bottom: 4, left: 4 }}
+              accessibilityLayer
+            >
+              <CartesianGrid
+                vertical={false}
+                stroke="var(--border)"
+                strokeDasharray="3 5"
+              />
+              <XAxis
+                dataKey="year"
+                type="number"
+                domain={[1, "dataMax"]}
+                ticks={ticks}
+                tickFormatter={(year) => `${year}년`}
+                tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
+                axisLine={{ stroke: "var(--border)" }}
+                tickLine={false}
+              />
+              <YAxis
+                width={58}
+                tickCount={5}
+                tickFormatter={(value) =>
+                  `₩${compactWon.format(Number(value))}`
+                }
+                tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <Tooltip
+                cursor={{
+                  stroke: "var(--muted-foreground)",
+                  strokeDasharray: "3 3",
+                }}
+                animationDuration={0}
+                content={({ active, payload }) => (
+                  <CompoundGrowthTooltip
+                    active={active}
+                    point={
+                      payload?.[0]?.payload as CompoundGrowthPoint | undefined
+                    }
+                  />
+                )}
+              />
+              <Line
+                dataKey="principal"
+                name="누적 납입 원금"
+                type="monotone"
+                stroke="var(--chart-2)"
+                strokeWidth={2}
+                dot={false}
+                activeDot={{ r: 4 }}
+                isAnimationActive={false}
+              />
+              <Line
+                dataKey="assets"
+                name="예상 총자산"
+                type="monotone"
+                stroke="var(--primary)"
+                strokeWidth={3}
+                dot={false}
+                activeDot={{ r: 4 }}
+                isAnimationActive={false}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="flex h-full items-center justify-center rounded-xl border border-dashed bg-muted/20 px-6 text-center text-sm leading-6 text-muted-foreground">
+            투자 조건을 계산하면 이곳에 원금과 예상 총자산의 성장 흐름이
+            표시됩니다.
+          </div>
+        )}
       </div>
     </section>
   );

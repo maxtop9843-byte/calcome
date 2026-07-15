@@ -6,16 +6,22 @@ export const calculatorWorkspaceClass =
   "grid gap-6 md:grid-cols-[minmax(16rem,0.36fr)_minmax(0,0.64fr)] md:items-start";
 export const calculatorSettingsClass =
   "rounded-2xl border bg-card p-5 shadow-sm sm:p-7 lg:sticky lg:top-6";
+export const compactCalculatorSettingsClass =
+  "rounded-2xl border bg-card p-4 shadow-sm lg:sticky lg:top-4";
 
 export function CalculatorActions({
   submitLabel,
   onReset,
+  compact = false,
 }: {
   submitLabel: string;
   onReset: () => void;
+  compact?: boolean;
 }) {
   return (
-    <div className="mt-6 grid grid-cols-[minmax(0,1fr)_auto] gap-2">
+    <div
+      className={`${compact ? "mt-3" : "mt-6"} grid grid-cols-[minmax(0,1fr)_auto] gap-2`}
+    >
       <Button type="submit" size="lg" className="h-11 px-5">
         {submitLabel}
       </Button>

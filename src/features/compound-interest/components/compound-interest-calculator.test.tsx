@@ -11,14 +11,18 @@ describe("CompoundInterestCalculator", () => {
     await user.type(screen.getByLabelText("투자 기간 *"), "10");
     await user.type(screen.getByLabelText("연 이자율 *"), "5");
   }
-  it("renders empty inputs, example placeholders, and no chart or table", () => {
+  it("renders empty inputs with reserved result and chart space", () => {
     render(<CompoundInterestCalculator />);
 
     expect(screen.getByLabelText("초기 원금 *")).toHaveValue("");
     expect(screen.getByPlaceholderText("예: 1,000,000")).toBeVisible();
-    expect(screen.queryByRole("img")).not.toBeInTheDocument();
+    expect(screen.getByTestId("primary-results").children).toHaveLength(3);
+    expect(screen.getAllByText("—")).toHaveLength(3);
+    expect(
+      screen.getByRole("img", { name: /누적 납입 원금과 예상 총자산/ }),
+    ).toBeVisible();
+    expect(screen.getByText(/투자 조건을 계산하면 이곳에/)).toBeVisible();
     expect(screen.queryByRole("table")).not.toBeInTheDocument();
-    expect(screen.getByText(/원금과 납입액/)).toBeVisible();
   });
 
   it("keeps inflation and tax disabled with empty visible presets", async () => {
@@ -78,6 +82,12 @@ describe("CompoundInterestCalculator", () => {
     expect(
       screen.getByRole("img", { name: /누적 납입 원금과 예상 총자산/ }),
     ).toBeVisible();
+    const details = screen
+      .getByText("연도별 상세 내역 보기")
+      .closest("details");
+    expect(details).not.toHaveAttribute("open");
+    expect(screen.getByRole("table", { hidden: true })).not.toBeVisible();
+    await user.click(screen.getByText("연도별 상세 내역 보기"));
     expect(
       screen.getByRole("table", { name: "연도별 복리 계산 상세 내역" }),
     ).toBeVisible();
