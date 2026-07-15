@@ -3,7 +3,12 @@
 import Decimal from "decimal.js";
 import { type ChangeEvent, type FormEvent, useRef, useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import {
+  CalculatorActions,
+  PrimaryResults,
+  calculatorSettingsClass,
+  calculatorWorkspaceClass,
+} from "@/components/calculators/calculator-workspace";
 import { formatMoneyInput } from "@/lib/input/money";
 
 import { calculateCompoundInterest } from "../calculate";
@@ -150,20 +155,27 @@ export function CompoundInterestCalculator() {
     );
   }
 
+  function reset() {
+    setValues(INITIAL_COMPOUND_INTEREST_VALUES);
+    setErrors({});
+    setResult(null);
+    setAnnouncement("입력값과 계산 결과를 초기화했습니다.");
+  }
+
   const maxBalance = result
     ? new Decimal(
-        result.yearlyData.at(-1)?.grossBalance ?? result.grossFinalBalance,
+        result.yearlyData.at(-1)?.netBalance ?? result.estimatedFinalBalance,
       )
     : new Decimal(0);
 
   return (
     <section aria-labelledby="calculator-title" className="space-y-8">
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
+      <div className={calculatorWorkspaceClass}>
         <form
           ref={formRef}
           noValidate
           onSubmit={handleSubmit}
-          className="rounded-2xl border bg-card p-5 shadow-sm sm:p-7"
+          className={calculatorSettingsClass}
         >
           <div className="mb-6">
             <p className="text-sm font-semibold text-primary">입력</p>
@@ -354,237 +366,252 @@ export function CompoundInterestCalculator() {
             </div>
           </details>
 
-          <Button type="submit" size="lg" className="mt-6 h-11 w-full px-5">
-            예상 결과 계산하기
-          </Button>
+          <CalculatorActions submitLabel="예상 결과 계산하기" onReset={reset} />
         </form>
-
-        <section
-          aria-labelledby="result-title"
-          className="rounded-2xl border bg-card p-5 shadow-sm sm:p-7 lg:sticky lg:top-6"
-        >
-          <p className="text-sm font-semibold text-primary">예상 결과</p>
-          <h2
-            id="result-title"
-            className="mt-1 text-2xl font-semibold tracking-tight"
+        <div className="space-y-6">
+          <section
+            aria-labelledby="result-title"
+            className="rounded-2xl border bg-card p-5 shadow-sm sm:p-7"
           >
-            {result
-              ? result.taxEnabled
-                ? "세금 반영 예상 최종 금액"
-                : "예상 최종 금액"
-              : "복리 계산 결과"}
-          </h2>
+            <p className="text-sm font-semibold text-primary">예상 결과</p>
+            <h2
+              id="result-title"
+              className="mt-1 text-2xl font-semibold tracking-tight"
+            >
+              {result
+                ? result.taxEnabled
+                  ? "세금 반영 예상 최종 금액"
+                  : "예상 최종 금액"
+                : "복리 계산 결과"}
+            </h2>
+            {result ? (
+              <>
+                <PrimaryResults
+                  metrics={[
+                    {
+                      label: "예상 최종 금액",
+                      value: formatWon(result.estimatedFinalBalance),
+                      featured: true,
+                    },
+                    {
+                      label: "총 납입 원금",
+                      value: formatWon(result.totalContributedPrincipal),
+                    },
+                    {
+                      label: "예상 순증가액",
+                      value: formatWon(result.estimatedNetGain),
+                    },
+                  ]}
+                />
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                  고정 이자율을 가정한 시나리오 추정치이며 실제 수익이나 금융
+                  결과를 보장하지 않습니다.
+                </p>
+
+                <p className="sr-only" aria-live="polite" aria-atomic="true">
+                  {announcement}
+                </p>
+              </>
+            ) : (
+              <div className="mt-6 rounded-xl border border-dashed bg-muted/30 p-6 text-sm leading-6 text-muted-foreground">
+                원금과 납입액, 기간, 이자율을 입력하면 예상 복리 성장 결과를
+                확인할 수 있습니다.
+              </div>
+            )}
+          </section>
           {result ? (
             <>
-              <p className="mt-4 break-words text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl">
-                {formatWon(result.estimatedFinalBalance)}
-              </p>
-              <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                고정 이자율을 가정한 시나리오 추정치이며 실제 수익이나 금융
-                결과를 보장하지 않습니다.
-              </p>
+              <section className="rounded-2xl border bg-card p-5 sm:p-7">
+                <h2
+                  id="growth-chart-title"
+                  className="text-2xl font-semibold tracking-tight"
+                >
+                  연도별 자산 성장
+                </h2>
+                <p
+                  id="growth-chart-description"
+                  className="mt-2 text-sm text-muted-foreground"
+                >
+                  막대는 각 연도의 총 납입 원금과 예상 총자산을 마지막 연도
+                  잔액에 상대적으로 표시합니다.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-4 text-xs">
+                  <span className="flex items-center gap-2">
+                    <span className="size-3 rounded-sm bg-chart-2" />
+                    누적 납입 원금
+                  </span>
+                  <span className="flex items-center gap-2">
+                    <span className="size-3 rounded-sm bg-primary" />
+                    예상 총자산
+                  </span>
+                </div>
+                <div
+                  role="img"
+                  aria-labelledby="growth-chart-title growth-chart-description"
+                  className="mt-5 max-h-96 space-y-3 overflow-y-auto pr-2"
+                >
+                  {result.yearlyData.map((record) => {
+                    const assetWidth = new Decimal(record.netBalance)
+                      .div(maxBalance)
+                      .mul(100)
+                      .toNumber();
+                    const principalWidth = new Decimal(
+                      record.cumulativePrincipal,
+                    )
+                      .div(maxBalance)
+                      .mul(100)
+                      .toNumber();
+                    return (
+                      <div
+                        key={record.year}
+                        aria-hidden="true"
+                        className="grid grid-cols-[3rem_1fr] items-center gap-3"
+                      >
+                        <span className="text-xs text-muted-foreground">
+                          {record.year}년
+                        </span>
+                        <div className="relative h-7 rounded-md bg-muted">
+                          <div
+                            className="absolute inset-y-0 left-0 rounded-md bg-primary/80"
+                            style={{ width: `${assetWidth}%` }}
+                          />
+                          <div
+                            className="absolute inset-y-1 left-0 rounded-sm bg-chart-2"
+                            style={{ width: `${principalWidth}%` }}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
 
-              <dl className="mt-6 grid gap-3 sm:grid-cols-2">
-                {[
-                  ["세전 예상 잔액", result.grossFinalBalance],
-                  ["총 납입 원금", result.totalContributedPrincipal],
-                  ["예상 세전 이자", result.grossInterest],
-                  ["예상 간이 세금", result.estimatedTax],
-                  ["예상 순증가액", result.estimatedNetGain],
-                  ["물가 반영 현재가치", result.inflationAdjustedValue],
-                ].map(([label, value]) => (
-                  <div
-                    key={label}
-                    className="rounded-xl border bg-background p-4"
-                  >
-                    <dt className="text-xs leading-5 text-muted-foreground">
-                      {label}
+              <section className="rounded-2xl border bg-card p-5 sm:p-7">
+                <h2 className="text-2xl font-semibold tracking-tight">
+                  연도별 상세 내역
+                </h2>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  모든 금액은 원 단위로 반올림해 표시합니다. 표는 위 차트의 전체
+                  대체 정보를 제공합니다.
+                </p>
+                <div className="mt-5 overflow-x-auto rounded-xl border">
+                  <table className="w-full min-w-[1100px] border-collapse text-right text-sm tabular-nums">
+                    <caption className="sr-only">
+                      연도별 복리 계산 상세 내역
+                    </caption>
+                    <thead className="bg-muted/70">
+                      <tr>
+                        {[
+                          "연도",
+                          "기초 잔액",
+                          "연간 납입",
+                          "연간 이자",
+                          "누적 원금",
+                          "세전 잔액",
+                          "간이 세금",
+                          "세후 잔액",
+                          "물가 반영 가치",
+                        ].map((heading) => (
+                          <th
+                            key={heading}
+                            scope="col"
+                            className="whitespace-nowrap border-b px-3 py-3 font-medium"
+                          >
+                            {heading}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {result.yearlyData.map((record) => (
+                        <tr
+                          key={record.year}
+                          className="border-b last:border-0"
+                        >
+                          <th scope="row" className="px-3 py-3 font-medium">
+                            {record.year}년
+                          </th>
+                          <td className="px-3 py-3">
+                            {formatWon(record.openingBalance)}
+                          </td>
+                          <td className="px-3 py-3">
+                            {formatWon(record.contributions)}
+                          </td>
+                          <td className="px-3 py-3">
+                            {formatWon(record.interest)}
+                          </td>
+                          <td className="px-3 py-3">
+                            {formatWon(record.cumulativePrincipal)}
+                          </td>
+                          <td className="px-3 py-3">
+                            {formatWon(record.grossBalance)}
+                          </td>
+                          <td className="px-3 py-3">
+                            {formatWon(record.estimatedTax)}
+                          </td>
+                          <td className="px-3 py-3">
+                            {formatWon(record.netBalance)}
+                          </td>
+                          <td className="px-3 py-3">
+                            {formatWon(record.inflationAdjustedValue)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+
+              <section className="rounded-2xl border bg-card p-5 sm:p-7">
+                <h2 className="text-2xl font-semibold tracking-tight">
+                  추가 결과와 적용 가정
+                </h2>
+                <dl className="mt-5 grid gap-3 sm:grid-cols-2">
+                  {[
+                    ["세전 예상 잔액", result.grossFinalBalance],
+                    ["예상 세전 이자", result.grossInterest],
+                    ["예상 간이 세금", result.estimatedTax],
+                    ["물가 반영 현재가치", result.inflationAdjustedValue],
+                  ].map(([label, value]) => (
+                    <div
+                      key={label}
+                      className="rounded-xl border bg-background p-4"
+                    >
+                      <dt className="text-xs text-muted-foreground">{label}</dt>
+                      <dd className="mt-1 font-semibold tabular-nums">
+                        {formatWon(value)}
+                      </dd>
+                    </div>
+                  ))}
+                  <div className="rounded-xl border bg-background p-4 sm:col-span-2">
+                    <dt className="text-xs text-muted-foreground">
+                      예상 자산 배수 (납입 원금 대비)
                     </dt>
-                    <dd className="mt-1 break-words font-semibold tabular-nums">
-                      {formatWon(value)}
+                    <dd className="mt-1 font-semibold tabular-nums">
+                      {formatMultiplier(result.growthMultiplier)}
                     </dd>
                   </div>
-                ))}
-                <div className="rounded-xl border bg-background p-4 sm:col-span-2">
-                  <dt className="text-xs leading-5 text-muted-foreground">
-                    예상 자산 배수 (납입 원금 대비)
-                  </dt>
-                  <dd className="mt-1 font-semibold tabular-nums">
-                    {formatMultiplier(result.growthMultiplier)}
-                  </dd>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    시간가중 수익률이나 투자 수익률이 아닙니다.
+                </dl>
+                <div className="mt-5 rounded-xl bg-muted p-4 text-sm leading-6">
+                  <p className="font-medium">적용 가정</p>
+                  <p className="mt-1 text-muted-foreground">
+                    납입 시점:{" "}
+                    {values.contributionTiming === "beginning"
+                      ? "기간 초"
+                      : "기간 말"}
+                    {result.inflationEnabled
+                      ? ` · 물가 ${formatPercent(values.inflationRate)}`
+                      : " · 물가 미반영"}
+                    {result.taxEnabled
+                      ? ` · 간이 세율 ${formatPercent(values.taxRate)}`
+                      : " · 세금 미반영"}
                   </p>
                 </div>
-              </dl>
-
-              <div className="mt-5 rounded-xl bg-muted p-4 text-sm leading-6">
-                <p className="font-medium">적용 가정</p>
-                <p className="mt-1 text-muted-foreground">
-                  납입 시점:{" "}
-                  {values.contributionTiming === "beginning"
-                    ? "기간 초"
-                    : "기간 말"}
-                  {result.inflationEnabled
-                    ? ` · 물가 ${formatPercent(values.inflationRate)}`
-                    : " · 물가 미반영"}
-                  {result.taxEnabled
-                    ? ` · 간이 세율 ${formatPercent(values.taxRate)}`
-                    : " · 세금 미반영"}
-                </p>
-              </div>
-              <p className="sr-only" aria-live="polite" aria-atomic="true">
-                {announcement}
-              </p>
+              </section>
             </>
-          ) : (
-            <div className="mt-6 rounded-xl border border-dashed bg-muted/30 p-6 text-sm leading-6 text-muted-foreground">
-              원금과 납입액, 기간, 이자율을 입력하면 예상 복리 성장 결과를
-              확인할 수 있습니다.
-            </div>
-          )}
-        </section>
+          ) : null}
+        </div>
       </div>
-
-      {result ? (
-        <>
-          <section className="rounded-2xl border bg-card p-5 sm:p-7">
-            <h2
-              id="growth-chart-title"
-              className="text-2xl font-semibold tracking-tight"
-            >
-              연도별 자산 성장
-            </h2>
-            <p
-              id="growth-chart-description"
-              className="mt-2 text-sm text-muted-foreground"
-            >
-              막대는 각 연도의 총 납입 원금과 세전 예상 잔액을 마지막 연도
-              잔액에 상대적으로 표시합니다.
-            </p>
-            <div className="mt-4 flex flex-wrap gap-4 text-xs">
-              <span className="flex items-center gap-2">
-                <span className="size-3 rounded-sm bg-chart-2" />
-                누적 납입 원금
-              </span>
-              <span className="flex items-center gap-2">
-                <span className="size-3 rounded-sm bg-primary" />
-                세전 예상 잔액
-              </span>
-            </div>
-            <div
-              role="img"
-              aria-labelledby="growth-chart-title growth-chart-description"
-              className="mt-5 max-h-96 space-y-3 overflow-y-auto pr-2"
-            >
-              {result.yearlyData.map((record) => {
-                const grossWidth = new Decimal(record.grossBalance)
-                  .div(maxBalance)
-                  .mul(100)
-                  .toNumber();
-                const principalWidth = new Decimal(record.cumulativePrincipal)
-                  .div(maxBalance)
-                  .mul(100)
-                  .toNumber();
-                return (
-                  <div
-                    key={record.year}
-                    aria-hidden="true"
-                    className="grid grid-cols-[3rem_1fr] items-center gap-3"
-                  >
-                    <span className="text-xs text-muted-foreground">
-                      {record.year}년
-                    </span>
-                    <div className="relative h-7 rounded-md bg-muted">
-                      <div
-                        className="absolute inset-y-0 left-0 rounded-md bg-primary/80"
-                        style={{ width: `${grossWidth}%` }}
-                      />
-                      <div
-                        className="absolute inset-y-1 left-0 rounded-sm bg-chart-2"
-                        style={{ width: `${principalWidth}%` }}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-
-          <section className="rounded-2xl border bg-card p-5 sm:p-7">
-            <h2 className="text-2xl font-semibold tracking-tight">
-              연도별 상세 내역
-            </h2>
-            <p className="mt-2 text-sm text-muted-foreground">
-              모든 금액은 원 단위로 반올림해 표시합니다. 표는 위 차트의 전체
-              대체 정보를 제공합니다.
-            </p>
-            <div className="mt-5 overflow-x-auto rounded-xl border">
-              <table className="w-full min-w-[1100px] border-collapse text-right text-sm tabular-nums">
-                <caption className="sr-only">
-                  연도별 복리 계산 상세 내역
-                </caption>
-                <thead className="bg-muted/70">
-                  <tr>
-                    {[
-                      "연도",
-                      "기초 잔액",
-                      "연간 납입",
-                      "연간 이자",
-                      "누적 원금",
-                      "세전 잔액",
-                      "간이 세금",
-                      "세후 잔액",
-                      "물가 반영 가치",
-                    ].map((heading) => (
-                      <th
-                        key={heading}
-                        scope="col"
-                        className="whitespace-nowrap border-b px-3 py-3 font-medium"
-                      >
-                        {heading}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {result.yearlyData.map((record) => (
-                    <tr key={record.year} className="border-b last:border-0">
-                      <th scope="row" className="px-3 py-3 font-medium">
-                        {record.year}년
-                      </th>
-                      <td className="px-3 py-3">
-                        {formatWon(record.openingBalance)}
-                      </td>
-                      <td className="px-3 py-3">
-                        {formatWon(record.contributions)}
-                      </td>
-                      <td className="px-3 py-3">
-                        {formatWon(record.interest)}
-                      </td>
-                      <td className="px-3 py-3">
-                        {formatWon(record.cumulativePrincipal)}
-                      </td>
-                      <td className="px-3 py-3">
-                        {formatWon(record.grossBalance)}
-                      </td>
-                      <td className="px-3 py-3">
-                        {formatWon(record.estimatedTax)}
-                      </td>
-                      <td className="px-3 py-3">
-                        {formatWon(record.netBalance)}
-                      </td>
-                      <td className="px-3 py-3">
-                        {formatWon(record.inflationAdjustedValue)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-        </>
-      ) : null}
     </section>
   );
 }

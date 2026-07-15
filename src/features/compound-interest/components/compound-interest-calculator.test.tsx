@@ -70,8 +70,11 @@ describe("CompoundInterestCalculator", () => {
     const resultRegion = screen.getByRole("region", {
       name: "세금 반영 예상 최종 금액",
     });
-    expect(within(resultRegion).getByText("세전 예상 잔액")).toBeVisible();
-    expect(within(resultRegion).getByText(/간이 세율 20%/)).toBeVisible();
+    expect(
+      within(resultRegion).getByTestId("primary-results").children,
+    ).toHaveLength(3);
+    expect(screen.getByText("세전 예상 잔액")).toBeVisible();
+    expect(screen.getByText(/간이 세율 20%/)).toBeVisible();
     expect(screen.getByText(/계산이 완료되었습니다/)).toHaveAttribute(
       "aria-live",
       "polite",

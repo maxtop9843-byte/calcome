@@ -32,6 +32,9 @@ describe("SavingsCalculator", () => {
       screen.getByRole("button", { name: "만기 결과 계산하기" }),
     );
     const result = screen.getByRole("region", { name: "예상 세후 만기액" });
+    expect(within(result).getByTestId("primary-results").children).toHaveLength(
+      3,
+    );
     expect(within(result).getByText(/월복리 · 기간 초 납입/)).toBeVisible();
     expect(within(result).getByText(/적용 간이 세율 0%/)).toBeVisible();
     expect(screen.getByText(/계산이 완료되었습니다/)).toHaveAttribute(

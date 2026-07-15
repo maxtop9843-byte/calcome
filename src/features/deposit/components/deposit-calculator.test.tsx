@@ -29,6 +29,7 @@ describe("DepositCalculator", () => {
       screen.getByRole("button", { name: "만기 결과 계산하기" }),
     );
     expect(screen.getByText(/월복리 · 1년/)).toBeVisible();
+    expect(screen.getByTestId("primary-results").children).toHaveLength(3);
     expect(screen.getByText(/적용 간이 세율 0%/)).toBeVisible();
     expect(screen.getByText(/계산이 완료되었습니다/)).toHaveAttribute(
       "aria-live",

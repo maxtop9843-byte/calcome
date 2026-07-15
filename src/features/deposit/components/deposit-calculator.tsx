@@ -2,7 +2,12 @@
 
 import { type ChangeEvent, type FormEvent, useRef, useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import {
+  CalculatorActions,
+  PrimaryResults,
+  calculatorSettingsClass,
+  calculatorWorkspaceClass,
+} from "@/components/calculators/calculator-workspace";
 import { formatMoneyInput } from "@/lib/input/money";
 
 import { calculateDeposit } from "../calculate";
@@ -141,6 +146,14 @@ export function DepositCalculator() {
     );
   }
 
+  function reset() {
+    setValues(INITIAL_DEPOSIT_VALUES);
+    setErrors({});
+    setResult(null);
+    setAppliedValues(DEFAULT_DEPOSIT_VALUES);
+    setAnnouncement("입력값과 계산 결과를 초기화했습니다.");
+  }
+
   const appliedTaxRate =
     appliedValues.taxOption === "tax-free"
       ? "0"
@@ -150,12 +163,12 @@ export function DepositCalculator() {
 
   return (
     <section aria-labelledby="deposit-calculator-title">
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
+      <div className={calculatorWorkspaceClass}>
         <form
           ref={formRef}
           noValidate
           onSubmit={submit}
-          className="rounded-2xl border bg-card p-5 shadow-sm sm:p-7"
+          className={calculatorSettingsClass}
         >
           <p className="text-sm font-semibold text-primary">입력</p>
           <h2
@@ -288,14 +301,12 @@ export function DepositCalculator() {
               />
             </div>
           ) : null}
-          <Button type="submit" size="lg" className="mt-6 h-11 w-full px-5">
-            만기 결과 계산하기
-          </Button>
+          <CalculatorActions submitLabel="만기 결과 계산하기" onReset={reset} />
         </form>
 
         <section
           aria-labelledby="deposit-result-title"
-          className="rounded-2xl border bg-card p-5 shadow-sm sm:p-7 lg:sticky lg:top-6"
+          className="rounded-2xl border bg-card p-5 shadow-sm sm:p-7"
         >
           <p className="text-sm font-semibold text-primary">예상 결과</p>
           <h2
@@ -306,33 +317,44 @@ export function DepositCalculator() {
           </h2>
           {result ? (
             <>
-              <p className="mt-4 break-words text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl">
-                {formatDepositWon(result.maturityAfterTax)}
-              </p>
+              <PrimaryResults
+                metrics={[
+                  {
+                    label: "세후 만기액",
+                    value: formatDepositWon(result.maturityAfterTax),
+                    featured: true,
+                  },
+                  { label: "원금", value: formatDepositWon(result.principal) },
+                  {
+                    label: "세후 이자",
+                    value: formatDepositWon(result.afterTaxInterest),
+                  },
+                ]}
+              />
               <p className="mt-3 text-sm leading-6 text-muted-foreground">
                 고정 조건을 가정한 추정치이며 특정 금융상품의 실제 지급액이
                 아닙니다.
               </p>
-              <dl className="mt-6 grid gap-3 sm:grid-cols-2">
-                {[
-                  ["원금", result.principal],
-                  ["세전 이자", result.grossInterest],
-                  ["예상 세금", result.estimatedTax],
-                  ["세후 이자", result.afterTaxInterest],
-                  ["세전 만기액", result.maturityBeforeTax],
-                  ["세후 만기액", result.maturityAfterTax],
-                ].map(([label, value]) => (
-                  <div
-                    key={label}
-                    className="rounded-xl border bg-background p-4"
-                  >
-                    <dt className="text-xs text-muted-foreground">{label}</dt>
-                    <dd className="mt-1 font-semibold tabular-nums">
-                      {formatDepositWon(value)}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
+              <div className="mt-6 rounded-xl border bg-muted/20 p-4">
+                <h3 className="font-medium">추가 결과</h3>
+                <dl className="mt-3 grid gap-3 sm:grid-cols-3">
+                  {[
+                    ["세전 이자", result.grossInterest],
+                    ["예상 세금", result.estimatedTax],
+                    ["세전 만기액", result.maturityBeforeTax],
+                  ].map(([label, value]) => (
+                    <div
+                      key={label}
+                      className="rounded-xl border bg-background p-4"
+                    >
+                      <dt className="text-xs text-muted-foreground">{label}</dt>
+                      <dd className="mt-1 font-semibold tabular-nums">
+                        {formatDepositWon(value)}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
               <div className="mt-5 rounded-xl bg-muted p-4 text-sm leading-6">
                 <p className="font-medium">실효 수익</p>
                 <p className="mt-1 text-muted-foreground">

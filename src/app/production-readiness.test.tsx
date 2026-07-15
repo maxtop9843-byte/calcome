@@ -125,12 +125,23 @@ describe("production recovery and navigation", () => {
       screen.getByText("누구나 쉽게 사용할 수 있는 금융 계산기를 제공합니다."),
     ).toBeVisible();
     expect(
-      screen.getByRole("link", { name: "모든 계산기 보기" }),
+      screen.getByRole("link", { name: "전체 계산기 보기" }),
     ).toHaveAttribute("href", "/calculators");
     expect(
       screen.queryByRole("link", { name: "GitHub에서 보기" }),
     ).not.toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "인기 계산기" })).toBeVisible();
+    const popularGrid = screen.getByTestId("popular-calculator-grid");
+    expect(popularGrid).toHaveClass("sm:grid-cols-2");
+    expect(
+      Array.from(popularGrid.children).map((item) => item.textContent),
+    ).toEqual([
+      expect.stringContaining("복리 계산기"),
+      expect.stringContaining("대출 계산기"),
+      expect.stringContaining("예금 계산기"),
+      expect.stringContaining("적금 계산기"),
+      expect.stringContaining("CAGR 계산기"),
+    ]);
     expect(screen.getByRole("link", { name: /예금 계산기/ })).toHaveAttribute(
       "href",
       "/finance/deposit",

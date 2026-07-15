@@ -28,6 +28,7 @@ describe("LoanCalculator", () => {
       screen.getByRole("button", { name: "상환 결과 계산하기" }),
     );
     expect(screen.getByRole("heading", { name: "첫 달 납부액" })).toBeVisible();
+    expect(screen.getByTestId("primary-results").children).toHaveLength(3);
     expect(screen.getByText("마지막 달 납부액")).toBeVisible();
   });
   it("hides the schedule for bullet repayment and explains maturity principal", async () => {

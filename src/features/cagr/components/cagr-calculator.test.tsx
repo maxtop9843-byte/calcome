@@ -33,6 +33,7 @@ describe("CagrCalculator", () => {
     await user.type(period, "2");
     await user.click(screen.getByRole("button", { name: "CAGR 계산하기" }));
     expect(screen.getByText(/연평균 감소/)).toBeVisible();
+    expect(screen.getByTestId("primary-results").children).toHaveLength(3);
     expect(screen.getByText(/계산이 완료되었습니다/)).toHaveAttribute(
       "aria-live",
       "polite",
@@ -49,5 +50,16 @@ describe("CagrCalculator", () => {
     expect(screen.getByRole("alert")).toBeVisible();
     await waitFor(() => expect(initial).toHaveFocus());
     expect(initial).toHaveAccessibleDescription(/0보다 크고/);
+  });
+
+  it("resets inputs and removes calculated results", async () => {
+    const user = userEvent.setup();
+    render(<CagrCalculator />);
+    await fillRequired(user);
+    await user.click(screen.getByRole("button", { name: "CAGR 계산하기" }));
+    expect(screen.getByTestId("primary-results")).toBeVisible();
+    await user.click(screen.getByRole("button", { name: "초기화" }));
+    expect(screen.getByLabelText("시작값 *")).toHaveValue("");
+    expect(screen.queryByTestId("primary-results")).not.toBeInTheDocument();
   });
 });

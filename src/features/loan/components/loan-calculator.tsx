@@ -2,7 +2,12 @@
 
 import { type ChangeEvent, type FormEvent, useRef, useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import {
+  CalculatorActions,
+  PrimaryResults,
+  calculatorSettingsClass,
+  calculatorWorkspaceClass,
+} from "@/components/calculators/calculator-workspace";
 import { formatMoneyInput } from "@/lib/input/money";
 
 import { calculateLoan } from "../calculate";
@@ -135,6 +140,13 @@ export function LoanCalculator() {
       `계산이 완료되었습니다. 첫 달 납부액은 ${formatLoanWon(next.monthlyPayment)}입니다.`,
     );
   }
+  function reset() {
+    setValues(INITIAL_LOAN_VALUES);
+    setErrors({});
+    setResult(null);
+    setRepaymentType(DEFAULT_LOAN_VALUES.repaymentType);
+    setAnnouncement("입력값과 계산 결과를 초기화했습니다.");
+  }
 
   const showSchedule = repaymentType !== "bullet";
   const monthlyLabel =
@@ -146,12 +158,12 @@ export function LoanCalculator() {
 
   return (
     <section aria-labelledby="loan-calculator-title" className="space-y-8">
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
+      <div className={calculatorWorkspaceClass}>
         <form
           ref={formRef}
           noValidate
           onSubmit={submit}
-          className="rounded-2xl border bg-card p-5 shadow-sm sm:p-7"
+          className={calculatorSettingsClass}
         >
           <p className="text-sm font-semibold text-primary">입력</p>
           <h2
@@ -239,118 +251,125 @@ export function LoanCalculator() {
               </select>
             </div>
           </div>
-          <Button type="submit" size="lg" className="mt-6 h-11 w-full px-5">
-            상환 결과 계산하기
-          </Button>
+          <CalculatorActions submitLabel="상환 결과 계산하기" onReset={reset} />
         </form>
-
-        <section
-          aria-labelledby="loan-result-title"
-          className="rounded-2xl border bg-card p-5 shadow-sm sm:p-7 lg:sticky lg:top-6"
-        >
-          <p className="text-sm font-semibold text-primary">예상 결과</p>
-          <h2
-            id="loan-result-title"
-            className="mt-1 text-2xl font-semibold tracking-tight"
+        <div className="space-y-6">
+          <section
+            aria-labelledby="loan-result-title"
+            className="rounded-2xl border bg-card p-5 shadow-sm sm:p-7"
           >
-            {result ? monthlyLabel : "상환 계산 결과"}
-          </h2>
-          {result ? (
-            <>
-              <p className="mt-4 break-words text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl">
-                {formatLoanWon(result.monthlyPayment)}
-              </p>
-              <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                금리와 상환 조건이 변하지 않는다는 가정의 원 단위 추정치입니다.
-              </p>
-              <dl className="mt-6 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-xl border bg-background p-4">
-                  <dt className="text-xs text-muted-foreground">총 상환액</dt>
-                  <dd className="mt-1 font-semibold tabular-nums">
-                    {formatLoanWon(result.totalRepayment)}
-                  </dd>
-                </div>
-                <div className="rounded-xl border bg-background p-4">
-                  <dt className="text-xs text-muted-foreground">총 이자</dt>
-                  <dd className="mt-1 font-semibold tabular-nums">
-                    {formatLoanWon(result.totalInterest)}
-                  </dd>
-                </div>
+            <p className="text-sm font-semibold text-primary">예상 결과</p>
+            <h2
+              id="loan-result-title"
+              className="mt-1 text-2xl font-semibold tracking-tight"
+            >
+              {result ? monthlyLabel : "상환 계산 결과"}
+            </h2>
+            {result ? (
+              <>
+                <PrimaryResults
+                  metrics={[
+                    {
+                      label: monthlyLabel,
+                      value: formatLoanWon(result.monthlyPayment),
+                      featured: true,
+                    },
+                    {
+                      label: "총 상환액",
+                      value: formatLoanWon(result.totalRepayment),
+                    },
+                    {
+                      label: "총 이자",
+                      value: formatLoanWon(result.totalInterest),
+                    },
+                  ]}
+                />
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                  금리와 상환 조건이 변하지 않는다는 가정의 원 단위
+                  추정치입니다.
+                </p>
                 {repaymentType === "equal-principal" ? (
-                  <div className="rounded-xl border bg-background p-4 sm:col-span-2">
-                    <dt className="text-xs text-muted-foreground">
-                      마지막 달 납부액
-                    </dt>
-                    <dd className="mt-1 font-semibold tabular-nums">
-                      {formatLoanWon(result.lastMonthlyPayment)}
-                    </dd>
+                  <div className="mt-5 rounded-xl border bg-background p-4">
+                    <div>
+                      <p className="text-xs text-muted-foreground">
+                        마지막 달 납부액
+                      </p>
+                      <p className="mt-1 font-semibold tabular-nums">
+                        {formatLoanWon(result.lastMonthlyPayment)}
+                      </p>
+                    </div>
                   </div>
                 ) : null}
-              </dl>
-              <div className="mt-5 rounded-xl bg-muted p-4 text-sm leading-6">
-                <p className="font-medium">실질 상환 요약</p>
-                <p className="mt-1 text-muted-foreground">{result.summary}</p>
+                <div className="mt-5 rounded-xl bg-muted p-4 text-sm leading-6">
+                  <p className="font-medium">실질 상환 요약</p>
+                  <p className="mt-1 text-muted-foreground">{result.summary}</p>
+                </div>
+                <p className="sr-only" aria-live="polite" aria-atomic="true">
+                  {announcement}
+                </p>
+              </>
+            ) : (
+              <div className="mt-6 rounded-xl border border-dashed bg-muted/30 p-6 text-sm leading-6 text-muted-foreground">
+                대출 조건을 입력하고 계산하면 월 납부액과 총 이자, 상환 요약을
+                확인할 수 있습니다.
               </div>
-              <p className="sr-only" aria-live="polite" aria-atomic="true">
-                {announcement}
+            )}
+          </section>
+          {result && showSchedule ? (
+            <section className="rounded-2xl border bg-card p-5 sm:p-7">
+              <h2 className="text-2xl font-semibold tracking-tight">
+                월별 상환 일정
+              </h2>
+              <p className="mt-2 text-sm text-muted-foreground">
+                내부 계산은 반올림하지 않고, 표의 금액만 원 단위로 반올림합니다.
               </p>
-            </>
-          ) : (
-            <div className="mt-6 rounded-xl border border-dashed bg-muted/30 p-6 text-sm leading-6 text-muted-foreground">
-              대출 조건을 입력하고 계산하면 월 납부액과 총 이자, 상환 요약을
-              확인할 수 있습니다.
-            </div>
-          )}
-        </section>
+              <div className="mt-5 max-h-[36rem] overflow-auto rounded-xl border">
+                <table className="w-full min-w-[720px] border-collapse text-right text-sm tabular-nums">
+                  <caption className="sr-only">
+                    월별 대출 원금과 이자 상환 일정
+                  </caption>
+                  <thead className="sticky top-0 bg-muted">
+                    <tr>
+                      {["회차", "납부액", "원금", "이자", "남은 원금"].map(
+                        (h) => (
+                          <th
+                            key={h}
+                            scope="col"
+                            className="border-b px-4 py-3 font-medium"
+                          >
+                            {h}
+                          </th>
+                        ),
+                      )}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {result.schedule.map((row) => (
+                      <tr key={row.month} className="border-b last:border-0">
+                        <th scope="row" className="px-4 py-3 font-medium">
+                          {row.month}회
+                        </th>
+                        <td className="px-4 py-3">
+                          {formatLoanWon(row.payment)}
+                        </td>
+                        <td className="px-4 py-3">
+                          {formatLoanWon(row.principal)}
+                        </td>
+                        <td className="px-4 py-3">
+                          {formatLoanWon(row.interest)}
+                        </td>
+                        <td className="px-4 py-3">
+                          {formatLoanWon(row.remainingBalance)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          ) : null}
+        </div>
       </div>
-
-      {result && showSchedule ? (
-        <section className="rounded-2xl border bg-card p-5 sm:p-7">
-          <h2 className="text-2xl font-semibold tracking-tight">
-            월별 상환 일정
-          </h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            내부 계산은 반올림하지 않고, 표의 금액만 원 단위로 반올림합니다.
-          </p>
-          <div className="mt-5 max-h-[36rem] overflow-auto rounded-xl border">
-            <table className="w-full min-w-[720px] border-collapse text-right text-sm tabular-nums">
-              <caption className="sr-only">
-                월별 대출 원금과 이자 상환 일정
-              </caption>
-              <thead className="sticky top-0 bg-muted">
-                <tr>
-                  {["회차", "납부액", "원금", "이자", "남은 원금"].map((h) => (
-                    <th
-                      key={h}
-                      scope="col"
-                      className="border-b px-4 py-3 font-medium"
-                    >
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {result.schedule.map((row) => (
-                  <tr key={row.month} className="border-b last:border-0">
-                    <th scope="row" className="px-4 py-3 font-medium">
-                      {row.month}회
-                    </th>
-                    <td className="px-4 py-3">{formatLoanWon(row.payment)}</td>
-                    <td className="px-4 py-3">
-                      {formatLoanWon(row.principal)}
-                    </td>
-                    <td className="px-4 py-3">{formatLoanWon(row.interest)}</td>
-                    <td className="px-4 py-3">
-                      {formatLoanWon(row.remainingBalance)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      ) : null}
     </section>
   );
 }

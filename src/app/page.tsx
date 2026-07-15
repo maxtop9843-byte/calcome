@@ -20,6 +20,16 @@ const websiteStructuredData = {
   description: siteConfig.description,
   inLanguage: "ko-KR",
 };
+const popularCalculatorOrder = [
+  "compound-interest",
+  "loan",
+  "deposit",
+  "savings",
+  "cagr",
+] as const;
+const popularCalculators = popularCalculatorOrder.map((id) =>
+  publishedCalculators.find((calculator) => calculator.id === id)!,
+);
 
 export default function Home() {
   return (
@@ -33,7 +43,7 @@ export default function Home() {
           ),
         }}
       />
-      <section className="mx-auto w-full max-w-6xl px-5 py-20 sm:px-8 sm:py-28">
+      <section className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8 sm:py-20">
         <div className="max-w-3xl">
           <p className="mb-4 text-sm font-semibold tracking-wide text-primary">
             CalCome
@@ -48,14 +58,6 @@ export default function Home() {
             </span>
           </p>
           <CalculatorSearch calculators={publishedCalculators} />
-          <div className="mt-8">
-            <Link
-              href="/calculators"
-              className={cn(buttonVariants({ size: "lg" }), "h-11 px-5")}
-            >
-              모든 계산기 보기
-            </Link>
-          </div>
         </div>
       </section>
       <section
@@ -70,8 +72,11 @@ export default function Home() {
           >
             인기 계산기
           </h2>
-          <ul className="mt-6 grid max-w-xl gap-4">
-            {publishedCalculators.map((calculator) => (
+          <ul
+            className="mt-6 grid gap-4 sm:grid-cols-2"
+            data-testid="popular-calculator-grid"
+          >
+            {popularCalculators.map((calculator) => (
               <li key={calculator.id}>
                 <CalculatorCard calculator={calculator} />
               </li>

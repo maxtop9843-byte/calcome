@@ -2,7 +2,12 @@
 
 import { type ChangeEvent, type FormEvent, useRef, useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import {
+  CalculatorActions,
+  PrimaryResults,
+  calculatorSettingsClass,
+  calculatorWorkspaceClass,
+} from "@/components/calculators/calculator-workspace";
 import { formatMoneyInput } from "@/lib/input/money";
 
 import { calculateSavings } from "../calculate";
@@ -138,6 +143,14 @@ export function SavingsCalculator() {
     );
   }
 
+  function reset() {
+    setValues(INITIAL_SAVINGS_VALUES);
+    setErrors({});
+    setResult(null);
+    setAppliedValues(DEFAULT_SAVINGS_VALUES);
+    setAnnouncement("입력값과 계산 결과를 초기화했습니다.");
+  }
+
   const appliedTaxRate =
     appliedValues.taxOption === "tax-free"
       ? "0"
@@ -147,12 +160,12 @@ export function SavingsCalculator() {
 
   return (
     <section aria-labelledby="savings-calculator-title" className="space-y-8">
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
+      <div className={calculatorWorkspaceClass}>
         <form
           ref={formRef}
           noValidate
           onSubmit={submit}
-          className="rounded-2xl border bg-card p-5 shadow-sm sm:p-7"
+          className={calculatorSettingsClass}
         >
           <p className="text-sm font-semibold text-primary">입력</p>
           <h2
@@ -326,138 +339,153 @@ export function SavingsCalculator() {
               />
             </div>
           ) : null}
-          <Button type="submit" size="lg" className="mt-6 h-11 w-full px-5">
-            만기 결과 계산하기
-          </Button>
+          <CalculatorActions submitLabel="만기 결과 계산하기" onReset={reset} />
         </form>
-
-        <section
-          aria-labelledby="savings-result-title"
-          className="rounded-2xl border bg-card p-5 shadow-sm sm:p-7 lg:sticky lg:top-6"
-        >
-          <p className="text-sm font-semibold text-primary">예상 결과</p>
-          <h2
-            id="savings-result-title"
-            className="mt-1 text-2xl font-semibold tracking-tight"
+        <div className="space-y-6">
+          <section
+            aria-labelledby="savings-result-title"
+            className="rounded-2xl border bg-card p-5 shadow-sm sm:p-7"
           >
-            예상 세후 만기액
-          </h2>
-          {result ? (
-            <>
-              <p className="mt-4 break-words text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl">
-                {formatSavingsWon(result.maturityAfterTax)}
-              </p>
-              <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                고정 조건을 가정한 수학적 추정치이며 특정 은행 상품의 실제
-                수령액이 아닙니다.
-              </p>
-              <dl className="mt-6 grid gap-3 sm:grid-cols-2">
-                {[
-                  ["총 납입 원금", result.totalPrincipal],
-                  ["세전 이자", result.grossInterest],
-                  ["예상 세금", result.estimatedTax],
-                  ["예상 세후 이자", result.afterTaxInterest],
-                  ["세전 만기액", result.maturityBeforeTax],
-                  ["세후 만기액", result.maturityAfterTax],
-                ].map(([label, value]) => (
-                  <div
-                    key={label}
-                    className="rounded-xl border bg-background p-4"
-                  >
-                    <dt className="text-xs text-muted-foreground">{label}</dt>
-                    <dd className="mt-1 font-semibold tabular-nums">
-                      {formatSavingsWon(value)}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-              <div className="mt-5 rounded-xl bg-muted p-4 text-sm leading-6">
-                <p className="font-medium">실효 수익 요약</p>
-                <p className="mt-1 text-muted-foreground">
-                  총 {result.depositCount}회 납입 · 납입 원금 대비 세후 이자{" "}
-                  {formatSavingsPercent(result.effectiveReturnRate)} · 적용 간이
-                  세율 {appliedTaxRate}%
+            <p className="text-sm font-semibold text-primary">예상 결과</p>
+            <h2
+              id="savings-result-title"
+              className="mt-1 text-2xl font-semibold tracking-tight"
+            >
+              예상 세후 만기액
+            </h2>
+            {result ? (
+              <>
+                <PrimaryResults
+                  metrics={[
+                    {
+                      label: "세후 만기액",
+                      value: formatSavingsWon(result.maturityAfterTax),
+                      featured: true,
+                    },
+                    {
+                      label: "총 납입 원금",
+                      value: formatSavingsWon(result.totalPrincipal),
+                    },
+                    {
+                      label: "세후 이자",
+                      value: formatSavingsWon(result.afterTaxInterest),
+                    },
+                  ]}
+                />
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                  고정 조건을 가정한 수학적 추정치이며 특정 은행 상품의 실제
+                  수령액이 아닙니다.
                 </p>
-                <p className="mt-1 text-muted-foreground">
-                  {appliedValues.interestMethod === "simple"
-                    ? "단리"
-                    : "월복리"}{" "}
-                  ·{" "}
-                  {appliedValues.depositTiming === "beginning"
-                    ? "기간 초 납입"
-                    : "기간 말 납입"}
+                <div className="mt-6 rounded-xl border bg-muted/20 p-4">
+                  <h3 className="font-medium">추가 결과</h3>
+                  <dl className="mt-3 grid gap-3 sm:grid-cols-3">
+                    {[
+                      ["세전 이자", result.grossInterest],
+                      ["예상 세금", result.estimatedTax],
+                      ["세전 만기액", result.maturityBeforeTax],
+                    ].map(([label, value]) => (
+                      <div
+                        key={label}
+                        className="rounded-xl border bg-background p-4"
+                      >
+                        <dt className="text-xs text-muted-foreground">
+                          {label}
+                        </dt>
+                        <dd className="mt-1 font-semibold tabular-nums">
+                          {formatSavingsWon(value)}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+                <div className="mt-5 rounded-xl bg-muted p-4 text-sm leading-6">
+                  <p className="font-medium">실효 수익 요약</p>
+                  <p className="mt-1 text-muted-foreground">
+                    총 {result.depositCount}회 납입 · 납입 원금 대비 세후 이자{" "}
+                    {formatSavingsPercent(result.effectiveReturnRate)} · 적용
+                    간이 세율 {appliedTaxRate}%
+                  </p>
+                  <p className="mt-1 text-muted-foreground">
+                    {appliedValues.interestMethod === "simple"
+                      ? "단리"
+                      : "월복리"}{" "}
+                    ·{" "}
+                    {appliedValues.depositTiming === "beginning"
+                      ? "기간 초 납입"
+                      : "기간 말 납입"}
+                  </p>
+                </div>
+                <p className="sr-only" aria-live="polite" aria-atomic="true">
+                  {announcement}
                 </p>
+              </>
+            ) : (
+              <div className="mt-6 rounded-xl border border-dashed bg-muted/30 p-6 text-sm leading-6 text-muted-foreground">
+                납입액과 기간, 이자율을 입력하면 예상 만기액과 이자 내역을
+                확인할 수 있습니다.
               </div>
-              <p className="sr-only" aria-live="polite" aria-atomic="true">
-                {announcement}
+            )}
+          </section>
+          {result ? (
+            <section className="rounded-2xl border bg-card p-5 sm:p-7">
+              <h2 className="text-2xl font-semibold tracking-tight">
+                월별 만기 형성 내역
+              </h2>
+              <p className="mt-2 text-sm text-muted-foreground">
+                이자는 계산 정밀도를 유지하고 화면의 금액만 원 단위로
+                반올림합니다.
               </p>
-            </>
-          ) : (
-            <div className="mt-6 rounded-xl border border-dashed bg-muted/30 p-6 text-sm leading-6 text-muted-foreground">
-              납입액과 기간, 이자율을 입력하면 예상 만기액과 이자 내역을 확인할
-              수 있습니다.
-            </div>
-          )}
-        </section>
+              <div className="mt-5 max-h-[36rem] overflow-auto rounded-xl border">
+                <table className="w-full min-w-[720px] border-collapse text-right text-sm tabular-nums">
+                  <caption className="sr-only">
+                    월별 적금 납입액과 이자 및 세전 잔액
+                  </caption>
+                  <thead className="sticky top-0 bg-muted">
+                    <tr>
+                      {[
+                        "기간",
+                        "납입액",
+                        "해당 월 이자",
+                        "누적 원금",
+                        "세전 잔액",
+                      ].map((h) => (
+                        <th
+                          key={h}
+                          scope="col"
+                          className="border-b px-4 py-3 font-medium"
+                        >
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {result.schedule.map((row) => (
+                      <tr key={row.month} className="border-b last:border-0">
+                        <th scope="row" className="px-4 py-3 font-medium">
+                          {row.month}개월
+                        </th>
+                        <td className="px-4 py-3">
+                          {formatSavingsWon(row.deposit)}
+                        </td>
+                        <td className="px-4 py-3">
+                          {formatSavingsWon(row.interest)}
+                        </td>
+                        <td className="px-4 py-3">
+                          {formatSavingsWon(row.cumulativePrincipal)}
+                        </td>
+                        <td className="px-4 py-3">
+                          {formatSavingsWon(row.grossBalance)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          ) : null}
+        </div>
       </div>
-
-      {result ? (
-        <section className="rounded-2xl border bg-card p-5 sm:p-7">
-          <h2 className="text-2xl font-semibold tracking-tight">
-            월별 만기 형성 내역
-          </h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            이자는 계산 정밀도를 유지하고 화면의 금액만 원 단위로 반올림합니다.
-          </p>
-          <div className="mt-5 max-h-[36rem] overflow-auto rounded-xl border">
-            <table className="w-full min-w-[720px] border-collapse text-right text-sm tabular-nums">
-              <caption className="sr-only">
-                월별 적금 납입액과 이자 및 세전 잔액
-              </caption>
-              <thead className="sticky top-0 bg-muted">
-                <tr>
-                  {[
-                    "기간",
-                    "납입액",
-                    "해당 월 이자",
-                    "누적 원금",
-                    "세전 잔액",
-                  ].map((h) => (
-                    <th
-                      key={h}
-                      scope="col"
-                      className="border-b px-4 py-3 font-medium"
-                    >
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {result.schedule.map((row) => (
-                  <tr key={row.month} className="border-b last:border-0">
-                    <th scope="row" className="px-4 py-3 font-medium">
-                      {row.month}개월
-                    </th>
-                    <td className="px-4 py-3">
-                      {formatSavingsWon(row.deposit)}
-                    </td>
-                    <td className="px-4 py-3">
-                      {formatSavingsWon(row.interest)}
-                    </td>
-                    <td className="px-4 py-3">
-                      {formatSavingsWon(row.cumulativePrincipal)}
-                    </td>
-                    <td className="px-4 py-3">
-                      {formatSavingsWon(row.grossBalance)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      ) : null}
     </section>
   );
 }

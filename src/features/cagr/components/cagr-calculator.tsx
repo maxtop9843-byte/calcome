@@ -2,7 +2,12 @@
 
 import { type ChangeEvent, type FormEvent, useRef, useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import {
+  CalculatorActions,
+  PrimaryResults,
+  calculatorSettingsClass,
+  calculatorWorkspaceClass,
+} from "@/components/calculators/calculator-workspace";
 import { formatMoneyInput } from "@/lib/input/money";
 
 import { calculateCagr } from "../calculate";
@@ -139,15 +144,22 @@ export function CagrCalculator() {
       `계산이 완료되었습니다. 연평균 복합성장률은 ${formatCagrPercent(next.cagrPercent)}입니다.`,
     );
   }
+  function reset() {
+    setValues(INITIAL_CAGR_VALUES);
+    setErrors({});
+    setResult(null);
+    setAppliedValues(DEFAULT_CAGR_VALUES);
+    setAnnouncement("입력값과 계산 결과를 초기화했습니다.");
+  }
 
   return (
     <section aria-labelledby="cagr-calculator-title">
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
+      <div className={calculatorWorkspaceClass}>
         <form
           ref={formRef}
           noValidate
           onSubmit={submit}
-          className="rounded-2xl border bg-card p-5 shadow-sm sm:p-7"
+          className={calculatorSettingsClass}
         >
           <p className="text-sm font-semibold text-primary">입력</p>
           <h2
@@ -227,14 +239,12 @@ export function CagrCalculator() {
               </select>
             </div>
           </div>
-          <Button type="submit" size="lg" className="mt-6 h-11 w-full px-5">
-            CAGR 계산하기
-          </Button>
+          <CalculatorActions submitLabel="CAGR 계산하기" onReset={reset} />
         </form>
 
         <section
           aria-labelledby="cagr-result-title"
-          className="rounded-2xl border bg-card p-5 shadow-sm sm:p-7 lg:sticky lg:top-6"
+          className="rounded-2xl border bg-card p-5 shadow-sm sm:p-7"
         >
           <p className="text-sm font-semibold text-primary">계산 결과</p>
           <h2
@@ -245,26 +255,26 @@ export function CagrCalculator() {
           </h2>
           {result ? (
             <>
-              <p className="mt-4 break-words text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl">
-                {formatCagrPercent(result.cagrPercent)}
-              </p>
+              <PrimaryResults
+                metrics={[
+                  {
+                    label: "CAGR",
+                    value: formatCagrPercent(result.cagrPercent),
+                    featured: true,
+                  },
+                  {
+                    label: "총수익률",
+                    value: formatCagrPercent(result.totalReturnPercent),
+                  },
+                  {
+                    label: "절대 손익",
+                    value: formatCagrWon(result.absoluteProfit),
+                  },
+                ]}
+              />
               <p className="mt-3 text-sm leading-6 text-muted-foreground">
                 매년 같은 복리 비율로 변했다고 가정한 연환산 값입니다.
               </p>
-              <dl className="mt-6 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-xl border bg-background p-4">
-                  <dt className="text-xs text-muted-foreground">총수익률</dt>
-                  <dd className="mt-1 font-semibold tabular-nums">
-                    {formatCagrPercent(result.totalReturnPercent)}
-                  </dd>
-                </div>
-                <div className="rounded-xl border bg-background p-4">
-                  <dt className="text-xs text-muted-foreground">절대 손익</dt>
-                  <dd className="mt-1 font-semibold tabular-nums">
-                    {formatCagrWon(result.absoluteProfit)}
-                  </dd>
-                </div>
-              </dl>
               <div className="mt-5 rounded-xl bg-muted p-4 text-sm leading-6">
                 <p className="font-medium">연환산 성장 요약</p>
                 <p className="mt-1 text-muted-foreground">
