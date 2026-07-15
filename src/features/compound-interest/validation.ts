@@ -120,6 +120,14 @@ export function validateCompoundInterestForm(
     errors.recurringContribution = message;
   }
 
+  if (!values.initialPrincipal.trim())
+    errors.initialPrincipal = "초기 원금을 입력해 주세요.";
+  if (!values.recurringContribution.trim())
+    errors.recurringContribution = "정기 납입액을 입력해 주세요.";
+  if (!values.durationYears.trim())
+    errors.durationYears = "투자 기간을 입력해 주세요.";
+  if (!values.annualInterestRate.trim())
+    errors.annualInterestRate = "연 이자율을 입력해 주세요.";
   if (Object.keys(errors).length > 0) return { errors };
 
   return {

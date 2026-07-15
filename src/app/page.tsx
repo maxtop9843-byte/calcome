@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { CalculatorCard } from "@/components/calculators/calculator-card";
+import { CalculatorSearch } from "@/components/calculators/calculator-search";
 import { buttonVariants } from "@/components/ui/button";
 import { publishedCalculators } from "@/config/calculators";
 import { absoluteUrl, siteConfig } from "@/config/site";
@@ -46,6 +47,7 @@ export default function Home() {
               누구나 쉽게 사용할 수 있는 금융 계산기를 제공합니다.
             </span>
           </p>
+          <CalculatorSearch calculators={publishedCalculators} />
           <div className="mt-8">
             <Link
               href="/calculators"
@@ -75,6 +77,17 @@ export default function Home() {
               </li>
             ))}
           </ul>
+          <div className="mt-8">
+            <Link
+              href="/calculators"
+              className={cn(
+                buttonVariants({ variant: "outline" }),
+                "h-11 px-5",
+              )}
+            >
+              전체 계산기 보기
+            </Link>
+          </div>
         </div>
       </section>
     </main>

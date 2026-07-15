@@ -3,6 +3,7 @@
 import { type ChangeEvent, type FormEvent, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { formatMoneyInput } from "@/lib/input/money";
 
 import { calculateDeposit } from "../calculate";
 import {
@@ -18,10 +19,12 @@ import type {
 } from "../types";
 import { validateDepositForm } from "../validation";
 
-const initialValidation = validateDepositForm(DEFAULT_DEPOSIT_VALUES);
-if (!initialValidation.data)
-  throw new Error("기본 예금 조건이 올바르지 않습니다.");
-const initialResult = calculateDeposit(initialValidation.data);
+const INITIAL_DEPOSIT_VALUES: DepositFormValues = {
+  ...DEFAULT_DEPOSIT_VALUES,
+  depositAmount: "",
+  depositPeriod: "",
+  annualInterestRate: "",
+};
 
 const controlClass =
   "mt-2 h-11 w-full rounded-lg border bg-background px-3 text-base tabular-nums shadow-sm outline-none transition focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20";
@@ -33,6 +36,8 @@ type NumberFieldProps = {
   unit: string;
   help: string;
   error?: string;
+  placeholder: string;
+  money?: boolean;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onBlur: () => void;
 };
@@ -44,6 +49,8 @@ function NumberField({
   unit,
   help,
   error,
+  placeholder,
+  money = false,
   onChange,
   onBlur,
 }: NumberFieldProps) {
@@ -58,7 +65,12 @@ function NumberField({
           id={field}
           name={field}
           value={value}
-          onChange={onChange}
+          onChange={(event) => {
+            if (money)
+              event.target.value = formatMoneyInput(event.target.value, value);
+            onChange(event);
+          }}
+          placeholder={placeholder}
           onBlur={onBlur}
           inputMode="decimal"
           autoComplete="off"
@@ -87,10 +99,10 @@ function NumberField({
 
 export function DepositCalculator() {
   const [values, setValues] = useState<DepositFormValues>(
-    DEFAULT_DEPOSIT_VALUES,
+    INITIAL_DEPOSIT_VALUES,
   );
   const [errors, setErrors] = useState<DepositValidationErrors>({});
-  const [result, setResult] = useState<DepositResult>(initialResult);
+  const [result, setResult] = useState<DepositResult | null>(null);
   const [appliedValues, setAppliedValues] = useState(DEFAULT_DEPOSIT_VALUES);
   const [announcement, setAnnouncement] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
@@ -173,6 +185,8 @@ export function DepositCalculator() {
                 unit="원"
                 help="만기까지 한 번에 맡길 원금"
                 error={errors.depositAmount}
+                placeholder="예: 10,000,000"
+                money
                 onChange={(e) => updateValue("depositAmount", e.target.value)}
                 onBlur={() => validateField("depositAmount")}
               />
@@ -184,6 +198,7 @@ export function DepositCalculator() {
               unit={values.periodUnit === "years" ? "년" : "개월"}
               help="최대 100년 또는 1,200개월"
               error={errors.depositPeriod}
+              placeholder="예: 1"
               onChange={(e) => updateValue("depositPeriod", e.target.value)}
               onBlur={() => validateField("depositPeriod")}
             />
@@ -208,6 +223,7 @@ export function DepositCalculator() {
               unit="%"
               help="기간 동안 고정된다고 가정하는 명목 연이율"
               error={errors.annualInterestRate}
+              placeholder="예: 3.5"
               onChange={(e) =>
                 updateValue("annualInterestRate", e.target.value)
               }
@@ -266,6 +282,7 @@ export function DepositCalculator() {
                 unit="%"
                 help="상품에 적용되는 세율을 직접 입력하세요."
                 error={errors.customTaxRate}
+                placeholder="예: 15.4"
                 onChange={(e) => updateValue("customTaxRate", e.target.value)}
                 onBlur={() => validateField("customTaxRate")}
               />
@@ -287,46 +304,60 @@ export function DepositCalculator() {
           >
             예상 세후 만기액
           </h2>
-          <p className="mt-4 break-words text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl">
-            {formatDepositWon(result.maturityAfterTax)}
-          </p>
-          <p className="mt-3 text-sm leading-6 text-muted-foreground">
-            고정 조건을 가정한 추정치이며 특정 금융상품의 실제 지급액이
-            아닙니다.
-          </p>
-          <dl className="mt-6 grid gap-3 sm:grid-cols-2">
-            {[
-              ["원금", result.principal],
-              ["세전 이자", result.grossInterest],
-              ["예상 세금", result.estimatedTax],
-              ["세후 이자", result.afterTaxInterest],
-              ["세전 만기액", result.maturityBeforeTax],
-              ["세후 만기액", result.maturityAfterTax],
-            ].map(([label, value]) => (
-              <div key={label} className="rounded-xl border bg-background p-4">
-                <dt className="text-xs text-muted-foreground">{label}</dt>
-                <dd className="mt-1 font-semibold tabular-nums">
-                  {formatDepositWon(value)}
-                </dd>
+          {result ? (
+            <>
+              <p className="mt-4 break-words text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl">
+                {formatDepositWon(result.maturityAfterTax)}
+              </p>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                고정 조건을 가정한 추정치이며 특정 금융상품의 실제 지급액이
+                아닙니다.
+              </p>
+              <dl className="mt-6 grid gap-3 sm:grid-cols-2">
+                {[
+                  ["원금", result.principal],
+                  ["세전 이자", result.grossInterest],
+                  ["예상 세금", result.estimatedTax],
+                  ["세후 이자", result.afterTaxInterest],
+                  ["세전 만기액", result.maturityBeforeTax],
+                  ["세후 만기액", result.maturityAfterTax],
+                ].map(([label, value]) => (
+                  <div
+                    key={label}
+                    className="rounded-xl border bg-background p-4"
+                  >
+                    <dt className="text-xs text-muted-foreground">{label}</dt>
+                    <dd className="mt-1 font-semibold tabular-nums">
+                      {formatDepositWon(value)}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+              <div className="mt-5 rounded-xl bg-muted p-4 text-sm leading-6">
+                <p className="font-medium">실효 수익</p>
+                <p className="mt-1 text-muted-foreground">
+                  원금 대비 세후 이자{" "}
+                  {formatDepositPercent(result.effectiveReturnRate)} · 적용 간이
+                  세율 {appliedTaxRate}%
+                </p>
+                <p className="mt-1 text-muted-foreground">
+                  {appliedValues.interestMethod === "simple"
+                    ? "단리"
+                    : "월복리"}{" "}
+                  · {appliedValues.depositPeriod}
+                  {appliedValues.periodUnit === "years" ? "년" : "개월"}
+                </p>
               </div>
-            ))}
-          </dl>
-          <div className="mt-5 rounded-xl bg-muted p-4 text-sm leading-6">
-            <p className="font-medium">실효 수익</p>
-            <p className="mt-1 text-muted-foreground">
-              원금 대비 세후 이자{" "}
-              {formatDepositPercent(result.effectiveReturnRate)} · 적용 간이
-              세율 {appliedTaxRate}%
-            </p>
-            <p className="mt-1 text-muted-foreground">
-              {appliedValues.interestMethod === "simple" ? "단리" : "월복리"} ·{" "}
-              {appliedValues.depositPeriod}
-              {appliedValues.periodUnit === "years" ? "년" : "개월"}
-            </p>
-          </div>
-          <p className="sr-only" aria-live="polite" aria-atomic="true">
-            {announcement}
-          </p>
+              <p className="sr-only" aria-live="polite" aria-atomic="true">
+                {announcement}
+              </p>
+            </>
+          ) : (
+            <div className="mt-6 rounded-xl border border-dashed bg-muted/30 p-6 text-sm leading-6 text-muted-foreground">
+              예치 금액과 기간, 이자율을 입력하면 세전·세후 만기액을 확인할 수
+              있습니다.
+            </div>
+          )}
         </section>
       </div>
     </section>

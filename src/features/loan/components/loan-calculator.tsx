@@ -3,6 +3,7 @@
 import { type ChangeEvent, type FormEvent, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { formatMoneyInput } from "@/lib/input/money";
 
 import { calculateLoan } from "../calculate";
 import { DEFAULT_LOAN_VALUES } from "../constants";
@@ -15,10 +16,12 @@ import type {
 } from "../types";
 import { validateLoanForm } from "../validation";
 
-const initialValidation = validateLoanForm(DEFAULT_LOAN_VALUES);
-if (!initialValidation.data)
-  throw new Error("기본 대출 조건이 올바르지 않습니다.");
-const initialResult = calculateLoan(initialValidation.data);
+const INITIAL_LOAN_VALUES: LoanFormValues = {
+  ...DEFAULT_LOAN_VALUES,
+  loanAmount: "",
+  annualInterestRate: "",
+  loanPeriod: "",
+};
 
 const controlClass =
   "mt-2 h-11 w-full rounded-lg border bg-background px-3 text-base tabular-nums shadow-sm outline-none transition focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20";
@@ -30,6 +33,8 @@ type NumberFieldProps = {
   unit: string;
   help: string;
   error?: string;
+  placeholder: string;
+  money?: boolean;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onBlur: () => void;
 };
@@ -41,6 +46,8 @@ function NumberField({
   unit,
   help,
   error,
+  placeholder,
+  money = false,
   onChange,
   onBlur,
 }: NumberFieldProps) {
@@ -55,7 +62,12 @@ function NumberField({
           id={field}
           name={field}
           value={value}
-          onChange={onChange}
+          onChange={(event) => {
+            if (money)
+              event.target.value = formatMoneyInput(event.target.value, value);
+            onChange(event);
+          }}
+          placeholder={placeholder}
           onBlur={onBlur}
           inputMode="decimal"
           autoComplete="off"
@@ -83,9 +95,9 @@ function NumberField({
 }
 
 export function LoanCalculator() {
-  const [values, setValues] = useState<LoanFormValues>(DEFAULT_LOAN_VALUES);
+  const [values, setValues] = useState<LoanFormValues>(INITIAL_LOAN_VALUES);
   const [errors, setErrors] = useState<LoanValidationErrors>({});
-  const [result, setResult] = useState<LoanResult>(initialResult);
+  const [result, setResult] = useState<LoanResult | null>(null);
   const [repaymentType, setRepaymentType] = useState(values.repaymentType);
   const [announcement, setAnnouncement] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
@@ -168,6 +180,8 @@ export function LoanCalculator() {
               unit="원"
               help="실제로 빌릴 원금"
               error={errors.loanAmount}
+              placeholder="예: 100,000,000"
+              money
               onChange={(e) => updateValue("loanAmount", e.target.value)}
               onBlur={() => validateField("loanAmount")}
             />
@@ -178,6 +192,7 @@ export function LoanCalculator() {
               unit="%"
               help="기간 동안 고정된다고 가정하는 명목 연이율"
               error={errors.annualInterestRate}
+              placeholder="예: 4.5"
               onChange={(e) =>
                 updateValue("annualInterestRate", e.target.value)
               }
@@ -190,6 +205,7 @@ export function LoanCalculator() {
               unit={values.periodUnit === "years" ? "년" : "개월"}
               help="최대 100년 또는 1,200개월"
               error={errors.loanPeriod}
+              placeholder="예: 30"
               onChange={(e) => updateValue("loanPeriod", e.target.value)}
               onBlur={() => validateField("loanPeriod")}
             />
@@ -237,49 +253,58 @@ export function LoanCalculator() {
             id="loan-result-title"
             className="mt-1 text-2xl font-semibold tracking-tight"
           >
-            {monthlyLabel}
+            {result ? monthlyLabel : "상환 계산 결과"}
           </h2>
-          <p className="mt-4 break-words text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl">
-            {formatLoanWon(result.monthlyPayment)}
-          </p>
-          <p className="mt-3 text-sm leading-6 text-muted-foreground">
-            금리와 상환 조건이 변하지 않는다는 가정의 원 단위 추정치입니다.
-          </p>
-          <dl className="mt-6 grid gap-3 sm:grid-cols-2">
-            <div className="rounded-xl border bg-background p-4">
-              <dt className="text-xs text-muted-foreground">총 상환액</dt>
-              <dd className="mt-1 font-semibold tabular-nums">
-                {formatLoanWon(result.totalRepayment)}
-              </dd>
-            </div>
-            <div className="rounded-xl border bg-background p-4">
-              <dt className="text-xs text-muted-foreground">총 이자</dt>
-              <dd className="mt-1 font-semibold tabular-nums">
-                {formatLoanWon(result.totalInterest)}
-              </dd>
-            </div>
-            {repaymentType === "equal-principal" ? (
-              <div className="rounded-xl border bg-background p-4 sm:col-span-2">
-                <dt className="text-xs text-muted-foreground">
-                  마지막 달 납부액
-                </dt>
-                <dd className="mt-1 font-semibold tabular-nums">
-                  {formatLoanWon(result.lastMonthlyPayment)}
-                </dd>
+          {result ? (
+            <>
+              <p className="mt-4 break-words text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl">
+                {formatLoanWon(result.monthlyPayment)}
+              </p>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                금리와 상환 조건이 변하지 않는다는 가정의 원 단위 추정치입니다.
+              </p>
+              <dl className="mt-6 grid gap-3 sm:grid-cols-2">
+                <div className="rounded-xl border bg-background p-4">
+                  <dt className="text-xs text-muted-foreground">총 상환액</dt>
+                  <dd className="mt-1 font-semibold tabular-nums">
+                    {formatLoanWon(result.totalRepayment)}
+                  </dd>
+                </div>
+                <div className="rounded-xl border bg-background p-4">
+                  <dt className="text-xs text-muted-foreground">총 이자</dt>
+                  <dd className="mt-1 font-semibold tabular-nums">
+                    {formatLoanWon(result.totalInterest)}
+                  </dd>
+                </div>
+                {repaymentType === "equal-principal" ? (
+                  <div className="rounded-xl border bg-background p-4 sm:col-span-2">
+                    <dt className="text-xs text-muted-foreground">
+                      마지막 달 납부액
+                    </dt>
+                    <dd className="mt-1 font-semibold tabular-nums">
+                      {formatLoanWon(result.lastMonthlyPayment)}
+                    </dd>
+                  </div>
+                ) : null}
+              </dl>
+              <div className="mt-5 rounded-xl bg-muted p-4 text-sm leading-6">
+                <p className="font-medium">실질 상환 요약</p>
+                <p className="mt-1 text-muted-foreground">{result.summary}</p>
               </div>
-            ) : null}
-          </dl>
-          <div className="mt-5 rounded-xl bg-muted p-4 text-sm leading-6">
-            <p className="font-medium">실질 상환 요약</p>
-            <p className="mt-1 text-muted-foreground">{result.summary}</p>
-          </div>
-          <p className="sr-only" aria-live="polite" aria-atomic="true">
-            {announcement}
-          </p>
+              <p className="sr-only" aria-live="polite" aria-atomic="true">
+                {announcement}
+              </p>
+            </>
+          ) : (
+            <div className="mt-6 rounded-xl border border-dashed bg-muted/30 p-6 text-sm leading-6 text-muted-foreground">
+              대출 조건을 입력하고 계산하면 월 납부액과 총 이자, 상환 요약을
+              확인할 수 있습니다.
+            </div>
+          )}
         </section>
       </div>
 
-      {showSchedule ? (
+      {result && showSchedule ? (
         <section className="rounded-2xl border bg-card p-5 sm:p-7">
           <h2 className="text-2xl font-semibold tracking-tight">
             월별 상환 일정

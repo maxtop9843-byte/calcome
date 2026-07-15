@@ -71,6 +71,12 @@ export function validateDepositForm(values: DepositFormValues): {
       "예치 기간은 최대 1,200개월(100년)까지 입력할 수 있습니다.";
   }
 
+  if (!values.depositAmount.trim())
+    errors.depositAmount = "예치 금액을 입력해 주세요.";
+  if (!values.depositPeriod.trim())
+    errors.depositPeriod = "예치 기간을 입력해 주세요.";
+  if (!values.annualInterestRate.trim())
+    errors.annualInterestRate = "연 이자율을 입력해 주세요.";
   if (Object.keys(errors).length) return { errors };
 
   const taxRate =

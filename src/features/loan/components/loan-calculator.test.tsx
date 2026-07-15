@@ -4,18 +4,22 @@ import { describe, expect, it } from "vitest";
 import { LoanCalculator } from "./loan-calculator";
 
 describe("LoanCalculator", () => {
-  it("renders defaults, results, and the amortization schedule", () => {
+  async function fillRequired(user: ReturnType<typeof userEvent.setup>) {
+    await user.type(screen.getByLabelText("대출 금액 *"), "100000000");
+    await user.type(screen.getByLabelText("연 이자율 *"), "4.5");
+    await user.type(screen.getByLabelText("대출 기간 *"), "30");
+  }
+  it("starts empty with examples and no amortization schedule", () => {
     render(<LoanCalculator />);
-    expect(screen.getByLabelText("대출 금액 *")).toHaveValue("100000000");
-    expect(screen.getByRole("heading", { name: "월 납부액" })).toBeVisible();
-    expect(
-      screen.getByRole("table", { name: "월별 대출 원금과 이자 상환 일정" }),
-    ).toBeVisible();
-    expect(screen.getByText("실질 상환 요약")).toBeVisible();
+    expect(screen.getByLabelText("대출 금액 *")).toHaveValue("");
+    expect(screen.getByPlaceholderText("예: 100,000,000")).toBeVisible();
+    expect(screen.queryByRole("table")).not.toBeInTheDocument();
+    expect(screen.getByText(/대출 조건을 입력하고 계산하면/)).toBeVisible();
   });
   it("calculates equal principal and labels the first and last payments", async () => {
     const user = userEvent.setup();
     render(<LoanCalculator />);
+    await fillRequired(user);
     await user.selectOptions(
       screen.getByLabelText("상환 방식 *"),
       "equal-principal",
@@ -29,6 +33,7 @@ describe("LoanCalculator", () => {
   it("hides the schedule for bullet repayment and explains maturity principal", async () => {
     const user = userEvent.setup();
     render(<LoanCalculator />);
+    await fillRequired(user);
     await user.selectOptions(screen.getByLabelText("상환 방식 *"), "bullet");
     await user.click(
       screen.getByRole("button", { name: "상환 결과 계산하기" }),

@@ -3,6 +3,7 @@
 import { type ChangeEvent, type FormEvent, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { formatMoneyInput } from "@/lib/input/money";
 
 import { calculateSavings } from "../calculate";
 import { DEFAULT_SAVINGS_VALUES, GENERAL_SAVINGS_TAX_RATE } from "../constants";
@@ -15,10 +16,12 @@ import type {
 } from "../types";
 import { validateSavingsForm } from "../validation";
 
-const initialValidation = validateSavingsForm(DEFAULT_SAVINGS_VALUES);
-if (!initialValidation.data)
-  throw new Error("기본 적금 조건이 올바르지 않습니다.");
-const initialResult = calculateSavings(initialValidation.data);
+const INITIAL_SAVINGS_VALUES: SavingsFormValues = {
+  ...DEFAULT_SAVINGS_VALUES,
+  regularDeposit: "",
+  savingsPeriod: "",
+  annualInterestRate: "",
+};
 
 const controlClass =
   "mt-2 h-11 w-full rounded-lg border bg-background px-3 text-base tabular-nums shadow-sm outline-none transition focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20";
@@ -30,6 +33,8 @@ type NumberFieldProps = {
   unit: string;
   help: string;
   error?: string;
+  placeholder: string;
+  money?: boolean;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onBlur: () => void;
 };
@@ -41,6 +46,8 @@ function NumberField({
   unit,
   help,
   error,
+  placeholder,
+  money = false,
   onChange,
   onBlur,
 }: NumberFieldProps) {
@@ -55,7 +62,12 @@ function NumberField({
           id={field}
           name={field}
           value={value}
-          onChange={onChange}
+          onChange={(event) => {
+            if (money)
+              event.target.value = formatMoneyInput(event.target.value, value);
+            onChange(event);
+          }}
+          placeholder={placeholder}
           onBlur={onBlur}
           inputMode="decimal"
           autoComplete="off"
@@ -84,10 +96,10 @@ function NumberField({
 
 export function SavingsCalculator() {
   const [values, setValues] = useState<SavingsFormValues>(
-    DEFAULT_SAVINGS_VALUES,
+    INITIAL_SAVINGS_VALUES,
   );
   const [errors, setErrors] = useState<SavingsValidationErrors>({});
-  const [result, setResult] = useState<SavingsResult>(initialResult);
+  const [result, setResult] = useState<SavingsResult | null>(null);
   const [appliedValues, setAppliedValues] = useState(DEFAULT_SAVINGS_VALUES);
   const [announcement, setAnnouncement] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
@@ -169,6 +181,8 @@ export function SavingsCalculator() {
               unit="원"
               help="선택한 주기마다 넣는 고정 금액"
               error={errors.regularDeposit}
+              placeholder="예: 100,000"
+              money
               onChange={(e) => updateValue("regularDeposit", e.target.value)}
               onBlur={() => validateField("regularDeposit")}
             />
@@ -195,6 +209,7 @@ export function SavingsCalculator() {
               unit={values.periodUnit === "years" ? "년" : "개월"}
               help="최대 100년 또는 1,200개월"
               error={errors.savingsPeriod}
+              placeholder="예: 1"
               onChange={(e) => updateValue("savingsPeriod", e.target.value)}
               onBlur={() => validateField("savingsPeriod")}
             />
@@ -219,6 +234,7 @@ export function SavingsCalculator() {
               unit="%"
               help="우대금리를 포함해 직접 확인한 연이율"
               error={errors.annualInterestRate}
+              placeholder="예: 3.5"
               onChange={(e) =>
                 updateValue("annualInterestRate", e.target.value)
               }
@@ -304,6 +320,7 @@ export function SavingsCalculator() {
                 unit="%"
                 help="상품에 적용되는 세율을 직접 입력하세요."
                 error={errors.customTaxRate}
+                placeholder="예: 15.4"
                 onChange={(e) => updateValue("customTaxRate", e.target.value)}
                 onBlur={() => validateField("customTaxRate")}
               />
@@ -325,103 +342,122 @@ export function SavingsCalculator() {
           >
             예상 세후 만기액
           </h2>
-          <p className="mt-4 break-words text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl">
-            {formatSavingsWon(result.maturityAfterTax)}
-          </p>
-          <p className="mt-3 text-sm leading-6 text-muted-foreground">
-            고정 조건을 가정한 수학적 추정치이며 특정 은행 상품의 실제 수령액이
-            아닙니다.
-          </p>
-          <dl className="mt-6 grid gap-3 sm:grid-cols-2">
-            {[
-              ["총 납입 원금", result.totalPrincipal],
-              ["세전 이자", result.grossInterest],
-              ["예상 세금", result.estimatedTax],
-              ["예상 세후 이자", result.afterTaxInterest],
-              ["세전 만기액", result.maturityBeforeTax],
-              ["세후 만기액", result.maturityAfterTax],
-            ].map(([label, value]) => (
-              <div key={label} className="rounded-xl border bg-background p-4">
-                <dt className="text-xs text-muted-foreground">{label}</dt>
-                <dd className="mt-1 font-semibold tabular-nums">
-                  {formatSavingsWon(value)}
-                </dd>
+          {result ? (
+            <>
+              <p className="mt-4 break-words text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl">
+                {formatSavingsWon(result.maturityAfterTax)}
+              </p>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                고정 조건을 가정한 수학적 추정치이며 특정 은행 상품의 실제
+                수령액이 아닙니다.
+              </p>
+              <dl className="mt-6 grid gap-3 sm:grid-cols-2">
+                {[
+                  ["총 납입 원금", result.totalPrincipal],
+                  ["세전 이자", result.grossInterest],
+                  ["예상 세금", result.estimatedTax],
+                  ["예상 세후 이자", result.afterTaxInterest],
+                  ["세전 만기액", result.maturityBeforeTax],
+                  ["세후 만기액", result.maturityAfterTax],
+                ].map(([label, value]) => (
+                  <div
+                    key={label}
+                    className="rounded-xl border bg-background p-4"
+                  >
+                    <dt className="text-xs text-muted-foreground">{label}</dt>
+                    <dd className="mt-1 font-semibold tabular-nums">
+                      {formatSavingsWon(value)}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+              <div className="mt-5 rounded-xl bg-muted p-4 text-sm leading-6">
+                <p className="font-medium">실효 수익 요약</p>
+                <p className="mt-1 text-muted-foreground">
+                  총 {result.depositCount}회 납입 · 납입 원금 대비 세후 이자{" "}
+                  {formatSavingsPercent(result.effectiveReturnRate)} · 적용 간이
+                  세율 {appliedTaxRate}%
+                </p>
+                <p className="mt-1 text-muted-foreground">
+                  {appliedValues.interestMethod === "simple"
+                    ? "단리"
+                    : "월복리"}{" "}
+                  ·{" "}
+                  {appliedValues.depositTiming === "beginning"
+                    ? "기간 초 납입"
+                    : "기간 말 납입"}
+                </p>
               </div>
-            ))}
-          </dl>
-          <div className="mt-5 rounded-xl bg-muted p-4 text-sm leading-6">
-            <p className="font-medium">실효 수익 요약</p>
-            <p className="mt-1 text-muted-foreground">
-              총 {result.depositCount}회 납입 · 납입 원금 대비 세후 이자{" "}
-              {formatSavingsPercent(result.effectiveReturnRate)} · 적용 간이
-              세율 {appliedTaxRate}%
-            </p>
-            <p className="mt-1 text-muted-foreground">
-              {appliedValues.interestMethod === "simple" ? "단리" : "월복리"} ·{" "}
-              {appliedValues.depositTiming === "beginning"
-                ? "기간 초 납입"
-                : "기간 말 납입"}
-            </p>
-          </div>
-          <p className="sr-only" aria-live="polite" aria-atomic="true">
-            {announcement}
-          </p>
+              <p className="sr-only" aria-live="polite" aria-atomic="true">
+                {announcement}
+              </p>
+            </>
+          ) : (
+            <div className="mt-6 rounded-xl border border-dashed bg-muted/30 p-6 text-sm leading-6 text-muted-foreground">
+              납입액과 기간, 이자율을 입력하면 예상 만기액과 이자 내역을 확인할
+              수 있습니다.
+            </div>
+          )}
         </section>
       </div>
 
-      <section className="rounded-2xl border bg-card p-5 sm:p-7">
-        <h2 className="text-2xl font-semibold tracking-tight">
-          월별 만기 형성 내역
-        </h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          이자는 계산 정밀도를 유지하고 화면의 금액만 원 단위로 반올림합니다.
-        </p>
-        <div className="mt-5 max-h-[36rem] overflow-auto rounded-xl border">
-          <table className="w-full min-w-[720px] border-collapse text-right text-sm tabular-nums">
-            <caption className="sr-only">
-              월별 적금 납입액과 이자 및 세전 잔액
-            </caption>
-            <thead className="sticky top-0 bg-muted">
-              <tr>
-                {[
-                  "기간",
-                  "납입액",
-                  "해당 월 이자",
-                  "누적 원금",
-                  "세전 잔액",
-                ].map((h) => (
-                  <th
-                    key={h}
-                    scope="col"
-                    className="border-b px-4 py-3 font-medium"
-                  >
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {result.schedule.map((row) => (
-                <tr key={row.month} className="border-b last:border-0">
-                  <th scope="row" className="px-4 py-3 font-medium">
-                    {row.month}개월
-                  </th>
-                  <td className="px-4 py-3">{formatSavingsWon(row.deposit)}</td>
-                  <td className="px-4 py-3">
-                    {formatSavingsWon(row.interest)}
-                  </td>
-                  <td className="px-4 py-3">
-                    {formatSavingsWon(row.cumulativePrincipal)}
-                  </td>
-                  <td className="px-4 py-3">
-                    {formatSavingsWon(row.grossBalance)}
-                  </td>
+      {result ? (
+        <section className="rounded-2xl border bg-card p-5 sm:p-7">
+          <h2 className="text-2xl font-semibold tracking-tight">
+            월별 만기 형성 내역
+          </h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            이자는 계산 정밀도를 유지하고 화면의 금액만 원 단위로 반올림합니다.
+          </p>
+          <div className="mt-5 max-h-[36rem] overflow-auto rounded-xl border">
+            <table className="w-full min-w-[720px] border-collapse text-right text-sm tabular-nums">
+              <caption className="sr-only">
+                월별 적금 납입액과 이자 및 세전 잔액
+              </caption>
+              <thead className="sticky top-0 bg-muted">
+                <tr>
+                  {[
+                    "기간",
+                    "납입액",
+                    "해당 월 이자",
+                    "누적 원금",
+                    "세전 잔액",
+                  ].map((h) => (
+                    <th
+                      key={h}
+                      scope="col"
+                      className="border-b px-4 py-3 font-medium"
+                    >
+                      {h}
+                    </th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
+              </thead>
+              <tbody>
+                {result.schedule.map((row) => (
+                  <tr key={row.month} className="border-b last:border-0">
+                    <th scope="row" className="px-4 py-3 font-medium">
+                      {row.month}개월
+                    </th>
+                    <td className="px-4 py-3">
+                      {formatSavingsWon(row.deposit)}
+                    </td>
+                    <td className="px-4 py-3">
+                      {formatSavingsWon(row.interest)}
+                    </td>
+                    <td className="px-4 py-3">
+                      {formatSavingsWon(row.cumulativePrincipal)}
+                    </td>
+                    <td className="px-4 py-3">
+                      {formatSavingsWon(row.grossBalance)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      ) : null}
     </section>
   );
 }

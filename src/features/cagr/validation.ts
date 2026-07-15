@@ -48,6 +48,11 @@ export function validateCagrForm(values: CagrFormValues): {
     errors.investmentPeriod =
       "투자 기간은 최대 1,200개월(100년)까지 입력할 수 있습니다.";
   }
+  if (!values.initialValue.trim())
+    errors.initialValue = "시작값을 입력해 주세요.";
+  if (!values.finalValue.trim()) errors.finalValue = "종료값을 입력해 주세요.";
+  if (!values.investmentPeriod.trim())
+    errors.investmentPeriod = "투자 기간을 입력해 주세요.";
 
   if (Object.keys(errors).length) return { errors };
 
