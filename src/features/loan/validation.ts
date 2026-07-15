@@ -54,6 +54,12 @@ export function validateLoanForm(values: LoanFormValues): {
     errors.loanPeriod =
       "대출 기간은 최대 1,200개월(100년)까지 입력할 수 있습니다.";
   }
+  if (!values.loanAmount.trim())
+    errors.loanAmount = "대출 금액을 입력해 주세요.";
+  if (!values.annualInterestRate.trim())
+    errors.annualInterestRate = "연 이자율을 입력해 주세요.";
+  if (!values.loanPeriod.trim())
+    errors.loanPeriod = "대출 기간을 입력해 주세요.";
 
   if (Object.keys(errors).length) return { errors };
   return {

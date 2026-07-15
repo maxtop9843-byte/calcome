@@ -89,6 +89,12 @@ export function validateSavingsForm(values: SavingsFormValues): {
       "연 납입은 12개월 이상의 완전한 연 단위 기간만 사용할 수 있습니다.";
   }
 
+  if (!values.regularDeposit.trim())
+    errors.regularDeposit = "정기 납입액을 입력해 주세요.";
+  if (!values.savingsPeriod.trim())
+    errors.savingsPeriod = "저축 기간을 입력해 주세요.";
+  if (!values.annualInterestRate.trim())
+    errors.annualInterestRate = "연 이자율을 입력해 주세요.";
   if (Object.keys(errors).length) return { errors };
 
   const taxRate =

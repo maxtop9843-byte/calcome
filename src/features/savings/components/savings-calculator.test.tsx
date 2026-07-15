@@ -5,24 +5,26 @@ import { describe, expect, it } from "vitest";
 import { SavingsCalculator } from "./savings-calculator";
 
 describe("SavingsCalculator", () => {
-  it("renders accessible defaults, results, and schedule", () => {
+  async function fillRequired(user: ReturnType<typeof userEvent.setup>) {
+    await user.type(screen.getByLabelText("정기 납입액 *"), "100000");
+    await user.type(screen.getByLabelText("저축 기간 *"), "1");
+    await user.type(screen.getByLabelText("연 이자율 *"), "3.5");
+  }
+  it("renders empty numeric inputs and no schedule", () => {
     render(<SavingsCalculator />);
-    expect(screen.getByLabelText("정기 납입액 *")).toHaveValue("100000");
+    expect(screen.getByLabelText("정기 납입액 *")).toHaveValue("");
     expect(screen.getByLabelText("이자 방식 *")).toHaveValue("simple");
     expect(screen.getByLabelText("일반과세 15.4%")).toBeChecked();
     expect(
       screen.getByRole("heading", { name: "예상 세후 만기액" }),
     ).toBeVisible();
-    expect(
-      screen.getByRole("table", {
-        name: "월별 적금 납입액과 이자 및 세전 잔액",
-      }),
-    ).toBeVisible();
+    expect(screen.queryByRole("table")).not.toBeInTheDocument();
   });
 
   it("updates compound, beginning, and tax-free results", async () => {
     const user = userEvent.setup();
     render(<SavingsCalculator />);
+    await fillRequired(user);
     await user.selectOptions(screen.getByLabelText("이자 방식 *"), "compound");
     await user.click(screen.getByLabelText("기간 초"));
     await user.click(screen.getByLabelText("비과세"));
@@ -41,6 +43,7 @@ describe("SavingsCalculator", () => {
   it("supports a custom tax rate", async () => {
     const user = userEvent.setup();
     render(<SavingsCalculator />);
+    await fillRequired(user);
     await user.click(screen.getByLabelText("사용자 지정"));
     const rate = screen.getByLabelText("사용자 지정 간이 세율 *");
     await user.type(rate, "10");

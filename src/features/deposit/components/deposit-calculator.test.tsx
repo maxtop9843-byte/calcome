@@ -5,27 +5,24 @@ import { describe, expect, it } from "vitest";
 import { DepositCalculator } from "./deposit-calculator";
 
 describe("DepositCalculator", () => {
-  it("renders accessible defaults and all required outputs", () => {
+  async function fillRequired(user: ReturnType<typeof userEvent.setup>) {
+    await user.type(screen.getByLabelText("예치 금액 *"), "10000000");
+    await user.type(screen.getByLabelText("예치 기간 *"), "1");
+    await user.type(screen.getByLabelText("연 이자율 *"), "3.5");
+  }
+  it("renders empty numeric inputs and a helpful result state", () => {
     render(<DepositCalculator />);
-    expect(screen.getByLabelText("예치 금액 *")).toHaveValue("10000000");
+    expect(screen.getByLabelText("예치 금액 *")).toHaveValue("");
     expect(screen.getByLabelText("이자 방식 *")).toHaveValue("simple");
     expect(screen.getByLabelText("일반과세 15.4%")).toBeChecked();
     const result = screen.getByRole("region", { name: "예상 세후 만기액" });
-    for (const label of [
-      "원금",
-      "세전 이자",
-      "예상 세금",
-      "세후 이자",
-      "세전 만기액",
-      "세후 만기액",
-      "실효 수익",
-    ])
-      expect(within(result).getByText(label)).toBeVisible();
+    expect(within(result).getByText(/예치 금액과 기간/)).toBeVisible();
   });
 
   it("updates compound and tax-free results with a polite announcement", async () => {
     const user = userEvent.setup();
     render(<DepositCalculator />);
+    await fillRequired(user);
     await user.selectOptions(screen.getByLabelText("이자 방식 *"), "compound");
     await user.click(screen.getByLabelText("비과세"));
     await user.click(
@@ -42,6 +39,7 @@ describe("DepositCalculator", () => {
   it("supports custom tax", async () => {
     const user = userEvent.setup();
     render(<DepositCalculator />);
+    await fillRequired(user);
     await user.click(screen.getByLabelText("사용자 지정"));
     await user.type(screen.getByLabelText("사용자 지정 간이 세율 *"), "10");
     await user.click(

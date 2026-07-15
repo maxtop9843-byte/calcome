@@ -3,6 +3,7 @@
 import { type ChangeEvent, type FormEvent, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { formatMoneyInput } from "@/lib/input/money";
 
 import { calculateCagr } from "../calculate";
 import { DEFAULT_CAGR_VALUES } from "../constants";
@@ -19,10 +20,12 @@ import type {
 } from "../types";
 import { validateCagrForm } from "../validation";
 
-const initialValidation = validateCagrForm(DEFAULT_CAGR_VALUES);
-if (!initialValidation.data)
-  throw new Error("기본 CAGR 조건이 올바르지 않습니다.");
-const initialResult = calculateCagr(initialValidation.data);
+const INITIAL_CAGR_VALUES: CagrFormValues = {
+  ...DEFAULT_CAGR_VALUES,
+  initialValue: "",
+  finalValue: "",
+  investmentPeriod: "",
+};
 
 const controlClass =
   "mt-2 h-11 w-full rounded-lg border bg-background px-3 text-base tabular-nums shadow-sm outline-none transition focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20";
@@ -34,6 +37,8 @@ type NumberFieldProps = {
   unit: string;
   help: string;
   error?: string;
+  placeholder: string;
+  money?: boolean;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onBlur: () => void;
 };
@@ -45,6 +50,8 @@ function NumberField({
   unit,
   help,
   error,
+  placeholder,
+  money = false,
   onChange,
   onBlur,
 }: NumberFieldProps) {
@@ -59,7 +66,12 @@ function NumberField({
           id={field}
           name={field}
           value={value}
-          onChange={onChange}
+          onChange={(event) => {
+            if (money)
+              event.target.value = formatMoneyInput(event.target.value, value);
+            onChange(event);
+          }}
+          placeholder={placeholder}
           onBlur={onBlur}
           inputMode="decimal"
           autoComplete="off"
@@ -87,9 +99,9 @@ function NumberField({
 }
 
 export function CagrCalculator() {
-  const [values, setValues] = useState<CagrFormValues>(DEFAULT_CAGR_VALUES);
+  const [values, setValues] = useState<CagrFormValues>(INITIAL_CAGR_VALUES);
   const [errors, setErrors] = useState<CagrValidationErrors>({});
-  const [result, setResult] = useState<CagrResult>(initialResult);
+  const [result, setResult] = useState<CagrResult | null>(null);
   const [appliedValues, setAppliedValues] = useState(DEFAULT_CAGR_VALUES);
   const [announcement, setAnnouncement] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
@@ -164,6 +176,8 @@ export function CagrCalculator() {
               unit="원"
               help="투자나 지표의 최초 평가액"
               error={errors.initialValue}
+              placeholder="예: 10,000,000"
+              money
               onChange={(event) =>
                 updateValue("initialValue", event.target.value)
               }
@@ -176,6 +190,8 @@ export function CagrCalculator() {
               unit="원"
               help="투자 기간이 끝난 시점의 평가액"
               error={errors.finalValue}
+              placeholder="예: 15,000,000"
+              money
               onChange={(event) =>
                 updateValue("finalValue", event.target.value)
               }
@@ -188,6 +204,7 @@ export function CagrCalculator() {
               unit={values.periodUnit === "years" ? "년" : "개월"}
               help="최대 100년 또는 1,200개월"
               error={errors.investmentPeriod}
+              placeholder="예: 5"
               onChange={(event) =>
                 updateValue("investmentPeriod", event.target.value)
               }
@@ -226,42 +243,52 @@ export function CagrCalculator() {
           >
             연평균 복합성장률(CAGR)
           </h2>
-          <p className="mt-4 break-words text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl">
-            {formatCagrPercent(result.cagrPercent)}
-          </p>
-          <p className="mt-3 text-sm leading-6 text-muted-foreground">
-            매년 같은 복리 비율로 변했다고 가정한 연환산 값입니다.
-          </p>
-          <dl className="mt-6 grid gap-3 sm:grid-cols-2">
-            <div className="rounded-xl border bg-background p-4">
-              <dt className="text-xs text-muted-foreground">총수익률</dt>
-              <dd className="mt-1 font-semibold tabular-nums">
-                {formatCagrPercent(result.totalReturnPercent)}
-              </dd>
+          {result ? (
+            <>
+              <p className="mt-4 break-words text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl">
+                {formatCagrPercent(result.cagrPercent)}
+              </p>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                매년 같은 복리 비율로 변했다고 가정한 연환산 값입니다.
+              </p>
+              <dl className="mt-6 grid gap-3 sm:grid-cols-2">
+                <div className="rounded-xl border bg-background p-4">
+                  <dt className="text-xs text-muted-foreground">총수익률</dt>
+                  <dd className="mt-1 font-semibold tabular-nums">
+                    {formatCagrPercent(result.totalReturnPercent)}
+                  </dd>
+                </div>
+                <div className="rounded-xl border bg-background p-4">
+                  <dt className="text-xs text-muted-foreground">절대 손익</dt>
+                  <dd className="mt-1 font-semibold tabular-nums">
+                    {formatCagrWon(result.absoluteProfit)}
+                  </dd>
+                </div>
+              </dl>
+              <div className="mt-5 rounded-xl bg-muted p-4 text-sm leading-6">
+                <p className="font-medium">연환산 성장 요약</p>
+                <p className="mt-1 text-muted-foreground">
+                  {describeAnnualizedGrowth(result.cagrPercent)}{" "}
+                  {formatCagrPercent(result.cagrPercent)} · 전체 변화{" "}
+                  {formatCagrPercent(result.totalReturnPercent)}
+                </p>
+                <p className="mt-1 text-muted-foreground">
+                  {appliedValues.investmentPeriod}
+                  {appliedValues.periodUnit === "years"
+                    ? "년"
+                    : "개월"} 동안 {formatCagrWon(result.absoluteProfit)} 변화
+                </p>
+              </div>
+              <p className="sr-only" aria-live="polite" aria-atomic="true">
+                {announcement}
+              </p>
+            </>
+          ) : (
+            <div className="mt-6 rounded-xl border border-dashed bg-muted/30 p-6 text-sm leading-6 text-muted-foreground">
+              시작값과 종료값, 투자 기간을 입력하면 CAGR과 총수익률을 확인할 수
+              있습니다.
             </div>
-            <div className="rounded-xl border bg-background p-4">
-              <dt className="text-xs text-muted-foreground">절대 손익</dt>
-              <dd className="mt-1 font-semibold tabular-nums">
-                {formatCagrWon(result.absoluteProfit)}
-              </dd>
-            </div>
-          </dl>
-          <div className="mt-5 rounded-xl bg-muted p-4 text-sm leading-6">
-            <p className="font-medium">연환산 성장 요약</p>
-            <p className="mt-1 text-muted-foreground">
-              {describeAnnualizedGrowth(result.cagrPercent)}{" "}
-              {formatCagrPercent(result.cagrPercent)} · 전체 변화{" "}
-              {formatCagrPercent(result.totalReturnPercent)}
-            </p>
-            <p className="mt-1 text-muted-foreground">
-              {appliedValues.investmentPeriod}
-              {appliedValues.periodUnit === "years" ? "년" : "개월"} 동안{" "}
-              {formatCagrWon(result.absoluteProfit)} 변화
-            </p>
-          </div>
-          <p className="sr-only" aria-live="polite" aria-atomic="true">
-            {announcement}
-          </p>
+          )}
         </section>
       </div>
     </section>

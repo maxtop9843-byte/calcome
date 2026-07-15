@@ -5,21 +5,26 @@ import { describe, expect, it } from "vitest";
 import { CagrCalculator } from "./cagr-calculator";
 
 describe("CagrCalculator", () => {
-  it("renders accessible defaults and required outputs", () => {
+  async function fillRequired(user: ReturnType<typeof userEvent.setup>) {
+    await user.type(screen.getByLabelText("시작값 *"), "10000000");
+    await user.type(screen.getByLabelText("종료값 *"), "15000000");
+    await user.type(screen.getByLabelText("투자 기간 *"), "5");
+  }
+  it("renders empty inputs, select defaults, and an empty result state", () => {
     render(<CagrCalculator />);
-    expect(screen.getByLabelText("시작값 *")).toHaveValue("10000000");
+    expect(screen.getByLabelText("시작값 *")).toHaveValue("");
     expect(screen.getByLabelText("기간 단위 *")).toHaveValue("years");
     const result = screen.getByRole("region", {
       name: "연평균 복합성장률(CAGR)",
     });
-    expect(within(result).getByText("총수익률")).toBeVisible();
-    expect(within(result).getByText("절대 손익")).toBeVisible();
-    expect(within(result).getByText("연환산 성장 요약")).toBeVisible();
+    expect(within(result).getByText(/시작값과 종료값/)).toBeVisible();
+    expect(within(result).queryByText("총수익률")).not.toBeInTheDocument();
   });
 
   it("renders a loss summary and polite announcement", async () => {
     const user = userEvent.setup();
     render(<CagrCalculator />);
+    await fillRequired(user);
     const finalValue = screen.getByLabelText("종료값 *");
     await user.clear(finalValue);
     await user.type(finalValue, "8100000");

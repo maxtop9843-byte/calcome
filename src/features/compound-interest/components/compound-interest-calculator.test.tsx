@@ -5,21 +5,20 @@ import { describe, expect, it } from "vitest";
 import { CompoundInterestCalculator } from "./compound-interest-calculator";
 
 describe("CompoundInterestCalculator", () => {
-  it("renders approved defaults, result, chart, and semantic table", () => {
+  async function fillRequired(user: ReturnType<typeof userEvent.setup>) {
+    await user.type(screen.getByLabelText("초기 원금 *"), "1000000");
+    await user.type(screen.getByLabelText("정기 납입액 *"), "100000");
+    await user.type(screen.getByLabelText("투자 기간 *"), "10");
+    await user.type(screen.getByLabelText("연 이자율 *"), "5");
+  }
+  it("renders empty inputs, example placeholders, and no chart or table", () => {
     render(<CompoundInterestCalculator />);
 
-    expect(screen.getByLabelText("초기 원금 *")).toHaveValue("1000000");
-    expect(screen.getByLabelText("투자 기간 *")).toHaveValue("10");
-    expect(
-      screen.getByRole("heading", { name: "예상 최종 금액" }),
-    ).toBeVisible();
-    expect(
-      screen.getByRole("img", { name: /각 연도의 총 납입 원금/ }),
-    ).toBeVisible();
-    expect(
-      screen.getByRole("table", { name: "연도별 복리 계산 상세 내역" }),
-    ).toBeVisible();
-    expect(screen.getByText("예상 자산 배수 (납입 원금 대비)")).toBeVisible();
+    expect(screen.getByLabelText("초기 원금 *")).toHaveValue("");
+    expect(screen.getByPlaceholderText("예: 1,000,000")).toBeVisible();
+    expect(screen.queryByRole("img")).not.toBeInTheDocument();
+    expect(screen.queryByRole("table")).not.toBeInTheDocument();
+    expect(screen.getByText(/원금과 납입액/)).toBeVisible();
   });
 
   it("keeps inflation and tax disabled with empty visible presets", async () => {
@@ -30,8 +29,6 @@ describe("CompoundInterestCalculator", () => {
 
     expect(screen.getByLabelText("연 물가상승률")).toHaveValue("");
     expect(screen.getByLabelText("수익 간이 세율")).toHaveValue("");
-    expect(screen.getByText(/물가 미반영/)).toBeVisible();
-    expect(screen.getByText(/세금 미반영/)).toBeVisible();
   });
 
   it("reports invalid zero contributions and focuses the first invalid field", async () => {
@@ -44,6 +41,8 @@ describe("CompoundInterestCalculator", () => {
     await user.type(principal, "0");
     await user.clear(contribution);
     await user.type(contribution, "0");
+    await user.type(screen.getByLabelText("투자 기간 *"), "10");
+    await user.type(screen.getByLabelText("연 이자율 *"), "5");
     await user.click(
       screen.getByRole("button", { name: "예상 결과 계산하기" }),
     );
@@ -56,6 +55,7 @@ describe("CompoundInterestCalculator", () => {
   it("makes the tax-adjusted balance primary and retains gross balance", async () => {
     const user = userEvent.setup();
     render(<CompoundInterestCalculator />);
+    await fillRequired(user);
 
     await user.click(screen.getByText(/선택 고급 설정: 물가·간이 세금/));
     await user.type(screen.getByLabelText("수익 간이 세율"), "20");
