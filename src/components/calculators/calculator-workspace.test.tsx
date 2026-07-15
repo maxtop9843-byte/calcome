@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   PrimaryResults,
+  compactCalculatorSettingsClass,
   calculatorSettingsClass,
   calculatorWorkspaceClass,
 } from "./calculator-workspace";
@@ -26,5 +27,11 @@ describe("calculator workspace", () => {
       />,
     );
     expect(screen.getByTestId("primary-results").children).toHaveLength(3);
+  });
+
+  it("provides a compact settings variant with desktop sticky positioning", () => {
+    expect(compactCalculatorSettingsClass).toContain("p-4");
+    expect(compactCalculatorSettingsClass).toContain("lg:sticky");
+    expect(compactCalculatorSettingsClass).toContain("lg:top-4");
   });
 });

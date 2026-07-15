@@ -5,8 +5,8 @@ import { type ChangeEvent, type FormEvent, useRef, useState } from "react";
 import {
   CalculatorActions,
   PrimaryResults,
-  calculatorSettingsClass,
   calculatorWorkspaceClass,
+  compactCalculatorSettingsClass,
 } from "@/components/calculators/calculator-workspace";
 import { formatMoneyInput } from "@/lib/input/money";
 
@@ -31,7 +31,7 @@ const INITIAL_COMPOUND_INTEREST_VALUES: CompoundInterestFormValues = {
 };
 
 const inputClassName =
-  "mt-2 h-11 w-full rounded-lg border bg-background px-3 text-base tabular-nums shadow-sm outline-none transition focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20";
+  "mt-1.5 h-10 w-full rounded-lg border bg-background px-3 text-sm tabular-nums shadow-sm outline-none transition focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20";
 
 type NumberFieldProps = {
   field: CompoundInterestField;
@@ -95,10 +95,7 @@ function NumberField({
         </span>
       </div>
       {help ? (
-        <p
-          id={`${field}-help`}
-          className="mt-1.5 text-xs leading-5 text-muted-foreground"
-        >
+        <p id={`${field}-help`} className="sr-only">
           {help}
         </p>
       ) : null}
@@ -169,9 +166,9 @@ export function CompoundInterestCalculator() {
           ref={formRef}
           noValidate
           onSubmit={handleSubmit}
-          className={calculatorSettingsClass}
+          className={compactCalculatorSettingsClass}
         >
-          <div className="mb-6">
+          <div className="mb-4">
             <p className="text-sm font-semibold text-primary">입력</p>
             <h2
               id="calculator-title"
@@ -179,22 +176,21 @@ export function CompoundInterestCalculator() {
             >
               복리 조건 설정
             </h2>
-            <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              별표(*) 항목은 필수입니다. 결과는 입력한 고정 조건을 바탕으로 한
-              추정치입니다.
+            <p className="mt-1 text-xs leading-5 text-muted-foreground">
+              별표(*) 항목은 필수입니다.
             </p>
           </div>
 
           {Object.keys(errors).length > 0 ? (
             <div
               role="alert"
-              className="mb-6 rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm"
+              className="mb-4 rounded-lg border border-destructive/30 bg-destructive/5 p-3 text-sm"
             >
               입력값을 확인해 주세요. 첫 번째 오류 항목으로 이동했습니다.
             </div>
           ) : null}
 
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div className="grid gap-x-4 gap-y-3 sm:grid-cols-2">
             <NumberField
               field="initialPrincipal"
               label="초기 원금"
@@ -296,7 +292,7 @@ export function CompoundInterestCalculator() {
             </div>
           </div>
 
-          <fieldset className="mt-5">
+          <fieldset className="mt-3">
             <legend className="text-sm font-medium">납입 시점</legend>
             <div className="mt-2 grid grid-cols-2 gap-2">
               {[
@@ -305,7 +301,7 @@ export function CompoundInterestCalculator() {
               ].map(([value, label]) => (
                 <label
                   key={value}
-                  className="flex min-h-11 cursor-pointer items-center gap-2 rounded-lg border px-3 text-sm has-checked:border-primary has-checked:bg-primary/5"
+                  className="flex min-h-10 cursor-pointer items-center gap-2 rounded-lg border px-3 text-sm has-checked:border-primary has-checked:bg-primary/5"
                 >
                   <input
                     type="radio"
@@ -322,8 +318,14 @@ export function CompoundInterestCalculator() {
             </div>
           </fieldset>
 
-          <details className="mt-6 rounded-xl border bg-muted/30 p-4">
-            <summary className="min-h-11 cursor-pointer content-center font-medium">
+          <CalculatorActions
+            submitLabel="예상 결과 계산하기"
+            onReset={reset}
+            compact
+          />
+
+          <details className="mt-3 rounded-xl border bg-muted/30 px-3 py-2">
+            <summary className="min-h-9 cursor-pointer content-center text-sm font-medium">
               선택 고급 설정: 물가·간이 세금
               {values.inflationRate.trim() || values.taxRate.trim()
                 ? " (입력됨)"
@@ -332,7 +334,7 @@ export function CompoundInterestCalculator() {
             <p className="mt-2 text-sm leading-6 text-muted-foreground">
               기본값은 적용 안 함입니다. 실제 물가와 세법을 예측하지 않습니다.
             </p>
-            <div className="mt-4 grid gap-5 sm:grid-cols-2">
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
               <NumberField
                 field="inflationRate"
                 label="연 물가상승률"
@@ -359,8 +361,6 @@ export function CompoundInterestCalculator() {
               />
             </div>
           </details>
-
-          <CalculatorActions submitLabel="예상 결과 계산하기" onReset={reset} />
         </form>
         <div className="space-y-6">
           <section
@@ -378,47 +378,41 @@ export function CompoundInterestCalculator() {
                   : "예상 최종 금액"
                 : "복리 계산 결과"}
             </h2>
-            {result ? (
-              <>
-                <PrimaryResults
-                  metrics={[
-                    {
-                      label: "예상 최종 금액",
-                      value: formatWon(result.estimatedFinalBalance),
-                      featured: true,
-                    },
-                    {
-                      label: "총 납입 원금",
-                      value: formatWon(result.totalContributedPrincipal),
-                    },
-                    {
-                      label: "예상 순증가액",
-                      value: formatWon(result.estimatedNetGain),
-                    },
-                  ]}
-                />
-                <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                  고정 이자율을 가정한 시나리오 추정치이며 실제 수익이나 금융
-                  결과를 보장하지 않습니다.
-                </p>
-
-                <p className="sr-only" aria-live="polite" aria-atomic="true">
-                  {announcement}
-                </p>
-              </>
-            ) : (
-              <div className="mt-6 rounded-xl border border-dashed bg-muted/30 p-6 text-sm leading-6 text-muted-foreground">
-                원금과 납입액, 기간, 이자율을 입력하면 예상 복리 성장 결과를
-                확인할 수 있습니다.
-              </div>
-            )}
+            <PrimaryResults
+              metrics={[
+                {
+                  label: "예상 최종 금액",
+                  value: result ? formatWon(result.estimatedFinalBalance) : "—",
+                  featured: true,
+                },
+                {
+                  label: "총 납입 원금",
+                  value: result
+                    ? formatWon(result.totalContributedPrincipal)
+                    : "—",
+                },
+                {
+                  label: "예상 순증가액",
+                  value: result ? formatWon(result.estimatedNetGain) : "—",
+                },
+              ]}
+            />
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">
+              고정 이자율을 가정한 시나리오 추정치이며 실제 수익이나 금융 결과를
+              보장하지 않습니다.
+            </p>
+            <p className="sr-only" aria-live="polite" aria-atomic="true">
+              {announcement}
+            </p>
           </section>
+          <CompoundGrowthChart records={result?.yearlyData} />
           {result ? (
             <>
-              <CompoundGrowthChart records={result.yearlyData} />
-
-              <section className="rounded-2xl border bg-card p-5 sm:p-7">
-                <h2 className="text-2xl font-semibold tracking-tight">
+              <details className="rounded-2xl border bg-card p-5 sm:p-7">
+                <summary className="cursor-pointer font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                  연도별 상세 내역 보기
+                </summary>
+                <h2 className="mt-5 text-2xl font-semibold tracking-tight">
                   연도별 상세 내역
                 </h2>
                 <p className="mt-2 text-sm text-muted-foreground">
@@ -491,7 +485,7 @@ export function CompoundInterestCalculator() {
                     </tbody>
                   </table>
                 </div>
-              </section>
+              </details>
 
               <section className="rounded-2xl border bg-card p-5 sm:p-7">
                 <h2 className="text-2xl font-semibold tracking-tight">

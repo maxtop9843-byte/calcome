@@ -61,6 +61,16 @@ describe("CompoundGrowthChart", () => {
     ).toBeVisible();
   });
 
+  it("reserves chart space without drawing fake data", () => {
+    render(<CompoundGrowthChart />);
+    expect(screen.getByTestId("compound-growth-chart")).toHaveClass(
+      "h-64",
+      "lg:h-96",
+    );
+    expect(screen.getByText(/투자 조건을 계산하면 이곳에/)).toBeVisible();
+    expect(document.querySelector(".recharts-wrapper")).not.toBeInTheDocument();
+  });
+
   it("shows year, principal, assets, and interest in the tooltip", () => {
     render(
       <CompoundGrowthTooltip
