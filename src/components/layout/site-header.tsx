@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronDown, Star } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 import { siteConfig } from "@/config/site";
 
@@ -23,27 +23,15 @@ export function SiteHeader() {
           aria-label="주요 탐색"
           className="flex flex-1 items-center justify-between"
         >
-          <div className="hidden items-center gap-7 text-sm font-medium md:flex">
+          <div className="hidden items-center text-sm font-medium md:flex">
             <Link
               href="/calculators"
               className="flex items-center gap-1 hover:text-primary"
             >
               계산기 <ChevronDown className="size-3.5" aria-hidden="true" />
             </Link>
-            <Link href="/about" className="hover:text-primary">
-              금융 가이드
-            </Link>
-            <Link href="/" className="hover:text-primary">
-              블로그
-            </Link>
           </div>
-          <div className="ml-auto flex items-center gap-5 text-sm font-medium">
-            <Link
-              href="/calculators"
-              className="hidden items-center gap-1.5 sm:flex"
-            >
-              <Star className="size-4" aria-hidden="true" /> 즐겨찾기
-            </Link>
+          <div className="ml-auto flex items-center text-sm font-medium">
             <Link href="/calculators">모든 계산기</Link>
           </div>
         </nav>
