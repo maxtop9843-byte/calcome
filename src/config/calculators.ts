@@ -38,7 +38,7 @@ export const publishedCalculators = [
     description: "상환 방식별 월 납부액, 총 이자와 상환 일정을 계산합니다.",
     keywords: ["대출", "loan", "상환", "원리금", "이자"],
     category: "금융",
-    href: "/finance/loan",
+    href: "/ko/finance/loan",
   },
   {
     id: "compound-interest",

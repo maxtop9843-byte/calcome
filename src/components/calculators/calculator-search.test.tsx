@@ -15,7 +15,7 @@ describe("CalculatorSearch", () => {
     await user.type(search, "  출  ");
     expect(screen.getByRole("link", { name: /대출 계산기/ })).toHaveAttribute(
       "href",
-      "/finance/loan",
+      "/ko/finance/loan",
     );
 
     await user.clear(search);

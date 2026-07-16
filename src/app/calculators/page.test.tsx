@@ -37,7 +37,7 @@ describe("calculator directory", () => {
     );
     expect(screen.getByRole("link", { name: /대출 계산기/ })).toHaveAttribute(
       "href",
-      "/finance/loan",
+      "/ko/finance/loan",
     );
     expect(screen.getByRole("link", { name: /복리 계산기/ })).toHaveAttribute(
       "href",
@@ -71,7 +71,7 @@ describe("calculator directory", () => {
           {
             position: 4,
             name: "대출 계산기",
-            url: "https://calcome.com/finance/loan",
+            url: "https://calcome.com/ko/finance/loan",
           },
           {
             position: 5,

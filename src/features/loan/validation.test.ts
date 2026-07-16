@@ -3,6 +3,11 @@ import { DEFAULT_LOAN_VALUES } from "./constants";
 import { validateLoanForm } from "./validation";
 
 describe("validateLoanForm", () => {
+  it("produces identical calculation input for Korean and English", () => {
+    expect(validateLoanForm(DEFAULT_LOAN_VALUES, "ko").data).toEqual(
+      validateLoanForm(DEFAULT_LOAN_VALUES, "en").data,
+    );
+  });
   it("converts years to months", () => {
     expect(validateLoanForm(DEFAULT_LOAN_VALUES).data?.months).toBe(360);
   });

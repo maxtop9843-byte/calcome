@@ -9,7 +9,7 @@ import { sharedLayoutCopy } from "./layout-i18n";
 
 function localizedDestination(pathname: string, locale: CompoundLocale) {
   const localizedCalculator = pathname.match(
-    /^\/(?:ko|en)\/finance\/(compound-interest|savings|fixed-deposit)$/,
+    /^\/(?:ko|en)\/finance\/(compound-interest|savings|fixed-deposit|loan)$/,
   );
   if (localizedCalculator) {
     return `/${locale}/finance/${localizedCalculator[1]}`;
