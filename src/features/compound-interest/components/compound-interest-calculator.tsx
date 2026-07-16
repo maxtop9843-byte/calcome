@@ -117,7 +117,8 @@ export function CompoundInterestCalculator() {
   );
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [result, setResult] = useState<CompoundInterestResult | null>(null);
-  const [yearlyDetailsOpen, setYearlyDetailsOpen] = useState(false);
+  const [yearlyDetailsOpen, setYearlyDetailsOpen] = useState(true);
+  const [additionalDetailsOpen, setAdditionalDetailsOpen] = useState(false);
   const [announcement, setAnnouncement] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -152,6 +153,7 @@ export function CompoundInterestCalculator() {
     const nextResult = calculateCompoundInterest(validation.data);
     setResult(nextResult);
     setYearlyDetailsOpen(true);
+    setAdditionalDetailsOpen(true);
     setAnnouncement(
       `계산이 완료되었습니다. 예상 최종 금액은 ${formatWon(nextResult.estimatedFinalBalance)}입니다.`,
     );
@@ -161,7 +163,8 @@ export function CompoundInterestCalculator() {
     setValues(INITIAL_COMPOUND_INTEREST_VALUES);
     setErrors({});
     setResult(null);
-    setYearlyDetailsOpen(false);
+    setYearlyDetailsOpen(true);
+    setAdditionalDetailsOpen(false);
     setAnnouncement("입력값과 계산 결과를 초기화했습니다.");
   }
 
@@ -423,12 +426,20 @@ export function CompoundInterestCalculator() {
           </section>
           <CompoundGrowthChart records={result?.yearlyData} />
           <details
-            open={yearlyDetailsOpen}
-            onToggle={(event) => setYearlyDetailsOpen(event.currentTarget.open)}
+            open={result ? yearlyDetailsOpen : true}
+            onToggle={(event) => {
+              if (result) setYearlyDetailsOpen(event.currentTarget.open);
+            }}
             className="rounded-xl border bg-card p-4 shadow-sm"
           >
-            <summary className="cursor-pointer text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-              연도별 상세 내역 보기
+            <summary
+              aria-disabled={!result}
+              onClick={(event) => {
+                if (!result) event.preventDefault();
+              }}
+              className="cursor-pointer text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              상세 내역 보기
             </summary>
             {result ? (
               <>
@@ -492,7 +503,13 @@ export function CompoundInterestCalculator() {
 
           {result ? (
             <>
-              <details className="rounded-xl border bg-card p-4 shadow-sm">
+              <details
+                open={additionalDetailsOpen}
+                onToggle={(event) =>
+                  setAdditionalDetailsOpen(event.currentTarget.open)
+                }
+                className="rounded-xl border bg-card p-4 shadow-sm"
+              >
                 <summary className="cursor-pointer text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                   추가 결과와 적용 가정
                 </summary>
