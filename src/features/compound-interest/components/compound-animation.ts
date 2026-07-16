@@ -3,7 +3,7 @@
 import { useSyncExternalStore } from "react";
 
 export const COMPOUND_ANIMATION_DELAY = 100;
-export const COMPOUND_ANIMATION_DURATION = 2000;
+export const COMPOUND_ANIMATION_DURATION = 1600;
 export const COMPOUND_ANIMATION_EASING = "ease-in-out" as const;
 
 const reducedMotionQuery = "(prefers-reduced-motion: reduce)";

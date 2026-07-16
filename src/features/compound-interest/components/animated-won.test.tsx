@@ -40,6 +40,7 @@ describe("AnimatedWon", () => {
   });
 
   it("counts all three cards together and reaches the exact final values", () => {
+    expect(COMPOUND_ANIMATION_DURATION).toBe(1600);
     render(
       <>
         <AnimatedWon value="99594000" animationKey={1} />
