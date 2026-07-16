@@ -1,7 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import {
+  ThemeProvider,
+  themeInitializationScript,
+} from "@/components/theme/theme-provider";
 import { siteConfig } from "@/config/site";
 
 import "./globals.css";
@@ -41,25 +45,39 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fcfcfd" },
+    { media: "(prefers-color-scheme: dark)", color: "#171820" },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="ko" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{ __html: themeInitializationScript }}
+        />
+      </head>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
-        <a
-          href="#main-content"
-          className="sr-only z-50 rounded-md bg-background px-4 py-2 text-sm font-medium focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:ring-2 focus:ring-ring"
-        >
-          본문으로 건너뛰기
-        </a>
-        <div className="flex min-h-screen flex-col">
-          <SiteHeader />
-          {children}
-          <SiteFooter />
-        </div>
+        <ThemeProvider>
+          <a
+            href="#main-content"
+            className="sr-only z-50 rounded-md bg-background px-4 py-2 text-sm font-medium focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:ring-2 focus:ring-ring"
+          >
+            본문으로 건너뛰기
+          </a>
+          <div className="flex min-h-screen flex-col">
+            <SiteHeader />
+            {children}
+            <SiteFooter />
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

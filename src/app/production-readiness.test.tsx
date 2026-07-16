@@ -174,10 +174,10 @@ describe("production recovery and navigation", () => {
       "href",
       "/calculators",
     );
-    expect(screen.getByRole("link", { name: "모든 계산기" })).toHaveAttribute(
-      "href",
-      "/calculators",
-    );
+    expect(
+      screen.queryByRole("link", { name: "모든 계산기" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /모드로 전환/ })).toBeVisible();
     expect(screen.queryByText("금융 가이드")).not.toBeInTheDocument();
     expect(screen.queryByText("블로그")).not.toBeInTheDocument();
     expect(screen.queryByText("즐겨찾기")).not.toBeInTheDocument();
