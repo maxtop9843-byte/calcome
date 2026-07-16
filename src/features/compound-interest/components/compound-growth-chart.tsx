@@ -12,6 +12,7 @@ import {
 } from "recharts";
 
 import { formatWon } from "../format";
+import { getCompoundDictionary, type CompoundLocale } from "../i18n";
 import type { YearlyCompoundInterestRecord } from "../types";
 import {
   COMPOUND_ANIMATION_DELAY,
@@ -22,27 +23,6 @@ import {
 
 export const GROWTH_LINE_ANIMATION_DURATION = COMPOUND_ANIMATION_DURATION;
 export const GROWTH_LINE_ANIMATION_EASING = COMPOUND_ANIMATION_EASING;
-
-const GROWTH_SERIES = [
-  {
-    dataKey: "principal",
-    name: "누적 납입 원금",
-    stroke: "var(--chart-2)",
-    strokeWidth: 2,
-  },
-  {
-    dataKey: "interest",
-    name: "이자 금액",
-    stroke: "var(--chart-3)",
-    strokeWidth: 2,
-  },
-  {
-    dataKey: "assets",
-    name: "예상 총자산",
-    stroke: "var(--primary)",
-    strokeWidth: 3,
-  },
-] as const;
 
 export type CompoundGrowthPoint = {
   year: number;
@@ -84,25 +64,31 @@ export function getYearTicks(points: readonly CompoundGrowthPoint[]): number[] {
 export function CompoundGrowthTooltip({
   active,
   point,
+  locale = "ko",
 }: {
   active?: boolean;
   point?: CompoundGrowthPoint;
+  locale?: CompoundLocale;
 }) {
   if (!active || !point) return null;
+  const copy = getCompoundDictionary(locale).chart;
   return (
     <div className="rounded-lg border bg-popover p-3 text-sm text-popover-foreground shadow-lg">
-      <p className="font-semibold">{point.year}년</p>
+      <p className="font-semibold">
+        {point.year}
+        {locale === "ko" ? "년" : ""}
+      </p>
       <dl className="mt-2 grid gap-1.5 tabular-nums">
         <div className="flex justify-between gap-5">
-          <dt className="text-muted-foreground">누적 납입 원금</dt>
+          <dt className="text-muted-foreground">{copy.tooltipPrincipal}</dt>
           <dd>{formatWon(point.principalValue)}</dd>
         </div>
         <div className="flex justify-between gap-5">
-          <dt className="text-muted-foreground">예상 총자산</dt>
+          <dt className="text-muted-foreground">{copy.tooltipAssets}</dt>
           <dd>{formatWon(point.assetsValue)}</dd>
         </div>
         <div className="flex justify-between gap-5">
-          <dt className="text-muted-foreground">누적 이자</dt>
+          <dt className="text-muted-foreground">{copy.tooltipInterest}</dt>
           <dd>{formatWon(point.interestValue)}</dd>
         </div>
       </dl>
@@ -118,10 +104,33 @@ const compactWon = new Intl.NumberFormat("ko-KR", {
 export function CompoundGrowthChart({
   records,
   animationKey = 0,
+  locale = "ko",
 }: {
   records?: readonly YearlyCompoundInterestRecord[];
   animationKey?: number;
+  locale?: CompoundLocale;
 }) {
+  const copy = getCompoundDictionary(locale).chart;
+  const growthSeries = [
+    {
+      dataKey: "principal",
+      name: copy.seriesPrincipal,
+      stroke: "var(--chart-2)",
+      strokeWidth: 2,
+    },
+    {
+      dataKey: "interest",
+      name: copy.seriesInterest,
+      stroke: "var(--chart-3)",
+      strokeWidth: 2,
+    },
+    {
+      dataKey: "assets",
+      name: copy.seriesAssets,
+      stroke: "var(--primary)",
+      strokeWidth: 3,
+    },
+  ] as const;
   const data = createGrowthChartData(records ?? []);
   const ticks = getYearTicks(data);
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -132,36 +141,35 @@ export function CompoundGrowthChart({
         id="growth-chart-title"
         className="text-lg font-semibold tracking-tight"
       >
-        자산 성장 그래프
+        {copy.title}
       </h2>
       <p id="growth-chart-description" className="sr-only">
-        누적 납입 원금과 예상 총자산의 간격으로 복리 수익이 커지는 흐름을 보여
-        줍니다. 정확한 금액은 아래 연도별 상세 내역에서 확인할 수 있습니다.
+        {copy.description}
       </p>
       <div
         className="mt-5 flex flex-wrap justify-center gap-6 text-xs"
-        aria-label="차트 범례"
+        aria-label={copy.legend}
       >
         <span className="flex items-center gap-2" data-series="assets">
           <span
             className="size-2.5 rounded-full bg-primary"
             aria-hidden="true"
           />
-          예상 자산
+          {copy.legendAssets}
         </span>
         <span className="flex items-center gap-2" data-series="principal">
           <span
             className="size-2.5 rounded-full bg-chart-2"
             aria-hidden="true"
           />
-          납입 금액
+          {copy.legendPrincipal}
         </span>
         <span className="flex items-center gap-2" data-series="interest">
           <span
             className="size-2.5 rounded-full bg-chart-3"
             aria-hidden="true"
           />
-          이자 금액
+          {copy.legendInterest}
         </span>
       </div>
       <div
@@ -193,7 +201,9 @@ export function CompoundGrowthChart({
                 type="number"
                 domain={[1, "dataMax"]}
                 ticks={ticks}
-                tickFormatter={(year) => `${year}년`}
+                tickFormatter={(year) =>
+                  `${year}${locale === "ko" ? "년" : ""}`
+                }
                 tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
                 axisLine={{ stroke: "var(--border)" }}
                 tickLine={false}
@@ -217,13 +227,14 @@ export function CompoundGrowthChart({
                 content={({ active, payload }) => (
                   <CompoundGrowthTooltip
                     active={active}
+                    locale={locale}
                     point={
                       payload?.[0]?.payload as CompoundGrowthPoint | undefined
                     }
                   />
                 )}
               />
-              {GROWTH_SERIES.map((series) => (
+              {growthSeries.map((series) => (
                 <Line
                   key={`${animationKey}-${series.dataKey}`}
                   dataKey={series.dataKey}
@@ -248,7 +259,7 @@ export function CompoundGrowthChart({
               <span className="h-6 w-1.5 border border-foreground/70" />
               <span className="h-9 w-1.5 border border-foreground/70" />
             </span>
-            값을 입력하고 계산하면 자산 성장 그래프가 표시됩니다.
+            {copy.empty}
           </div>
         )}
       </div>

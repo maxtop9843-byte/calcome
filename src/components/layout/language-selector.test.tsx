@@ -1,0 +1,55 @@
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, it } from "vitest";
+
+import { LanguageSelector } from "./language-selector";
+
+describe("LanguageSelector", () => {
+  it("preserves the compound calculator destination in both directions", async () => {
+    const user = userEvent.setup();
+    window.localStorage.setItem("calcome-theme", "dark");
+    const { rerender } = render(
+      <LanguageSelector locale="ko" pathname="/ko/finance/compound-interest" />,
+    );
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "한국어" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/finance/compound-interest",
+    );
+    expect(window.localStorage.getItem("calcome-theme")).toBe("dark");
+
+    rerender(
+      <LanguageSelector locale="en" pathname="/en/finance/compound-interest" />,
+    );
+    expect(screen.getByLabelText("언어 선택")).toHaveTextContent("English");
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "한국어" })).toHaveAttribute(
+      "href",
+      "/ko/finance/compound-interest",
+    );
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+  });
+
+  it("is keyboard accessible, closes after selection, and exposes only implemented languages", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector locale="ko" pathname="/ko/finance/compound-interest" />,
+    );
+    screen.getByLabelText("언어 선택").focus();
+    expect(screen.getByLabelText("언어 선택")).toHaveFocus();
+    await user.click(screen.getByLabelText("언어 선택"));
+    const english = screen.getByRole("link", { name: "English" });
+    expect(english).toBeVisible();
+    await user.click(english);
+    expect(english).not.toBeVisible();
+    expect(screen.getAllByRole("link", { hidden: true })).toHaveLength(2);
+    expect(screen.queryByText("日本語")).not.toBeInTheDocument();
+  });
+});

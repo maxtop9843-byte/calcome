@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
 
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -52,13 +53,16 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const requestHeaders = await headers();
+  const locale = requestHeaders.get("x-calcome-locale") === "en" ? "en" : "ko";
+  const pathname = requestHeaders.get("x-calcome-pathname") ?? "/";
   return (
-    <html lang="ko" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{ __html: themeInitializationScript }}
@@ -73,7 +77,7 @@ export default function RootLayout({
             본문으로 건너뛰기
           </a>
           <div className="flex min-h-screen flex-col">
-            <SiteHeader />
+            <SiteHeader locale={locale} pathname={pathname} />
             {children}
             <SiteFooter />
           </div>

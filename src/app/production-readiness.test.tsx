@@ -84,9 +84,26 @@ describe("production metadata routes", () => {
         priority: 0.9,
       },
       {
-        url: "https://calcome.com/finance/compound-interest",
+        url: "https://calcome.com/ko/finance/compound-interest",
         changeFrequency: "monthly",
         priority: 0.9,
+        alternates: {
+          languages: {
+            ko: "https://calcome.com/ko/finance/compound-interest",
+            en: "https://calcome.com/en/finance/compound-interest",
+          },
+        },
+      },
+      {
+        url: "https://calcome.com/en/finance/compound-interest",
+        changeFrequency: "monthly",
+        priority: 0.9,
+        alternates: {
+          languages: {
+            ko: "https://calcome.com/ko/finance/compound-interest",
+            en: "https://calcome.com/en/finance/compound-interest",
+          },
+        },
       },
       {
         url: "https://calcome.com/about",

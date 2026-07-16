@@ -20,6 +20,7 @@ import { formatMoneyInput } from "@/lib/input/money";
 import { calculateCompoundInterest } from "../calculate";
 import { DEFAULT_COMPOUND_INTEREST_VALUES } from "../constants";
 import { formatMultiplier, formatPercent, formatWon } from "../format";
+import { getCompoundDictionary, type CompoundLocale } from "../i18n";
 import type {
   CompoundInterestField,
   CompoundInterestFormValues,
@@ -118,7 +119,12 @@ function NumberField({
   );
 }
 
-export function CompoundInterestCalculator() {
+export function CompoundInterestCalculator({
+  locale = "ko",
+}: {
+  locale?: CompoundLocale;
+}) {
+  const copy = getCompoundDictionary(locale).calculator;
   const [values, setValues] = useState<CompoundInterestFormValues>(
     INITIAL_COMPOUND_INTEREST_VALUES,
   );
@@ -150,7 +156,7 @@ export function CompoundInterestCalculator() {
   }
 
   function validateField(field: CompoundInterestField) {
-    const validation = validateCompoundInterestForm(values);
+    const validation = validateCompoundInterestForm(values, locale);
     setErrors((current) => {
       const next = { ...current };
       if (validation.errors[field]) next[field] = validation.errors[field];
@@ -162,7 +168,7 @@ export function CompoundInterestCalculator() {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setAnnouncement("");
-    const validation = validateCompoundInterestForm(values);
+    const validation = validateCompoundInterestForm(values, locale);
     setErrors(validation.errors);
 
     if (!validation.data) {
@@ -179,9 +185,7 @@ export function CompoundInterestCalculator() {
     setChartAnimationKey((current) => current + 1);
     setYearlyDetailsOpen(true);
     setAdditionalDetailsOpen(true);
-    setAnnouncement(
-      `계산이 완료되었습니다. 예상 최종 금액은 ${formatWon(nextResult.estimatedFinalBalance)}입니다.`,
-    );
+    setAnnouncement(copy.complete(formatWon(nextResult.estimatedFinalBalance)));
   }
 
   function reset() {
@@ -191,7 +195,7 @@ export function CompoundInterestCalculator() {
     setResult(null);
     setYearlyDetailsOpen(true);
     setAdditionalDetailsOpen(false);
-    setAnnouncement("입력값과 계산 결과를 초기화했습니다.");
+    setAnnouncement(copy.resetAnnouncement);
   }
 
   return (
@@ -209,10 +213,10 @@ export function CompoundInterestCalculator() {
               className="flex items-center gap-2 text-lg font-semibold"
             >
               <Calculator className="size-5 text-primary" aria-hidden="true" />
-              입력 정보
+              {copy.inputTitle}
             </h2>
             <p className="mt-3 text-xs leading-5 text-muted-foreground">
-              미래의 자산을 계산하기 위한 정보를 입력하세요.
+              {copy.inputDescription}
             </p>
           </div>
 
@@ -221,20 +225,20 @@ export function CompoundInterestCalculator() {
               role="alert"
               className="mb-4 rounded-lg border border-destructive/30 bg-destructive/5 p-3 text-sm"
             >
-              입력값을 확인해 주세요. 첫 번째 오류 항목으로 이동했습니다.
+              {copy.errorSummary}
             </div>
           ) : null}
 
           <div className="grid gap-x-3 gap-y-4 sm:grid-cols-2">
             <NumberField
               field="initialPrincipal"
-              label="초기 투자금"
+              label={copy.initialPrincipal}
               value={values.initialPrincipal}
-              unit="원"
+              unit={copy.won}
               required
-              help="처음 투자하거나 저축하는 금액"
+              help={copy.initialHelp}
               error={errors.initialPrincipal}
-              placeholder="예: 10,000,000"
+              placeholder={copy.initialPlaceholder}
               money
               className="sm:order-1 sm:col-span-2"
               onChange={(event) =>
@@ -244,13 +248,13 @@ export function CompoundInterestCalculator() {
             />
             <NumberField
               field="recurringContribution"
-              label="정기 납입액"
+              label={copy.contribution}
               value={values.recurringContribution}
-              unit="원"
+              unit={copy.won}
               required
-              help="선택한 주기마다 추가하는 고정 금액"
+              help={copy.contributionHelp}
               error={errors.recurringContribution}
-              placeholder="예: 500,000"
+              placeholder={copy.contributionPlaceholder}
               money
               className="sm:order-2 sm:col-span-2"
               onChange={(event) =>
@@ -263,7 +267,8 @@ export function CompoundInterestCalculator() {
                 htmlFor="contributionFrequency"
                 className="text-sm font-medium"
               >
-                납입 주기 <span className="text-destructive">*</span>
+                {copy.contributionFrequency}{" "}
+                <span className="text-destructive">*</span>
               </label>
               <select
                 id="contributionFrequency"
@@ -273,19 +278,19 @@ export function CompoundInterestCalculator() {
                 }
                 className={inputClassName}
               >
-                <option value="monthly">매월</option>
-                <option value="yearly">매년</option>
+                <option value="monthly">{copy.monthly}</option>
+                <option value="yearly">{copy.yearly}</option>
               </select>
             </div>
             <NumberField
               field="durationYears"
-              label="투자 기간"
+              label={copy.duration}
               value={values.durationYears}
-              unit="년"
+              unit={copy.yearsUnit}
               required
-              help="첫 버전은 1~100년의 정수만 지원합니다."
+              help={copy.durationHelp}
               error={errors.durationYears}
-              placeholder="예: 10"
+              placeholder={copy.durationPlaceholder}
               onChange={(event) =>
                 updateValue("durationYears", event.target.value)
               }
@@ -294,13 +299,13 @@ export function CompoundInterestCalculator() {
             />
             <NumberField
               field="annualInterestRate"
-              label="연 이자율"
+              label={copy.annualRate}
               value={values.annualInterestRate}
               unit="%"
               required
-              help="기간 내내 동일하다고 가정하는 명목 연 이자율"
+              help={copy.annualRateHelp}
               error={errors.annualInterestRate}
-              placeholder="예: 5"
+              placeholder={copy.annualRatePlaceholder}
               onChange={(event) =>
                 updateValue("annualInterestRate", event.target.value)
               }
@@ -312,7 +317,8 @@ export function CompoundInterestCalculator() {
                 htmlFor="compoundingFrequency"
                 className="text-sm font-medium"
               >
-                복리 주기 <span className="text-destructive">*</span>
+                {copy.compoundingFrequency}{" "}
+                <span className="text-destructive">*</span>
               </label>
               <select
                 id="compoundingFrequency"
@@ -322,21 +328,21 @@ export function CompoundInterestCalculator() {
                 }
                 className={inputClassName}
               >
-                <option value="yearly">매년</option>
-                <option value="semiannually">반기</option>
-                <option value="quarterly">분기</option>
-                <option value="monthly">매월</option>
-                <option value="daily">매일(연 365회)</option>
+                <option value="yearly">{copy.yearly}</option>
+                <option value="semiannually">{copy.semiannually}</option>
+                <option value="quarterly">{copy.quarterly}</option>
+                <option value="monthly">{copy.monthly}</option>
+                <option value="daily">{copy.daily}</option>
               </select>
             </div>
           </div>
 
           <fieldset className="mt-3">
-            <legend className="text-sm font-medium">납입 시점</legend>
+            <legend className="text-sm font-medium">{copy.timing}</legend>
             <div className="mt-2 grid grid-cols-2 gap-2">
               {[
-                ["end", "기간 말"],
-                ["beginning", "기간 초"],
+                ["end", copy.end],
+                ["beginning", copy.beginning],
               ].map(([value, label]) => (
                 <label
                   key={value}
@@ -359,7 +365,7 @@ export function CompoundInterestCalculator() {
 
           <div className="mt-4 grid gap-2">
             <Button type="submit" size="lg" className="h-11 w-full">
-              예상 결과 계산하기
+              {copy.calculate}
             </Button>
             <Button
               type="button"
@@ -368,29 +374,29 @@ export function CompoundInterestCalculator() {
               className="h-11 w-full"
               onClick={reset}
             >
-              초기화
+              {copy.reset}
             </Button>
           </div>
 
           <details className="mt-3 rounded-xl border bg-muted/30 px-3 py-2">
             <summary className="min-h-9 cursor-pointer content-center text-sm font-medium">
-              선택 고급 설정: 물가·간이 세금
+              {copy.advanced}
               {values.inflationRate.trim() || values.taxRate.trim()
-                ? " (입력됨)"
+                ? copy.entered
                 : ""}
             </summary>
             <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              기본값은 적용 안 함입니다. 실제 물가와 세법을 예측하지 않습니다.
+              {copy.advancedHelp}
             </p>
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
               <NumberField
                 field="inflationRate"
-                label="연 물가상승률"
+                label={copy.inflation}
                 value={values.inflationRate}
                 unit="%"
-                help="비워 두면 현재가치 조정을 하지 않습니다."
+                help={copy.inflationHelp}
                 error={errors.inflationRate}
-                placeholder="예: 2.5"
+                placeholder={copy.inflationPlaceholder}
                 onChange={(event) =>
                   updateValue("inflationRate", event.target.value)
                 }
@@ -398,12 +404,12 @@ export function CompoundInterestCalculator() {
               />
               <NumberField
                 field="taxRate"
-                label="수익 간이 세율"
+                label={copy.tax}
                 value={values.taxRate}
                 unit="%"
-                help="비워 두면 세금을 적용하지 않습니다. 법정 세율이 아닙니다."
+                help={copy.taxHelp}
                 error={errors.taxRate}
-                placeholder="예: 15.4"
+                placeholder={copy.taxPlaceholder}
                 onChange={(event) => updateValue("taxRate", event.target.value)}
                 onBlur={() => validateField("taxRate")}
               />
@@ -424,12 +430,12 @@ export function CompoundInterestCalculator() {
                 className="size-5 text-primary"
                 aria-hidden="true"
               />
-              예상 결과
+              {copy.results}
             </h2>
             <PrimaryResults
               metrics={[
                 {
-                  label: "예상 자산",
+                  label: copy.assets,
                   value: (
                     <AnimatedWon
                       key={`assets-${result ? chartAnimationKey : "empty"}`}
@@ -440,7 +446,7 @@ export function CompoundInterestCalculator() {
                   featured: true,
                 },
                 {
-                  label: "총 납입 금액",
+                  label: copy.principal,
                   value: (
                     <AnimatedWon
                       key={`principal-${result ? chartAnimationKey : "empty"}`}
@@ -450,7 +456,7 @@ export function CompoundInterestCalculator() {
                   ),
                 },
                 {
-                  label: "총 이자 금액",
+                  label: copy.gain,
                   value: (
                     <AnimatedWon
                       key={`gain-${result ? chartAnimationKey : "empty"}`}
@@ -468,6 +474,7 @@ export function CompoundInterestCalculator() {
           <CompoundGrowthChart
             records={result?.yearlyData}
             animationKey={chartAnimationKey}
+            locale={locale}
           />
           <details
             open={result ? yearlyDetailsOpen : true}
@@ -483,24 +490,16 @@ export function CompoundInterestCalculator() {
               }}
               className="cursor-pointer text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              상세 내역 보기
+              {copy.details}
             </summary>
             {result ? (
               <>
                 <div className="mt-4 overflow-x-auto rounded-lg border">
                   <table className="w-full min-w-[640px] border-collapse text-right text-sm tabular-nums">
-                    <caption className="sr-only">
-                      연도별 복리 계산 상세 내역
-                    </caption>
+                    <caption className="sr-only">{copy.tableCaption}</caption>
                     <thead className="bg-muted/70">
                       <tr>
-                        {[
-                          "연도",
-                          "연말 자산",
-                          "연간 납입",
-                          "연간 이자",
-                          "누적 원금",
-                        ].map((heading) => (
+                        {copy.tableHeadings.map((heading) => (
                           <th
                             key={heading}
                             scope="col"
@@ -518,7 +517,8 @@ export function CompoundInterestCalculator() {
                           className="border-b last:border-0"
                         >
                           <th scope="row" className="px-3 py-3 font-medium">
-                            {record.year}년
+                            {record.year}
+                            {copy.yearSuffix}
                           </th>
                           <td className="px-3 py-3">
                             {formatWon(record.netBalance)}
@@ -540,7 +540,7 @@ export function CompoundInterestCalculator() {
               </>
             ) : (
               <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                계산 후 연도별 원금, 이자, 예상 잔액을 표로 확인할 수 있습니다.
+                {copy.emptyDetails}
               </p>
             )}
           </details>
@@ -555,28 +555,30 @@ export function CompoundInterestCalculator() {
                 className="rounded-xl border bg-card p-4 shadow-sm"
               >
                 <summary className="cursor-pointer text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-                  추가 결과와 적용 가정
+                  {copy.additional}
                 </summary>
                 <dl className="mt-5 grid gap-3 sm:grid-cols-2">
-                  {[
-                    ["세전 예상 잔액", result.grossFinalBalance],
-                    ["예상 세전 이자", result.grossInterest],
-                    ["예상 간이 세금", result.estimatedTax],
-                    ["물가 반영 현재가치", result.inflationAdjustedValue],
-                  ].map(([label, value]) => (
+                  {copy.additionalLabels.map((label, index) => (
                     <div
                       key={label}
                       className="rounded-xl border bg-background p-4"
                     >
                       <dt className="text-xs text-muted-foreground">{label}</dt>
                       <dd className="mt-1 font-semibold tabular-nums">
-                        {formatWon(value)}
+                        {formatWon(
+                          [
+                            result.grossFinalBalance,
+                            result.grossInterest,
+                            result.estimatedTax,
+                            result.inflationAdjustedValue,
+                          ][index],
+                        )}
                       </dd>
                     </div>
                   ))}
                   <div className="rounded-xl border bg-background p-4 sm:col-span-2">
                     <dt className="text-xs text-muted-foreground">
-                      예상 자산 배수 (납입 원금 대비)
+                      {copy.multiplier}
                     </dt>
                     <dd className="mt-1 font-semibold tabular-nums">
                       {formatMultiplier(result.growthMultiplier)}
@@ -584,18 +586,18 @@ export function CompoundInterestCalculator() {
                   </div>
                 </dl>
                 <div className="mt-5 rounded-xl bg-muted p-4 text-sm leading-6">
-                  <p className="font-medium">적용 가정</p>
+                  <p className="font-medium">{copy.assumptions}</p>
                   <p className="mt-1 text-muted-foreground">
-                    납입 시점:{" "}
+                    {copy.timingPrefix}{" "}
                     {values.contributionTiming === "beginning"
-                      ? "기간 초"
-                      : "기간 말"}
+                      ? copy.beginning
+                      : copy.end}
                     {result.inflationEnabled
-                      ? ` · 물가 ${formatPercent(values.inflationRate)}`
-                      : " · 물가 미반영"}
+                      ? ` · ${copy.inflationApplied} ${formatPercent(values.inflationRate)}`
+                      : ` · ${copy.inflationNone}`}
                     {result.taxEnabled
-                      ? ` · 간이 세율 ${formatPercent(values.taxRate)}`
-                      : " · 세금 미반영"}
+                      ? ` · ${copy.taxApplied} ${formatPercent(values.taxRate)}`
+                      : ` · ${copy.taxNone}`}
                   </p>
                 </div>
               </details>

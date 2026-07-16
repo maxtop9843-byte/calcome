@@ -5,6 +5,7 @@ import type {
   CompoundInterestInput,
   ValidationErrors,
 } from "./types";
+import { getCompoundDictionary, type CompoundLocale } from "./i18n";
 
 const MONEY_PATTERN = /^(?:\d+|\d{1,3}(?:,\d{3})+)$/;
 const DECIMAL_PATTERN = /^\d+(?:\.\d+)?$/;
@@ -29,13 +30,14 @@ function validateMoney(
   value: string,
   label: string,
   maximum: Decimal.Value,
+  messages: ReturnType<typeof getCompoundDictionary>["validation"],
 ): { value?: string; error?: string } {
   const parsed = parseNumber(value, MONEY_PATTERN);
   if (!parsed.decimal || parsed.normalized === undefined) {
-    return { error: `${label}을(를) 원 단위의 숫자로 입력해 주세요.` };
+    return { error: messages.moneyInvalid(label) };
   }
   if (parsed.decimal.isNegative() || parsed.decimal.gt(maximum)) {
-    return { error: `${label}은(는) 0원 이상 허용 범위 이하여야 합니다.` };
+    return { error: messages.moneyRange(label) };
   }
   return { value: parsed.normalized };
 }
@@ -43,39 +45,58 @@ function validateMoney(
 function validatePercent(
   value: string,
   label: string,
+  messages: ReturnType<typeof getCompoundDictionary>["validation"],
   optional = false,
 ): { value?: string | null; error?: string } {
   if (optional && value.trim() === "") return { value: null };
   const parsed = parseNumber(value, DECIMAL_PATTERN);
   if (!parsed.decimal || parsed.normalized === undefined) {
-    return { error: `${label}을(를) 0%에서 100% 사이의 숫자로 입력해 주세요.` };
+    return { error: messages.percentInvalid(label) };
   }
   if (parsed.decimal.isNegative() || parsed.decimal.gt(100)) {
-    return { error: `${label}은(는) 0%에서 100% 사이여야 합니다.` };
+    return { error: messages.percentRange(label) };
   }
   return { value: parsed.normalized };
 }
 
 export function validateCompoundInterestForm(
   values: CompoundInterestFormValues,
+  locale: CompoundLocale = "ko",
 ): {
   data?: CompoundInterestInput;
   errors: ValidationErrors;
 } {
   const errors: ValidationErrors = {};
+  const messages = getCompoundDictionary(locale).validation;
   const principal = validateMoney(
     values.initialPrincipal,
-    "초기 원금",
+    messages.principalLabel,
     "100000000000",
+    messages,
   );
   const contribution = validateMoney(
     values.recurringContribution,
-    "정기 납입액",
+    messages.contributionLabel,
     "1000000000",
+    messages,
   );
-  const interest = validatePercent(values.annualInterestRate, "연 이자율");
-  const inflation = validatePercent(values.inflationRate, "물가상승률", true);
-  const tax = validatePercent(values.taxRate, "간이 세율", true);
+  const interest = validatePercent(
+    values.annualInterestRate,
+    messages.rateLabel,
+    messages,
+  );
+  const inflation = validatePercent(
+    values.inflationRate,
+    messages.inflationLabel,
+    messages,
+    true,
+  );
+  const tax = validatePercent(
+    values.taxRate,
+    messages.taxLabel,
+    messages,
+    true,
+  );
 
   if (principal.error) errors.initialPrincipal = principal.error;
   if (contribution.error) errors.recurringContribution = contribution.error;
@@ -90,23 +111,23 @@ export function validateCompoundInterestForm(
     duration.decimal.lt(1) ||
     duration.decimal.gt(100)
   ) {
-    errors.durationYears = "투자 기간은 1년에서 100년 사이의 정수여야 합니다.";
+    errors.durationYears = messages.duration;
   }
 
   if (
     !(["monthly", "yearly"] as string[]).includes(values.contributionFrequency)
   ) {
-    errors.contributionFrequency = "지원하는 납입 주기를 선택해 주세요.";
+    errors.contributionFrequency = messages.contributionFrequency;
   }
   if (
     !(
       ["yearly", "semiannually", "quarterly", "monthly", "daily"] as string[]
     ).includes(values.compoundingFrequency)
   ) {
-    errors.compoundingFrequency = "지원하는 복리 주기를 선택해 주세요.";
+    errors.compoundingFrequency = messages.compoundingFrequency;
   }
   if (!(["beginning", "end"] as string[]).includes(values.contributionTiming)) {
-    errors.contributionTiming = "납입 시점을 선택해 주세요.";
+    errors.contributionTiming = messages.timing;
   }
 
   if (
@@ -115,19 +136,19 @@ export function validateCompoundInterestForm(
     new Decimal(principal.value).isZero() &&
     new Decimal(contribution.value).isZero()
   ) {
-    const message = "초기 원금과 정기 납입액 중 하나는 0원보다 커야 합니다.";
+    const message = messages.positiveMoney;
     errors.initialPrincipal = message;
     errors.recurringContribution = message;
   }
 
   if (!values.initialPrincipal.trim())
-    errors.initialPrincipal = "초기 원금을 입력해 주세요.";
+    errors.initialPrincipal = messages.requiredPrincipal;
   if (!values.recurringContribution.trim())
-    errors.recurringContribution = "정기 납입액을 입력해 주세요.";
+    errors.recurringContribution = messages.requiredContribution;
   if (!values.durationYears.trim())
-    errors.durationYears = "투자 기간을 입력해 주세요.";
+    errors.durationYears = messages.requiredDuration;
   if (!values.annualInterestRate.trim())
-    errors.annualInterestRate = "연 이자율을 입력해 주세요.";
+    errors.annualInterestRate = messages.requiredRate;
   if (Object.keys(errors).length > 0) return { errors };
 
   return {
