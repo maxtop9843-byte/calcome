@@ -125,10 +125,13 @@ describe("CompoundInterestCalculator", () => {
   it("scrolls to results only after each successful calculation", async () => {
     const user = userEvent.setup();
     render(<CompoundInterestCalculator />);
+    const chart = screen.getByTestId("compound-growth-chart");
 
     expect(scrollIntoViewMock).not.toHaveBeenCalled();
+    expect(chart).toHaveAttribute("data-animation-run", "0");
     await calculate(user);
     expect(scrollIntoViewMock).not.toHaveBeenCalled();
+    expect(chart).toHaveAttribute("data-animation-run", "0");
 
     await fillRequired(user);
     await calculate(user);
@@ -139,16 +142,20 @@ describe("CompoundInterestCalculator", () => {
       }),
     );
     expect(scrollIntoViewMock).toHaveBeenCalledTimes(1);
+    expect(chart).toHaveAttribute("data-animation-run", "1");
 
     await user.click(screen.getByText(DETAILS_LABEL));
     await user.click(screen.getByText(ADDITIONAL_DETAILS_LABEL));
     expect(scrollIntoViewMock).toHaveBeenCalledTimes(1);
+    expect(chart).toHaveAttribute("data-animation-run", "1");
 
     await calculate(user);
     await waitFor(() => expect(scrollIntoViewMock).toHaveBeenCalledTimes(2));
+    expect(chart).toHaveAttribute("data-animation-run", "2");
 
     await user.click(screen.getByRole("button", { name: "초기화" }));
     expect(scrollIntoViewMock).toHaveBeenCalledTimes(2);
+    expect(screen.getByText(/값을 입력하고 계산하면/)).toBeVisible();
   });
 
   it("uses non-animated scrolling when reduced motion is preferred", async () => {
