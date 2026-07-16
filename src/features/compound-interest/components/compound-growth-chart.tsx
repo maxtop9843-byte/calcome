@@ -1,6 +1,7 @@
 "use client";
 
 import Decimal from "decimal.js";
+import { useSyncExternalStore } from "react";
 import {
   CartesianGrid,
   Line,
@@ -13,6 +14,48 @@ import {
 
 import { formatWon } from "../format";
 import type { YearlyCompoundInterestRecord } from "../types";
+
+export const GROWTH_LINE_ANIMATION_DURATION = 900;
+export const GROWTH_LINE_ANIMATION_EASING = "ease-out" as const;
+
+const GROWTH_SERIES = [
+  {
+    dataKey: "principal",
+    name: "누적 납입 원금",
+    stroke: "var(--chart-2)",
+    strokeWidth: 2,
+  },
+  {
+    dataKey: "interest",
+    name: "이자 금액",
+    stroke: "var(--chart-3)",
+    strokeWidth: 2,
+  },
+  {
+    dataKey: "assets",
+    name: "예상 총자산",
+    stroke: "var(--primary)",
+    strokeWidth: 3,
+  },
+] as const;
+
+const reducedMotionQuery = "(prefers-reduced-motion: reduce)";
+
+function subscribeToReducedMotion(onChange: () => void) {
+  if (typeof window.matchMedia !== "function") return () => undefined;
+  const mediaQuery = window.matchMedia(reducedMotionQuery);
+  mediaQuery.addEventListener?.("change", onChange);
+  return () => mediaQuery.removeEventListener?.("change", onChange);
+}
+
+function getReducedMotionPreference() {
+  if (typeof window.matchMedia !== "function") return false;
+  return window.matchMedia(reducedMotionQuery).matches;
+}
+
+function getServerReducedMotionPreference() {
+  return true;
+}
 
 export type CompoundGrowthPoint = {
   year: number;
@@ -87,11 +130,18 @@ const compactWon = new Intl.NumberFormat("ko-KR", {
 
 export function CompoundGrowthChart({
   records,
+  animationKey = 0,
 }: {
   records?: readonly YearlyCompoundInterestRecord[];
+  animationKey?: number;
 }) {
   const data = createGrowthChartData(records ?? []);
   const ticks = getYearTicks(data);
+  const prefersReducedMotion = useSyncExternalStore(
+    subscribeToReducedMotion,
+    getReducedMotionPreference,
+    getServerReducedMotionPreference,
+  );
 
   return (
     <section className="rounded-xl border bg-card p-4 shadow-sm">
@@ -136,6 +186,12 @@ export function CompoundGrowthChart({
         aria-labelledby="growth-chart-title growth-chart-description"
         className="mt-4 h-[300px] min-w-0"
         data-testid="compound-growth-chart"
+        data-animation-active={
+          Boolean(records?.length) && !prefersReducedMotion
+        }
+        data-animation-duration={GROWTH_LINE_ANIMATION_DURATION}
+        data-animation-easing={GROWTH_LINE_ANIMATION_EASING}
+        data-animation-run={animationKey}
       >
         {records?.length ? (
           <ResponsiveContainer width="100%" height="100%" minWidth={0}>
@@ -184,36 +240,21 @@ export function CompoundGrowthChart({
                   />
                 )}
               />
-              <Line
-                dataKey="principal"
-                name="누적 납입 원금"
-                type="monotone"
-                stroke="var(--chart-2)"
-                strokeWidth={2}
-                dot={false}
-                activeDot={{ r: 4 }}
-                isAnimationActive={false}
-              />
-              <Line
-                dataKey="interest"
-                name="이자 금액"
-                type="monotone"
-                stroke="var(--chart-3)"
-                strokeWidth={2}
-                dot={false}
-                activeDot={{ r: 4 }}
-                isAnimationActive={false}
-              />
-              <Line
-                dataKey="assets"
-                name="예상 총자산"
-                type="monotone"
-                stroke="var(--primary)"
-                strokeWidth={3}
-                dot={false}
-                activeDot={{ r: 4 }}
-                isAnimationActive={false}
-              />
+              {GROWTH_SERIES.map((series) => (
+                <Line
+                  key={`${animationKey}-${series.dataKey}`}
+                  dataKey={series.dataKey}
+                  name={series.name}
+                  type="monotone"
+                  stroke={series.stroke}
+                  strokeWidth={series.strokeWidth}
+                  dot={false}
+                  activeDot={{ r: 4 }}
+                  isAnimationActive={!prefersReducedMotion}
+                  animationDuration={GROWTH_LINE_ANIMATION_DURATION}
+                  animationEasing={GROWTH_LINE_ANIMATION_EASING}
+                />
+              ))}
             </LineChart>
           </ResponsiveContainer>
         ) : (

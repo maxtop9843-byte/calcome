@@ -125,6 +125,7 @@ export function CompoundInterestCalculator() {
   const [result, setResult] = useState<CompoundInterestResult | null>(null);
   const [yearlyDetailsOpen, setYearlyDetailsOpen] = useState(true);
   const [additionalDetailsOpen, setAdditionalDetailsOpen] = useState(false);
+  const [chartAnimationKey, setChartAnimationKey] = useState(0);
   const [announcement, setAnnouncement] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
   const resultSectionRef = useRef<HTMLElement>(null);
@@ -174,6 +175,7 @@ export function CompoundInterestCalculator() {
     const nextResult = calculateCompoundInterest(validation.data);
     pendingResultScrollRef.current = true;
     setResult(nextResult);
+    setChartAnimationKey((current) => current + 1);
     setYearlyDetailsOpen(true);
     setAdditionalDetailsOpen(true);
     setAnnouncement(
@@ -448,7 +450,10 @@ export function CompoundInterestCalculator() {
               {announcement}
             </p>
           </section>
-          <CompoundGrowthChart records={result?.yearlyData} />
+          <CompoundGrowthChart
+            records={result?.yearlyData}
+            animationKey={chartAnimationKey}
+          />
           <details
             open={result ? yearlyDetailsOpen : true}
             onToggle={(event) => {

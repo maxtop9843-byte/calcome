@@ -1,13 +1,17 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { render, screen, waitFor } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { YearlyCompoundInterestRecord } from "../types";
 import {
   CompoundGrowthChart,
   CompoundGrowthTooltip,
+  GROWTH_LINE_ANIMATION_DURATION,
+  GROWTH_LINE_ANIMATION_EASING,
   createGrowthChartData,
   getYearTicks,
 } from "./compound-growth-chart";
+
+const matchMediaMock = vi.fn();
 
 function record(year: number): YearlyCompoundInterestRecord {
   const principal = String(year * 1000000);
@@ -26,6 +30,19 @@ function record(year: number): YearlyCompoundInterestRecord {
 }
 
 describe("CompoundGrowthChart", () => {
+  beforeEach(() => {
+    matchMediaMock.mockReset();
+    matchMediaMock.mockReturnValue({
+      matches: false,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    });
+    Object.defineProperty(window, "matchMedia", {
+      configurable: true,
+      value: matchMediaMock,
+    });
+  });
+
   it("creates principal and asset series with tooltip interest data", () => {
     const points = createGrowthChartData([record(1), record(2)]);
     expect(points[1]).toEqual({
@@ -60,6 +77,54 @@ describe("CompoundGrowthChart", () => {
     expect(
       screen.getByText(/정확한 금액은 아래 연도별 상세 내역/),
     ).toBeVisible();
+  });
+
+  it("animates all three lines with restrained shared timing", async () => {
+    render(<CompoundGrowthChart records={[record(1), record(2)]} />);
+    const chart = screen.getByTestId("compound-growth-chart");
+
+    await waitFor(() =>
+      expect(chart).toHaveAttribute("data-animation-active", "true"),
+    );
+    expect(GROWTH_LINE_ANIMATION_DURATION).toBeGreaterThanOrEqual(800);
+    expect(GROWTH_LINE_ANIMATION_DURATION).toBeLessThanOrEqual(1000);
+    expect(chart).toHaveAttribute(
+      "data-animation-duration",
+      String(GROWTH_LINE_ANIMATION_DURATION),
+    );
+    expect(chart).toHaveAttribute(
+      "data-animation-easing",
+      GROWTH_LINE_ANIMATION_EASING,
+    );
+    expect(document.querySelectorAll("[data-series]")).toHaveLength(3);
+  });
+
+  it("replays only when the successful-calculation key changes", () => {
+    const firstRecords = [record(1), record(2)];
+    const { rerender } = render(
+      <CompoundGrowthChart records={firstRecords} animationKey={1} />,
+    );
+    const chart = screen.getByTestId("compound-growth-chart");
+    const firstRun = chart.getAttribute("data-animation-run");
+
+    rerender(<CompoundGrowthChart records={firstRecords} animationKey={1} />);
+    expect(chart).toHaveAttribute("data-animation-run", firstRun);
+
+    rerender(<CompoundGrowthChart records={firstRecords} animationKey={2} />);
+    expect(chart.getAttribute("data-animation-run")).not.toBe(firstRun);
+  });
+
+  it("disables line animation when reduced motion is preferred", () => {
+    matchMediaMock.mockReturnValue({
+      matches: true,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    });
+    render(<CompoundGrowthChart records={[record(1), record(2)]} />);
+    expect(screen.getByTestId("compound-growth-chart")).toHaveAttribute(
+      "data-animation-active",
+      "false",
+    );
   });
 
   it("reserves chart space without drawing fake data", () => {
