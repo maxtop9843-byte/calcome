@@ -54,6 +54,10 @@ describe("CompoundInterestCalculator", () => {
     expect(screen.getByText(/계산 후 연도별 원금/)).toBeVisible();
     expect(screen.queryByRole("table")).not.toBeInTheDocument();
     expect(screen.queryByText("연도별 상세 내역 보기")).not.toBeInTheDocument();
+
+    await user.click(screen.getByText(DETAILS_LABEL));
+    expect(getDetails(DETAILS_LABEL)).toHaveAttribute("open");
+    expect(screen.getByText(/계산 후 연도별 원금/)).toBeVisible();
   });
 
   it("does not change the current yearly disclosure state on validation failure", async () => {
@@ -62,19 +66,18 @@ describe("CompoundInterestCalculator", () => {
 
     const details = getDetails(DETAILS_LABEL);
     expect(details).toHaveAttribute("open");
+    await fillRequired(user);
     await calculate(user);
     expect(details).toHaveAttribute("open");
-    expect(screen.getByRole("alert")).toBeVisible();
 
     await user.click(screen.getByText(DETAILS_LABEL));
     expect(details).not.toHaveAttribute("open");
+    await user.clear(screen.getByLabelText("투자 기간 *"));
     await calculate(user);
     expect(details).not.toHaveAttribute("open");
-    expect(
-      screen.queryByText(ADDITIONAL_DETAILS_LABEL),
-    ).not.toBeInTheDocument();
+    expect(screen.getByRole("alert")).toBeVisible();
     await waitFor(() =>
-      expect(screen.getByLabelText("초기 투자금 *")).toHaveFocus(),
+      expect(screen.getByLabelText("투자 기간 *")).toHaveFocus(),
     );
   });
 
@@ -124,6 +127,10 @@ describe("CompoundInterestCalculator", () => {
     expect(
       screen.queryByText(ADDITIONAL_DETAILS_LABEL),
     ).not.toBeInTheDocument();
+
+    await user.click(screen.getByText(DETAILS_LABEL));
+    expect(getDetails(DETAILS_LABEL)).toHaveAttribute("open");
+    expect(screen.getByText(/계산 후 연도별 원금/)).toBeVisible();
   });
 
   it("keeps inflation and tax disabled with empty visible presets", async () => {

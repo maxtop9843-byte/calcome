@@ -426,11 +426,19 @@ export function CompoundInterestCalculator() {
           </section>
           <CompoundGrowthChart records={result?.yearlyData} />
           <details
-            open={yearlyDetailsOpen}
-            onToggle={(event) => setYearlyDetailsOpen(event.currentTarget.open)}
+            open={result ? yearlyDetailsOpen : true}
+            onToggle={(event) => {
+              if (result) setYearlyDetailsOpen(event.currentTarget.open);
+            }}
             className="rounded-xl border bg-card p-4 shadow-sm"
           >
-            <summary className="cursor-pointer text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            <summary
+              aria-disabled={!result}
+              onClick={(event) => {
+                if (!result) event.preventDefault();
+              }}
+              className="cursor-pointer text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
               상세 내역 보기
             </summary>
             {result ? (
