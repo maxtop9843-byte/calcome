@@ -27,6 +27,7 @@ import type {
   ValidationErrors,
 } from "../types";
 import { validateCompoundInterestForm } from "../validation";
+import { AnimatedWon } from "./animated-won";
 import { CompoundGrowthChart } from "./compound-growth-chart";
 
 const INITIAL_COMPOUND_INTEREST_VALUES: CompoundInterestFormValues = {
@@ -429,20 +430,34 @@ export function CompoundInterestCalculator() {
               metrics={[
                 {
                   label: "예상 자산",
-                  value: result
-                    ? formatWon(result.estimatedFinalBalance)
-                    : "0원",
+                  value: (
+                    <AnimatedWon
+                      key={`assets-${result ? chartAnimationKey : "empty"}`}
+                      animationKey={chartAnimationKey}
+                      value={result?.estimatedFinalBalance ?? null}
+                    />
+                  ),
                   featured: true,
                 },
                 {
                   label: "총 납입 금액",
-                  value: result
-                    ? formatWon(result.totalContributedPrincipal)
-                    : "0원",
+                  value: (
+                    <AnimatedWon
+                      key={`principal-${result ? chartAnimationKey : "empty"}`}
+                      animationKey={chartAnimationKey}
+                      value={result?.totalContributedPrincipal ?? null}
+                    />
+                  ),
                 },
                 {
                   label: "총 이자 금액",
-                  value: result ? formatWon(result.estimatedNetGain) : "0원",
+                  value: (
+                    <AnimatedWon
+                      key={`gain-${result ? chartAnimationKey : "empty"}`}
+                      animationKey={chartAnimationKey}
+                      value={result?.estimatedNetGain ?? null}
+                    />
+                  ),
                 },
               ]}
             />

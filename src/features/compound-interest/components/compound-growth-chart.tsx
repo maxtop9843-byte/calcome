@@ -1,7 +1,6 @@
 "use client";
 
 import Decimal from "decimal.js";
-import { useSyncExternalStore } from "react";
 import {
   CartesianGrid,
   Line,
@@ -14,9 +13,15 @@ import {
 
 import { formatWon } from "../format";
 import type { YearlyCompoundInterestRecord } from "../types";
+import {
+  COMPOUND_ANIMATION_DELAY,
+  COMPOUND_ANIMATION_DURATION,
+  COMPOUND_ANIMATION_EASING,
+  usePrefersReducedMotion,
+} from "./compound-animation";
 
-export const GROWTH_LINE_ANIMATION_DURATION = 900;
-export const GROWTH_LINE_ANIMATION_EASING = "ease-out" as const;
+export const GROWTH_LINE_ANIMATION_DURATION = COMPOUND_ANIMATION_DURATION;
+export const GROWTH_LINE_ANIMATION_EASING = COMPOUND_ANIMATION_EASING;
 
 const GROWTH_SERIES = [
   {
@@ -38,24 +43,6 @@ const GROWTH_SERIES = [
     strokeWidth: 3,
   },
 ] as const;
-
-const reducedMotionQuery = "(prefers-reduced-motion: reduce)";
-
-function subscribeToReducedMotion(onChange: () => void) {
-  if (typeof window.matchMedia !== "function") return () => undefined;
-  const mediaQuery = window.matchMedia(reducedMotionQuery);
-  mediaQuery.addEventListener?.("change", onChange);
-  return () => mediaQuery.removeEventListener?.("change", onChange);
-}
-
-function getReducedMotionPreference() {
-  if (typeof window.matchMedia !== "function") return false;
-  return window.matchMedia(reducedMotionQuery).matches;
-}
-
-function getServerReducedMotionPreference() {
-  return true;
-}
 
 export type CompoundGrowthPoint = {
   year: number;
@@ -137,11 +124,7 @@ export function CompoundGrowthChart({
 }) {
   const data = createGrowthChartData(records ?? []);
   const ticks = getYearTicks(data);
-  const prefersReducedMotion = useSyncExternalStore(
-    subscribeToReducedMotion,
-    getReducedMotionPreference,
-    getServerReducedMotionPreference,
-  );
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
     <section className="rounded-xl border bg-card p-4 shadow-sm">
@@ -251,6 +234,7 @@ export function CompoundGrowthChart({
                   dot={false}
                   activeDot={{ r: 4 }}
                   isAnimationActive={!prefersReducedMotion}
+                  animationBegin={COMPOUND_ANIMATION_DELAY}
                   animationDuration={GROWTH_LINE_ANIMATION_DURATION}
                   animationEasing={GROWTH_LINE_ANIMATION_EASING}
                 />

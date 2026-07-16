@@ -79,23 +79,20 @@ describe("CompoundGrowthChart", () => {
     ).toBeVisible();
   });
 
-  it("animates all three lines with restrained shared timing", async () => {
+  it("animates all three lines with synchronized growth timing", async () => {
     render(<CompoundGrowthChart records={[record(1), record(2)]} />);
     const chart = screen.getByTestId("compound-growth-chart");
 
     await waitFor(() =>
       expect(chart).toHaveAttribute("data-animation-active", "true"),
     );
-    expect(GROWTH_LINE_ANIMATION_DURATION).toBeGreaterThanOrEqual(800);
-    expect(GROWTH_LINE_ANIMATION_DURATION).toBeLessThanOrEqual(1000);
+    expect(GROWTH_LINE_ANIMATION_DURATION).toBe(2000);
     expect(chart).toHaveAttribute(
       "data-animation-duration",
       String(GROWTH_LINE_ANIMATION_DURATION),
     );
-    expect(chart).toHaveAttribute(
-      "data-animation-easing",
-      GROWTH_LINE_ANIMATION_EASING,
-    );
+    expect(chart).toHaveAttribute("data-animation-easing", "ease-in-out");
+    expect(GROWTH_LINE_ANIMATION_EASING).toBe("ease-in-out");
     expect(document.querySelectorAll("[data-series]")).toHaveLength(3);
   });
 
