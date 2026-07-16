@@ -74,11 +74,6 @@ describe("production metadata routes", () => {
         priority: 0.9,
       },
       {
-        url: "https://calcome.com/finance/savings",
-        changeFrequency: "monthly",
-        priority: 0.9,
-      },
-      {
         url: "https://calcome.com/finance/loan",
         changeFrequency: "monthly",
         priority: 0.9,
@@ -102,6 +97,28 @@ describe("production metadata routes", () => {
           languages: {
             ko: "https://calcome.com/ko/finance/compound-interest",
             en: "https://calcome.com/en/finance/compound-interest",
+          },
+        },
+      },
+      {
+        url: "https://calcome.com/ko/finance/savings",
+        changeFrequency: "monthly",
+        priority: 0.9,
+        alternates: {
+          languages: {
+            ko: "https://calcome.com/ko/finance/savings",
+            en: "https://calcome.com/en/finance/savings",
+          },
+        },
+      },
+      {
+        url: "https://calcome.com/en/finance/savings",
+        changeFrequency: "monthly",
+        priority: 0.9,
+        alternates: {
+          languages: {
+            ko: "https://calcome.com/ko/finance/savings",
+            en: "https://calcome.com/en/finance/savings",
           },
         },
       },
@@ -165,7 +182,7 @@ describe("production recovery and navigation", () => {
     );
     expect(screen.getByRole("link", { name: /적금 계산기/ })).toHaveAttribute(
       "href",
-      "/finance/savings",
+      "/ko/finance/savings",
     );
     expect(screen.getByRole("link", { name: /복리 계산기/ })).toHaveAttribute(
       "href",

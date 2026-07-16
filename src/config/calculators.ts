@@ -4,7 +4,7 @@ export type PublishedCalculator = {
   description: string;
   keywords: readonly string[];
   category: "금융";
-  href: `/finance/${string}`;
+  href: `/finance/${string}` | `/${"ko" | "en"}/finance/${string}`;
 };
 
 export const publishedCalculators = [
@@ -30,7 +30,7 @@ export const publishedCalculators = [
     description: "정기 납입 적금의 세전·세후 이자와 예상 만기액을 계산합니다.",
     keywords: ["적금", "savings", "저축", "납입", "이자"],
     category: "금융",
-    href: "/finance/savings",
+    href: "/ko/finance/savings",
   },
   {
     id: "loan",

@@ -4,6 +4,12 @@ import { DEFAULT_SAVINGS_VALUES, GENERAL_SAVINGS_TAX_RATE } from "./constants";
 import { validateSavingsForm } from "./validation";
 
 describe("validateSavingsForm", () => {
+  it("produces identical calculation input for Korean and English", () => {
+    const values = DEFAULT_SAVINGS_VALUES;
+    expect(validateSavingsForm(values, "ko").data).toEqual(
+      validateSavingsForm(values, "en").data,
+    );
+  });
   it("normalizes years and applies the verified general rate", () => {
     const result = validateSavingsForm(DEFAULT_SAVINGS_VALUES);
     expect(result.data).toMatchObject({

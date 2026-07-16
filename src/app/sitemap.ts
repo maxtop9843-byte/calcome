@@ -12,7 +12,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     ...publishedCalculators
-      .filter((calculator) => calculator.id !== "compound-interest")
+      .filter(
+        (calculator) =>
+          calculator.id !== "compound-interest" && calculator.id !== "savings",
+      )
       .map((calculator) => ({
         url: absoluteUrl(calculator.href),
         changeFrequency: "monthly" as const,
@@ -37,6 +40,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
         languages: {
           ko: absoluteUrl("/ko/finance/compound-interest"),
           en: absoluteUrl("/en/finance/compound-interest"),
+        },
+      },
+    },
+    {
+      url: absoluteUrl("/ko/finance/savings"),
+      changeFrequency: "monthly",
+      priority: 0.9,
+      alternates: {
+        languages: {
+          ko: absoluteUrl("/ko/finance/savings"),
+          en: absoluteUrl("/en/finance/savings"),
+        },
+      },
+    },
+    {
+      url: absoluteUrl("/en/finance/savings"),
+      changeFrequency: "monthly",
+      priority: 0.9,
+      alternates: {
+        languages: {
+          ko: absoluteUrl("/ko/finance/savings"),
+          en: absoluteUrl("/en/finance/savings"),
         },
       },
     },

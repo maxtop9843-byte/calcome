@@ -54,4 +54,22 @@ describe("LanguageSelector", () => {
     expect(screen.getAllByRole("link", { hidden: true })).toHaveLength(2);
     expect(screen.queryByText("日本語")).not.toBeInTheDocument();
   });
+
+  it("preserves the localized savings destination", async () => {
+    const user = userEvent.setup();
+    const { rerender } = render(
+      <LanguageSelector locale="ko" pathname="/ko/finance/savings" />,
+    );
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/finance/savings",
+    );
+    rerender(<LanguageSelector locale="en" pathname="/en/finance/savings" />);
+    await user.click(screen.getByLabelText("Select language"));
+    expect(screen.getByRole("link", { name: "한국어" })).toHaveAttribute(
+      "href",
+      "/ko/finance/savings",
+    );
+  });
 });

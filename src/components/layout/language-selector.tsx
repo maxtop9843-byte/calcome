@@ -8,8 +8,11 @@ import type { CompoundLocale } from "@/features/compound-interest/i18n";
 import { sharedLayoutCopy } from "./layout-i18n";
 
 function localizedDestination(pathname: string, locale: CompoundLocale) {
-  if (/^\/(ko|en)\/finance\/compound-interest$/.test(pathname)) {
-    return `/${locale}/finance/compound-interest`;
+  const localizedCalculator = pathname.match(
+    /^\/(?:ko|en)\/finance\/(compound-interest|savings)$/,
+  );
+  if (localizedCalculator) {
+    return `/${locale}/finance/${localizedCalculator[1]}`;
   }
   return locale === "ko" ? pathname : "/en/finance/compound-interest";
 }

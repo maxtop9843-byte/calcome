@@ -1,6 +1,7 @@
 import Decimal from "decimal.js";
 
 import { GENERAL_SAVINGS_TAX_RATE } from "./constants";
+import { getSavingsDictionary, type SavingsLocale } from "./i18n";
 import type {
   SavingsFormValues,
   SavingsInput,
@@ -21,80 +22,78 @@ function parseDecimal(value: string, pattern: RegExp): Decimal | null {
   }
 }
 
-export function validateSavingsForm(values: SavingsFormValues): {
+export function validateSavingsForm(
+  values: SavingsFormValues,
+  locale: SavingsLocale = "ko",
+): {
   data?: SavingsInput;
   errors: SavingsValidationErrors;
 } {
   const errors: SavingsValidationErrors = {};
+  const copy = getSavingsDictionary(locale).validation;
   const deposit = parseDecimal(values.regularDeposit, MONEY_PATTERN);
   const period = parseDecimal(values.savingsPeriod, /^\d+$/);
   const rate = parseDecimal(values.annualInterestRate, DECIMAL_PATTERN);
   const customTax = parseDecimal(values.customTaxRate, DECIMAL_PATTERN);
 
   if (!deposit || deposit.lt(1000) || deposit.gt("1000000000")) {
-    errors.regularDeposit =
-      "정기 납입액은 1천원 이상 10억원 이하의 원 단위 금액으로 입력해 주세요.";
+    errors.regularDeposit = copy.deposit;
   }
   if (!period || !period.isInteger() || period.lt(1)) {
-    errors.savingsPeriod = "저축 기간은 1 이상의 정수로 입력해 주세요.";
+    errors.savingsPeriod = copy.period;
   }
   if (!(values.periodUnit === "months" || values.periodUnit === "years")) {
-    errors.periodUnit = "저축 기간 단위를 선택해 주세요.";
+    errors.periodUnit = copy.periodUnit;
   }
   if (!rate || rate.isNegative() || rate.gt(100)) {
-    errors.annualInterestRate =
-      "연 이자율은 0% 이상 100% 이하로 입력해 주세요.";
+    errors.annualInterestRate = copy.rate;
   }
   if (!(
     values.depositFrequency === "monthly" ||
     values.depositFrequency === "yearly"
   )) {
-    errors.depositFrequency = "납입 주기를 선택해 주세요.";
+    errors.depositFrequency = copy.frequency;
   }
   if (!(
     values.interestMethod === "simple" || values.interestMethod === "compound"
   )) {
-    errors.interestMethod = "이자 방식을 선택해 주세요.";
+    errors.interestMethod = copy.method;
   }
   if (!(
     values.depositTiming === "beginning" || values.depositTiming === "end"
   )) {
-    errors.depositTiming = "납입 시점을 선택해 주세요.";
+    errors.depositTiming = copy.timing;
   }
   if (
     !(["tax-free", "general", "custom"] as string[]).includes(values.taxOption)
   ) {
-    errors.taxOption = "세금 옵션을 선택해 주세요.";
+    errors.taxOption = copy.tax;
   }
   if (
     values.taxOption === "custom" &&
     (!customTax || customTax.isNegative() || customTax.gt(100))
   ) {
-    errors.customTaxRate =
-      "사용자 지정 세율은 0% 이상 100% 이하로 입력해 주세요.";
+    errors.customTaxRate = copy.customTax;
   }
 
   const months = period
     ? period.mul(values.periodUnit === "years" ? 12 : 1)
     : null;
   if (months && months.gt(1200)) {
-    errors.savingsPeriod =
-      "저축 기간은 최대 1,200개월(100년)까지 입력할 수 있습니다.";
+    errors.savingsPeriod = copy.maxPeriod;
   } else if (
     months &&
     values.depositFrequency === "yearly" &&
     (months.lt(12) || !months.mod(12).isZero())
   ) {
-    errors.savingsPeriod =
-      "연 납입은 12개월 이상의 완전한 연 단위 기간만 사용할 수 있습니다.";
+    errors.savingsPeriod = copy.yearlyPeriod;
   }
 
   if (!values.regularDeposit.trim())
-    errors.regularDeposit = "정기 납입액을 입력해 주세요.";
-  if (!values.savingsPeriod.trim())
-    errors.savingsPeriod = "저축 기간을 입력해 주세요.";
+    errors.regularDeposit = copy.requiredDeposit;
+  if (!values.savingsPeriod.trim()) errors.savingsPeriod = copy.requiredPeriod;
   if (!values.annualInterestRate.trim())
-    errors.annualInterestRate = "연 이자율을 입력해 주세요.";
+    errors.annualInterestRate = copy.requiredRate;
   if (Object.keys(errors).length) return { errors };
 
   const taxRate =
