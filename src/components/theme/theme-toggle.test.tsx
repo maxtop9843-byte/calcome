@@ -15,10 +15,10 @@ function setSystemTheme(dark: boolean) {
   });
 }
 
-function renderThemeToggle() {
+function renderThemeToggle(locale: "ko" | "en" = "ko") {
   return render(
     <ThemeProvider>
-      <ThemeToggle />
+      <ThemeToggle locale={locale} />
     </ThemeProvider>,
   );
 }
@@ -103,6 +103,19 @@ describe("ThemeToggle", () => {
       screen.getByRole("button", { name: "라이트 모드로 전환" }),
     ).toBeVisible();
     expect(screen.getByTestId("theme-sun")).toBeVisible();
+    expect(document.documentElement).toHaveClass("dark");
+  });
+
+  it("uses English action labels without changing theme behavior", async () => {
+    const user = userEvent.setup();
+    renderThemeToggle("en");
+    const toggle = await screen.findByRole("button", {
+      name: "Switch to dark mode",
+    });
+    await user.click(toggle);
+    expect(
+      screen.getByRole("button", { name: "Switch to light mode" }),
+    ).toBeVisible();
     expect(document.documentElement).toHaveClass("dark");
   });
 });

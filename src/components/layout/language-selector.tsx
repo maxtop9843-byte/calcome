@@ -5,6 +5,7 @@ import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
 import type { CompoundLocale } from "@/features/compound-interest/i18n";
+import { sharedLayoutCopy } from "./layout-i18n";
 
 function localizedDestination(pathname: string, locale: CompoundLocale) {
   if (/^\/(ko|en)\/finance\/compound-interest$/.test(pathname)) {
@@ -21,6 +22,7 @@ export function LanguageSelector({
   pathname: string;
 }) {
   const [open, setOpen] = useState(false);
+  const copy = sharedLayoutCopy[locale];
   const currentLabel = locale === "ko" ? "한국어" : "English";
   return (
     <details
@@ -29,7 +31,7 @@ export function LanguageSelector({
       className="relative"
     >
       <summary
-        aria-label="언어 선택"
+        aria-label={copy.selectLanguage}
         className="flex min-h-10 cursor-pointer list-none items-center gap-1 rounded-lg px-2 text-sm font-medium hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-3"
       >
         {currentLabel}

@@ -25,8 +25,10 @@ describe("LanguageSelector", () => {
     rerender(
       <LanguageSelector locale="en" pathname="/en/finance/compound-interest" />,
     );
-    expect(screen.getByLabelText("언어 선택")).toHaveTextContent("English");
-    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByLabelText("Select language")).toHaveTextContent(
+      "English",
+    );
+    await user.click(screen.getByLabelText("Select language"));
     expect(screen.getByRole("link", { name: "한국어" })).toHaveAttribute(
       "href",
       "/ko/finance/compound-interest",

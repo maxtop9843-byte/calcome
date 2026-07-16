@@ -1,0 +1,34 @@
+import type { CompoundLocale } from "@/features/compound-interest/i18n";
+
+export const sharedLayoutCopy = {
+  ko: {
+    slogan: "금융 계산을 쉽게.",
+    calculators: "계산기",
+    primaryNavigation: "주요 탐색",
+    footerNavigation: "하단 탐색",
+    about: "소개",
+    privacy: "개인정보처리방침",
+    terms: "이용약관",
+    contact: "문의",
+    skipToContent: "본문으로 건너뛰기",
+    selectLanguage: "언어 선택",
+    toggleTheme: "테마 전환",
+    switchDark: "다크 모드로 전환",
+    switchLight: "라이트 모드로 전환",
+  },
+  en: {
+    slogan: "Finance made simple.",
+    calculators: "Calculators",
+    primaryNavigation: "Primary navigation",
+    footerNavigation: "Footer navigation",
+    about: "About",
+    privacy: "Privacy Policy",
+    terms: "Terms",
+    contact: "Contact",
+    skipToContent: "Skip to main content",
+    selectLanguage: "Select language",
+    toggleTheme: "Toggle theme",
+    switchDark: "Switch to dark mode",
+    switchLight: "Switch to light mode",
+  },
+} as const satisfies Record<CompoundLocale, Record<string, string>>;

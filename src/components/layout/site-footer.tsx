@@ -1,22 +1,25 @@
 import Link from "next/link";
 
 import { siteConfig } from "@/config/site";
+import type { CompoundLocale } from "@/features/compound-interest/i18n";
+import { sharedLayoutCopy } from "./layout-i18n";
 
-export function SiteFooter() {
+export function SiteFooter({ locale = "ko" }: { locale?: CompoundLocale }) {
+  const copy = sharedLayoutCopy[locale];
   return (
     <footer className="border-t">
       <div className="mx-auto flex max-w-6xl flex-col gap-4 px-5 py-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:px-8">
         <p>
           © {new Date().getFullYear()} {siteConfig.name}
         </p>
-        <nav aria-label="하단 탐색">
+        <nav aria-label={copy.footerNavigation}>
           <ul className="flex flex-wrap gap-x-5 gap-y-2">
             <li>
               <Link
                 href="/calculators"
                 className="hover:text-foreground hover:underline"
               >
-                계산기
+                {copy.calculators}
               </Link>
             </li>
             <li>
@@ -24,7 +27,7 @@ export function SiteFooter() {
                 href="/about"
                 className="hover:text-foreground hover:underline"
               >
-                소개
+                {copy.about}
               </Link>
             </li>
             <li>
@@ -32,7 +35,7 @@ export function SiteFooter() {
                 href="/privacy"
                 className="hover:text-foreground hover:underline"
               >
-                개인정보처리방침
+                {copy.privacy}
               </Link>
             </li>
             <li>
@@ -40,7 +43,7 @@ export function SiteFooter() {
                 href="/terms"
                 className="hover:text-foreground hover:underline"
               >
-                이용약관
+                {copy.terms}
               </Link>
             </li>
             <li>
@@ -48,7 +51,7 @@ export function SiteFooter() {
                 href="/contact"
                 className="hover:text-foreground hover:underline"
               >
-                문의
+                {copy.contact}
               </Link>
             </li>
           </ul>
