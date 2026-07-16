@@ -1,13 +1,29 @@
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { CompoundInterestCalculator } from "./compound-interest-calculator";
 
 const DETAILS_LABEL = "상세 내역 보기";
 const ADDITIONAL_DETAILS_LABEL = "추가 결과와 적용 가정";
+const scrollIntoViewMock = vi.fn();
+const matchMediaMock = vi.fn();
 
 describe("CompoundInterestCalculator", () => {
+  beforeEach(() => {
+    scrollIntoViewMock.mockReset();
+    matchMediaMock.mockReset();
+    matchMediaMock.mockReturnValue({ matches: false });
+    Object.defineProperty(Element.prototype, "scrollIntoView", {
+      configurable: true,
+      value: scrollIntoViewMock,
+    });
+    Object.defineProperty(window, "matchMedia", {
+      configurable: true,
+      value: matchMediaMock,
+    });
+  });
+
   function getDetails(label: string) {
     const details = screen.getByText(label).closest("details");
     expect(details).not.toBeNull();
@@ -104,6 +120,50 @@ describe("CompoundInterestCalculator", () => {
     await calculate(user);
     expect(yearlyDetails).toHaveAttribute("open");
     expect(additionalDetails).toHaveAttribute("open");
+  });
+
+  it("scrolls to results only after each successful calculation", async () => {
+    const user = userEvent.setup();
+    render(<CompoundInterestCalculator />);
+
+    expect(scrollIntoViewMock).not.toHaveBeenCalled();
+    await calculate(user);
+    expect(scrollIntoViewMock).not.toHaveBeenCalled();
+
+    await fillRequired(user);
+    await calculate(user);
+    await waitFor(() =>
+      expect(scrollIntoViewMock).toHaveBeenCalledWith({
+        behavior: "smooth",
+        block: "start",
+      }),
+    );
+    expect(scrollIntoViewMock).toHaveBeenCalledTimes(1);
+
+    await user.click(screen.getByText(DETAILS_LABEL));
+    await user.click(screen.getByText(ADDITIONAL_DETAILS_LABEL));
+    expect(scrollIntoViewMock).toHaveBeenCalledTimes(1);
+
+    await calculate(user);
+    await waitFor(() => expect(scrollIntoViewMock).toHaveBeenCalledTimes(2));
+
+    await user.click(screen.getByRole("button", { name: "초기화" }));
+    expect(scrollIntoViewMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("uses non-animated scrolling when reduced motion is preferred", async () => {
+    matchMediaMock.mockReturnValue({ matches: true });
+    const user = userEvent.setup();
+    render(<CompoundInterestCalculator />);
+    await fillRequired(user);
+    await calculate(user);
+
+    await waitFor(() =>
+      expect(scrollIntoViewMock).toHaveBeenCalledWith({
+        behavior: "auto",
+        block: "start",
+      }),
+    );
   });
 
   it("reset restores empty inputs and the open yearly empty state", async () => {

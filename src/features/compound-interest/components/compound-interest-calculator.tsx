@@ -1,6 +1,12 @@
 "use client";
 
-import { type ChangeEvent, type FormEvent, useRef, useState } from "react";
+import {
+  type ChangeEvent,
+  type FormEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Calculator, ChartNoAxesCombined } from "lucide-react";
 
 import {
@@ -121,6 +127,21 @@ export function CompoundInterestCalculator() {
   const [additionalDetailsOpen, setAdditionalDetailsOpen] = useState(false);
   const [announcement, setAnnouncement] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
+  const resultSectionRef = useRef<HTMLElement>(null);
+  const pendingResultScrollRef = useRef(false);
+
+  useEffect(() => {
+    if (!result || !pendingResultScrollRef.current) return;
+
+    pendingResultScrollRef.current = false;
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    resultSectionRef.current?.scrollIntoView({
+      behavior: reduceMotion ? "auto" : "smooth",
+      block: "start",
+    });
+  }, [result]);
 
   function updateValue(field: CompoundInterestField, value: string) {
     setValues((current) => ({ ...current, [field]: value }));
@@ -151,6 +172,7 @@ export function CompoundInterestCalculator() {
     }
 
     const nextResult = calculateCompoundInterest(validation.data);
+    pendingResultScrollRef.current = true;
     setResult(nextResult);
     setYearlyDetailsOpen(true);
     setAdditionalDetailsOpen(true);
@@ -160,6 +182,7 @@ export function CompoundInterestCalculator() {
   }
 
   function reset() {
+    pendingResultScrollRef.current = false;
     setValues(INITIAL_COMPOUND_INTEREST_VALUES);
     setErrors({});
     setResult(null);
@@ -386,8 +409,9 @@ export function CompoundInterestCalculator() {
         </form>
         <div className="space-y-3">
           <section
+            ref={resultSectionRef}
             aria-labelledby="result-title"
-            className="rounded-xl border bg-card p-4 shadow-sm"
+            className="scroll-mt-24 rounded-xl border bg-card p-4 shadow-sm"
           >
             <h2
               id="result-title"
