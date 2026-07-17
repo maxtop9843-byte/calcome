@@ -4,6 +4,7 @@ import { CalculatorCard } from "@/components/calculators/calculator-card";
 import { publishedCalculators } from "@/config/calculators";
 import { absoluteUrl } from "@/config/site";
 import { createPageMetadata } from "@/lib/seo/metadata";
+import { JsonLdScript } from "@/lib/seo/structured-data";
 
 const path = "/calculators";
 const description =
@@ -18,6 +19,7 @@ export const metadata = createPageMetadata({
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
+  "@id": `${absoluteUrl(path)}#webpage`,
   name: "CalCome 금융 계산기 모음",
   description,
   inLanguage: "ko-KR",
@@ -37,12 +39,7 @@ const structuredData = {
 export default function CalculatorsPage() {
   return (
     <main id="main-content" className="flex-1">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(structuredData).replaceAll("<", "\\u003c"),
-        }}
-      />
+      <JsonLdScript data={structuredData} />
       <div className="mx-auto w-full max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
         <nav aria-label="현재 위치" className="text-sm text-muted-foreground">
           <ol className="flex items-center gap-2">

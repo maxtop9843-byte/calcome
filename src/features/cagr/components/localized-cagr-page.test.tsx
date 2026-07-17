@@ -18,10 +18,9 @@ describe("LocalizedCagrPage", () => {
       container.querySelector('script[type="application/ld+json"]')!
         .textContent!,
     );
-    expect(schemas.map((item: { "@type": string }) => item["@type"])).toEqual([
-      "WebPage",
-      "BreadcrumbList",
-    ]);
+    expect(
+      schemas["@graph"].map((item: { "@type": string }) => item["@type"]),
+    ).toEqual(["WebSite", "WebPage", "BreadcrumbList"]);
   });
 
   it("renders English without unintended Korean", () => {

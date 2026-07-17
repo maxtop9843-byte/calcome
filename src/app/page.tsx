@@ -5,7 +5,10 @@ import { CalculatorCard } from "@/components/calculators/calculator-card";
 import { CalculatorSearch } from "@/components/calculators/calculator-search";
 import { buttonVariants } from "@/components/ui/button";
 import { publishedCalculators } from "@/config/calculators";
-import { absoluteUrl, siteConfig } from "@/config/site";
+import {
+  JsonLdScript,
+  createWebsiteStructuredData,
+} from "@/lib/seo/structured-data";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -14,11 +17,7 @@ export const metadata: Metadata = {
 
 const websiteStructuredData = {
   "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: siteConfig.name,
-  url: absoluteUrl(),
-  description: siteConfig.description,
-  inLanguage: "ko-KR",
+  ...createWebsiteStructuredData(),
 };
 const popularCalculatorOrder = [
   "compound-interest",
@@ -35,15 +34,7 @@ const popularCalculators = popularCalculatorOrder.map((id) =>
 export default function Home() {
   return (
     <main id="main-content" className="flex-1">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(websiteStructuredData).replaceAll(
-            "<",
-            "\\u003c",
-          ),
-        }}
-      />
+      <JsonLdScript data={websiteStructuredData} />
       <section className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8 sm:py-20">
         <div className="max-w-3xl">
           <p className="mb-4 text-sm font-semibold tracking-wide text-primary">

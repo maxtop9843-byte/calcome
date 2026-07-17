@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { BookOpen, CircleHelp, ShieldCheck } from "lucide-react";
 
-import { absoluteUrl } from "@/config/site";
+import {
+  JsonLdScript,
+  createPageStructuredData,
+} from "@/lib/seo/structured-data";
 
 import { getCompoundDictionary, type CompoundLocale } from "../i18n";
 import { CompoundInterestCalculator } from "./compound-interest-calculator";
@@ -13,43 +16,20 @@ export function LocalizedCompoundInterestPage({
 }) {
   const copy = getCompoundDictionary(locale).page;
   const path = `/${locale}/finance/compound-interest`;
-  const structuredData = [
-    {
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      name: copy.metaTitle,
-      description: copy.metaDescription,
-      inLanguage: locale === "ko" ? "ko-KR" : "en",
-      url: absoluteUrl(path),
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: copy.home,
-          item: absoluteUrl(),
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: copy.title,
-          item: absoluteUrl(path),
-        },
-      ],
-    },
-  ];
+  const structuredData = createPageStructuredData({
+    name: copy.metaTitle,
+    description: copy.metaDescription,
+    path,
+    locale,
+    breadcrumbs: [
+      { name: copy.home, path: "/" },
+      { name: copy.title, path },
+    ],
+  });
 
   return (
     <main id="main-content" className="flex-1">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(structuredData).replaceAll("<", "\\u003c"),
-        }}
-      />
+      <JsonLdScript data={structuredData} />
       <div className="mx-auto w-full max-w-[1440px] px-5 py-5 sm:px-6">
         <nav
           aria-label={copy.breadcrumbLabel}
