@@ -1,6 +1,9 @@
 import Link from "next/link";
 
-import { absoluteUrl, siteConfig } from "@/config/site";
+import {
+  JsonLdScript,
+  createPageStructuredData,
+} from "@/lib/seo/structured-data";
 
 import { getSavingsDictionary, type SavingsLocale } from "../i18n";
 import { SavingsCalculator } from "./savings-calculator";
@@ -8,53 +11,20 @@ import { SavingsCalculator } from "./savings-calculator";
 export function LocalizedSavingsPage({ locale }: { locale: SavingsLocale }) {
   const copy = getSavingsDictionary(locale).page;
   const path = `/${locale}/finance/savings`;
-  const structuredData = [
-    {
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      name: copy.title,
-      description: copy.metaDescription,
-      inLanguage: locale === "ko" ? "ko-KR" : "en-US",
-      url: absoluteUrl(path),
-      isPartOf: {
-        "@type": "WebSite",
-        name: siteConfig.name,
-        url: absoluteUrl(),
-      },
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: copy.home,
-          item: absoluteUrl(),
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: copy.calculators,
-          item: absoluteUrl("/calculators"),
-        },
-        {
-          "@type": "ListItem",
-          position: 3,
-          name: copy.title,
-          item: absoluteUrl(path),
-        },
-      ],
-    },
-  ];
+  const structuredData = createPageStructuredData({
+    name: copy.title,
+    description: copy.metaDescription,
+    path,
+    locale,
+    breadcrumbs: [
+      { name: copy.home, path: "/" },
+      { name: copy.calculators, path: "/calculators" },
+      { name: copy.title, path },
+    ],
+  });
   return (
     <main id="main-content" className="flex-1">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(structuredData).replaceAll("<", "\\u003c"),
-        }}
-      />
+      <JsonLdScript data={structuredData} />
       <div className="mx-auto w-full max-w-[1440px] px-5 py-8 sm:px-6 sm:py-10">
         <nav
           aria-label={copy.breadcrumb}

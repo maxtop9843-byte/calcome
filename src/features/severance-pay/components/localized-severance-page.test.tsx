@@ -13,12 +13,13 @@ describe("LocalizedSeverancePage", () => {
       canonical: "/ko/employment/severance-pay",
       languages: { en: "/en/employment/severance-pay" },
     });
+    const schemas = JSON.parse(
+      container.querySelector('script[type="application/ld+json"]')!
+        .textContent!,
+    );
     expect(
-      JSON.parse(
-        container.querySelector('script[type="application/ld+json"]')!
-          .textContent!,
-      ),
-    ).toHaveLength(2);
+      schemas["@graph"].map((item: { "@type": string }) => item["@type"]),
+    ).toEqual(["WebSite", "WebPage", "BreadcrumbList"]);
   });
   it("renders English without Korean", () => {
     const { container } = render(<LocalizedSeverancePage locale="en" />);
