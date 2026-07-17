@@ -26,6 +26,7 @@ const popularCalculatorOrder = [
   "deposit",
   "savings",
   "cagr",
+  "severance-pay",
 ] as const;
 const popularCalculators = popularCalculatorOrder.map((id) =>
   publishedCalculators.find((calculator) => calculator.id === id)!,
@@ -73,7 +74,7 @@ export default function Home() {
             인기 계산기
           </h2>
           <ul
-            className="mt-6 grid gap-4 sm:grid-cols-2"
+            className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
             data-testid="popular-calculator-grid"
           >
             {popularCalculators.map((calculator) => (

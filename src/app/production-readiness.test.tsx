@@ -309,6 +309,8 @@ describe("production recovery and navigation", () => {
     expect(screen.getByRole("heading", { name: "인기 계산기" })).toBeVisible();
     const popularGrid = screen.getByTestId("popular-calculator-grid");
     expect(popularGrid).toHaveClass("sm:grid-cols-2");
+    expect(popularGrid).toHaveClass("lg:grid-cols-3");
+    expect(popularGrid.children).toHaveLength(6);
     expect(
       Array.from(popularGrid.children).map((item) => item.textContent),
     ).toEqual([
@@ -317,6 +319,7 @@ describe("production recovery and navigation", () => {
       expect.stringContaining("예금 계산기"),
       expect.stringContaining("적금 계산기"),
       expect.stringContaining("CAGR 계산기"),
+      expect.stringContaining("퇴직금 계산기"),
     ]);
     expect(screen.getByRole("link", { name: /예금 계산기/ })).toHaveAttribute(
       "href",
@@ -337,6 +340,10 @@ describe("production recovery and navigation", () => {
     expect(screen.getByRole("link", { name: /복리 계산기/ })).toHaveAttribute(
       "href",
       "/ko/finance/compound-interest",
+    );
+    expect(screen.getByRole("link", { name: /퇴직금 계산기/ })).toHaveAttribute(
+      "href",
+      "/ko/employment/severance-pay",
     );
     const jsonLd = container.querySelector(
       'script[type="application/ld+json"]',
