@@ -4,9 +4,7 @@ export type PublishedCalculator = {
   description: string;
   keywords: readonly string[];
   category: "금융";
-  href:
-    | `/${"ko" | "en"}/finance/${string}`
-    | `/${"ko" | "en"}/employment/${string}`;
+  href: `/ko/${"finance" | "employment"}/${string}`;
 };
 
 export const publishedCalculators = [
