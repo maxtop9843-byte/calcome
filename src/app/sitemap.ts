@@ -22,6 +22,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
       },
     },
     {
+      url: absoluteUrl("/ko/employment/weekly-holiday-pay"),
+      changeFrequency: "monthly",
+      priority: 0.9,
+      alternates: {
+        languages: {
+          ko: absoluteUrl("/ko/employment/weekly-holiday-pay"),
+          en: absoluteUrl("/en/employment/weekly-holiday-pay"),
+        },
+      },
+    },
+    {
+      url: absoluteUrl("/en/employment/weekly-holiday-pay"),
+      changeFrequency: "monthly",
+      priority: 0.9,
+      alternates: {
+        languages: {
+          ko: absoluteUrl("/ko/employment/weekly-holiday-pay"),
+          en: absoluteUrl("/en/employment/weekly-holiday-pay"),
+        },
+      },
+    },
+    {
       url: absoluteUrl("/en/employment/unemployment-benefits"),
       changeFrequency: "monthly",
       priority: 0.9,
