@@ -28,8 +28,8 @@ Reviewed on 2026-07-13. Stripe, Linear, and Omni Calculator were used only as ma
 
 Complete these against the final public deployment before announcing launch:
 
-- [x] The repository defaults canonical URL generation to `https://calcome.com` and documents `NEXT_PUBLIC_SITE_URL=https://calcome.com`.
-- [ ] Set `NEXT_PUBLIC_SITE_URL=https://calcome.com` in the Vercel production environment and redeploy.
+- [x] The repository defaults canonical URL generation to `https://www.calcome.com` and documents `NEXT_PUBLIC_SITE_URL=https://www.calcome.com`.
+- [ ] Set `NEXT_PUBLIC_SITE_URL=https://www.calcome.com` in the Vercel production environment and redeploy.
 - [ ] Confirm DNS, TLS, HTTPS redirects, and the preferred `www` or apex host.
 - [ ] Fetch `/`, `/finance/compound-interest`, `/manifest.webmanifest`, `/robots.txt`, and `/sitemap.xml` from the public origin and verify successful responses.
 - [ ] Confirm canonical, Open Graph, Twitter/X, icon, and manifest URLs resolve to the production origin.

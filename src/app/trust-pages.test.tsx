@@ -21,7 +21,7 @@ describe("trust page metadata", () => {
       expect(metadata.description).toBeTruthy();
       expect(metadata.alternates).toEqual({ canonical: path });
       expect(metadata.openGraph).toMatchObject({
-        url: `https://calcome.com${path}`,
+        url: `https://www.calcome.com${path}`,
         siteName: "CalCome",
       });
       expect(metadata.twitter).toMatchObject({ card: "summary_large_image" });

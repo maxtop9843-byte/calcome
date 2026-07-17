@@ -8,7 +8,7 @@ describe("calculator directory", () => {
     expect(metadata.title).toBe("금융 계산기 모음");
     expect(metadata.alternates).toEqual({ canonical: "/calculators" });
     expect(metadata.openGraph).toMatchObject({
-      url: "https://calcome.com/calculators",
+      url: "https://www.calcome.com/calculators",
       siteName: "CalCome",
     });
     expect(metadata.twitter).toMatchObject({ card: "summary_large_image" });
@@ -66,42 +66,42 @@ describe("calculator directory", () => {
           {
             position: 1,
             name: "CAGR 계산기",
-            url: "https://calcome.com/ko/finance/cagr",
+            url: "https://www.calcome.com/ko/finance/cagr",
           },
           {
             position: 2,
             name: "예금 계산기",
-            url: "https://calcome.com/ko/finance/fixed-deposit",
+            url: "https://www.calcome.com/ko/finance/fixed-deposit",
           },
           {
             position: 3,
             name: "적금 계산기",
-            url: "https://calcome.com/ko/finance/savings",
+            url: "https://www.calcome.com/ko/finance/savings",
           },
           {
             position: 4,
             name: "대출 계산기",
-            url: "https://calcome.com/ko/finance/loan",
+            url: "https://www.calcome.com/ko/finance/loan",
           },
           {
             position: 5,
             name: "복리 계산기",
-            url: "https://calcome.com/finance/compound-interest",
+            url: "https://www.calcome.com/finance/compound-interest",
           },
           {
             position: 6,
             name: "퇴직금 계산기",
-            url: "https://calcome.com/ko/employment/severance-pay",
+            url: "https://www.calcome.com/ko/employment/severance-pay",
           },
           {
             position: 7,
             name: "실업급여 계산기",
-            url: "https://calcome.com/ko/employment/unemployment-benefits",
+            url: "https://www.calcome.com/ko/employment/unemployment-benefits",
           },
           {
             position: 8,
             name: "실수령액 계산기",
-            url: "https://calcome.com/ko/employment/net-salary",
+            url: "https://www.calcome.com/ko/employment/net-salary",
           },
         ],
       },

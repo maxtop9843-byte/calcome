@@ -4,7 +4,7 @@ CalCome is a modern calculator platform focused first on clear, trustworthy fina
 
 **CalCome · 금융 계산을 쉽게.**
 
-- Production domain: <https://calcome.com>
+- Production domain: <https://www.calcome.com>
 - Repository: <https://github.com/maxtop9843-byte/calcome>
 - Issues: <https://github.com/maxtop9843-byte/calcome/issues>
 
@@ -65,7 +65,7 @@ npm run dev
 Open `http://localhost:3000`.
 
 Copy `.env.example` to `.env.local`. Production builds use
-`NEXT_PUBLIC_SITE_URL=https://calcome.com`; local development can override it
+`NEXT_PUBLIC_SITE_URL=https://www.calcome.com`; local development can override it
 with `http://localhost:3000` when explicitly testing local absolute URLs.
 
 ## Commands

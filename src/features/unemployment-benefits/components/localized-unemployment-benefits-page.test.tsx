@@ -40,7 +40,7 @@ describe("LocalizedUnemploymentBenefitsPage", () => {
       },
     });
     expect(metadata.openGraph).toMatchObject({
-      url: "https://calcome.com/en/employment/unemployment-benefits",
+      url: "https://www.calcome.com/en/employment/unemployment-benefits",
     });
     expect(metadata.twitter).toMatchObject({ card: "summary_large_image" });
   });
