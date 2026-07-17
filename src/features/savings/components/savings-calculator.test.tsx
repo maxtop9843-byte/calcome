@@ -37,6 +37,13 @@ describe("SavingsCalculator", () => {
     );
     expect(screen.getByLabelText("저축 기간 *")).toHaveValue("");
     expect(screen.getByLabelText("연 이자율 *")).toHaveValue("");
+    for (const input of [
+      screen.getByLabelText("정기 납입액 *"),
+      screen.getByLabelText("저축 기간 *"),
+      screen.getByLabelText("연 이자율 *"),
+    ]) {
+      expect(input).toHaveClass("text-base", "sm:text-sm");
+    }
     expect(withinResults().getAllByText("-")).toHaveLength(3);
     expect(screen.getByTestId("savings-growth-chart")).toHaveAttribute(
       "data-animation-duration",
@@ -117,6 +124,17 @@ describe("SavingsCalculator", () => {
     expect(scrollIntoView).not.toHaveBeenCalled();
   });
 
+  it("dismisses numeric input focus after a successful keyboard submit", async () => {
+    const user = userEvent.setup();
+    render(<SavingsCalculator />);
+    await fillRequired(user);
+    const rate = screen.getByLabelText("연 이자율 *");
+    rate.focus();
+    await user.keyboard("{Enter}");
+    expect(rate).not.toHaveFocus();
+    await waitFor(() => expect(scrollIntoView).toHaveBeenCalledOnce());
+  });
+
   it("reset cancels results, animation, and restores placeholders", async () => {
     const user = userEvent.setup();
     render(<SavingsCalculator />);
@@ -146,11 +164,13 @@ describe("SavingsCalculator", () => {
       name: "만기 결과 계산하기",
     });
     await user.click(calculate);
+    await waitFor(() => expect(scrollIntoView).toHaveBeenCalledTimes(1));
     expect(screen.getByTestId("savings-growth-chart")).toHaveAttribute(
       "data-animation-run",
       "1",
     );
     await user.click(calculate);
+    await waitFor(() => expect(scrollIntoView).toHaveBeenCalledTimes(2));
     expect(screen.getByTestId("savings-growth-chart")).toHaveAttribute(
       "data-animation-run",
       "2",
@@ -187,10 +207,12 @@ describe("SavingsCalculator", () => {
     expect(screen.getAllByTestId("animated-won")[1]).toHaveTextContent(
       "₩1,200,000",
     );
-    expect(scrollIntoView).toHaveBeenCalledWith({
-      behavior: "auto",
-      block: "start",
-    });
+    await waitFor(() =>
+      expect(scrollIntoView).toHaveBeenCalledWith({
+        behavior: "auto",
+        block: "start",
+      }),
+    );
   });
 });
 

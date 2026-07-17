@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  type ChangeEvent,
-  type FormEvent,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { type ChangeEvent, type FormEvent, useRef, useState } from "react";
 
 import {
   PrimaryResults,
@@ -15,6 +9,7 @@ import {
 } from "@/components/calculators/calculator-workspace";
 import { Button } from "@/components/ui/button";
 import { AnimatedWon } from "@/features/compound-interest/components/animated-won";
+import { useStableResultScroll } from "@/hooks/use-stable-result-scroll";
 import { formatMoneyInput } from "@/lib/input/money";
 
 import { calculateDeposit } from "../calculate";
@@ -40,7 +35,7 @@ const INITIAL_VALUES: DepositFormValues = {
   annualInterestRate: "",
 };
 const controlClass =
-  "mt-1.5 h-10 w-full rounded-lg border bg-background px-3 text-sm tabular-nums shadow-sm outline-none transition placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive";
+  "mt-1.5 h-10 w-full rounded-lg border bg-background px-3 text-base tabular-nums shadow-sm outline-none transition placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive sm:text-sm";
 
 function NumberField({
   field,
@@ -119,19 +114,12 @@ export function DepositCalculator({
   const [animationKey, setAnimationKey] = useState(0);
   const [announcement, setAnnouncement] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
-  const resultRef = useRef<HTMLElement>(null);
-  const pendingScroll = useRef(false);
-
-  useEffect(() => {
-    if (!result || !pendingScroll.current) return;
-    pendingScroll.current = false;
-    const reduced =
-      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
-    resultRef.current?.scrollIntoView?.({
-      behavior: reduced ? "auto" : "smooth",
-      block: "start",
-    });
-  }, [result]);
+  const {
+    resultRef,
+    noteNumericInputFocus,
+    requestResultScroll,
+    cancelResultScroll,
+  } = useStableResultScroll(result);
 
   function updateValue(field: DepositField, value: string) {
     setValues((current) => ({ ...current, [field]: value }));
@@ -158,7 +146,7 @@ export function DepositCalculator({
       return;
     }
     const next = calculateDeposit(validation.data);
-    pendingScroll.current = true;
+    requestResultScroll();
     setResult(next);
     setAppliedValues(values);
     setAnimationKey((current) => current + 1);
@@ -167,7 +155,7 @@ export function DepositCalculator({
     setAnnouncement(copy.complete(formatDepositWon(next.maturityAfterTax)));
   }
   function reset() {
-    pendingScroll.current = false;
+    cancelResultScroll();
     setValues(INITIAL_VALUES);
     setErrors({});
     setResult(null);
@@ -190,7 +178,8 @@ export function DepositCalculator({
           ref={formRef}
           noValidate
           onSubmit={submit}
-          className={compactCalculatorSettingsClass}
+          onFocusCapture={noteNumericInputFocus}
+          className={`${compactCalculatorSettingsClass} min-w-0`}
         >
           <p className="text-sm font-semibold text-primary">
             {copy.inputEyebrow}

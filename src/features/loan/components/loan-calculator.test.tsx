@@ -30,6 +30,13 @@ describe("LoanCalculator", () => {
       "placeholder",
       "예: 100,000,000",
     );
+    for (const input of [
+      screen.getByLabelText("대출 금액 *"),
+      screen.getByLabelText("연 이자율 *"),
+      screen.getByLabelText("대출 기간 *"),
+    ]) {
+      expect(input).toHaveClass("text-base", "sm:text-sm");
+    }
     expect(
       within(screen.getByTestId("primary-results")).getAllByText("-"),
     ).toHaveLength(3);
@@ -108,6 +115,16 @@ describe("LoanCalculator", () => {
     expect(screen.getByRole("alert")).toBeVisible();
     expect(scrollIntoView).not.toHaveBeenCalled();
   });
+  it("dismisses numeric input focus after a successful keyboard submit", async () => {
+    const user = userEvent.setup();
+    render(<LoanCalculator />);
+    await fill(user);
+    const period = screen.getByLabelText("대출 기간 *");
+    period.focus();
+    await user.keyboard("{Enter}");
+    expect(period).not.toHaveFocus();
+    await waitFor(() => expect(scrollIntoView).toHaveBeenCalledOnce());
+  });
   it("replays on recalculation and reset restores empty state", async () => {
     const user = userEvent.setup();
     render(<LoanCalculator />);
@@ -116,7 +133,9 @@ describe("LoanCalculator", () => {
       name: "상환 결과 계산하기",
     });
     await user.click(calculate);
+    await waitFor(() => expect(scrollIntoView).toHaveBeenCalledTimes(1));
     await user.click(calculate);
+    await waitFor(() => expect(scrollIntoView).toHaveBeenCalledTimes(2));
     expect(
       new Set(
         screen
@@ -147,9 +166,11 @@ describe("LoanCalculator", () => {
     expect(screen.getAllByTestId("animated-won")[0]).toHaveTextContent(
       "₩1,032,797",
     );
-    expect(scrollIntoView).toHaveBeenCalledWith({
-      behavior: "auto",
-      block: "start",
-    });
+    await waitFor(() =>
+      expect(scrollIntoView).toHaveBeenCalledWith({
+        behavior: "auto",
+        block: "start",
+      }),
+    );
   });
 });
