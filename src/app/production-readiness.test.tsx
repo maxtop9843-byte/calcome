@@ -328,7 +328,7 @@ describe("production recovery and navigation", () => {
     );
     expect(screen.getByRole("link", { name: /복리 계산기/ })).toHaveAttribute(
       "href",
-      "/finance/compound-interest",
+      "/ko/finance/compound-interest",
     );
     const jsonLd = container.querySelector(
       'script[type="application/ld+json"]',
@@ -404,7 +404,7 @@ describe("production recovery and navigation", () => {
     ).toHaveAttribute("href", "/");
     expect(screen.getByRole("link", { name: "복리 계산기" })).toHaveAttribute(
       "href",
-      "/finance/compound-interest",
+      "/ko/finance/compound-interest",
     );
   });
 

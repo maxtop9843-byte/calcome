@@ -1,8 +1,14 @@
-import type { NextConfig } from "next";
+import { describe, expect, it } from "vitest";
 
-const nextConfig: NextConfig = {
-  async redirects() {
-    return [
+import nextConfig from "../../next.config";
+
+describe("legacy calculator redirects", () => {
+  it("permanently redirects every locale-less alias to one Korean URL", async () => {
+    expect(nextConfig.redirects).toBeTypeOf("function");
+
+    const redirects = await nextConfig.redirects!();
+
+    expect(redirects).toEqual([
       {
         source: "/finance/compound-interest",
         destination: "/ko/finance/compound-interest",
@@ -43,8 +49,6 @@ const nextConfig: NextConfig = {
         destination: "/ko/employment/unemployment-benefits",
         permanent: true,
       },
-    ];
-  },
-};
-
-export default nextConfig;
+    ]);
+  });
+});

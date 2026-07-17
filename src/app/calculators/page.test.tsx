@@ -41,7 +41,7 @@ describe("calculator directory", () => {
     );
     expect(screen.getByRole("link", { name: /복리 계산기/ })).toHaveAttribute(
       "href",
-      "/finance/compound-interest",
+      "/ko/finance/compound-interest",
     );
     expect(screen.getByRole("link", { name: /퇴직금 계산기/ })).toHaveAttribute(
       "href",
@@ -86,7 +86,7 @@ describe("calculator directory", () => {
           {
             position: 5,
             name: "복리 계산기",
-            url: "https://www.calcome.com/finance/compound-interest",
+            url: "https://www.calcome.com/ko/finance/compound-interest",
           },
           {
             position: 6,
