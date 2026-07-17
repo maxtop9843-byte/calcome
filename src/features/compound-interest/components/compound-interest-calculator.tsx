@@ -15,6 +15,7 @@ import {
   dashboardCalculatorWorkspaceClass,
 } from "@/components/calculators/calculator-workspace";
 import { Button } from "@/components/ui/button";
+import { afterViewportSettles } from "@/lib/browser/stable-viewport";
 import { formatMoneyInput } from "@/lib/input/money";
 
 import { calculateCompoundInterest } from "../calculate";
@@ -40,7 +41,7 @@ const INITIAL_COMPOUND_INTEREST_VALUES: CompoundInterestFormValues = {
 };
 
 const inputClassName =
-  "mt-1.5 h-10 w-full rounded-lg border bg-background px-3 text-sm tabular-nums shadow-sm outline-none transition placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20";
+  "mt-1.5 h-10 w-full rounded-lg border bg-background px-3 text-base tabular-nums shadow-sm outline-none transition placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 sm:text-sm";
 
 type NumberFieldProps = {
   field: CompoundInterestField;
@@ -137,18 +138,28 @@ export function CompoundInterestCalculator({
   const formRef = useRef<HTMLFormElement>(null);
   const resultSectionRef = useRef<HTMLElement>(null);
   const pendingResultScrollRef = useRef(false);
+  const mobileInputWasFocusedRef = useRef(false);
 
   useEffect(() => {
     if (!result || !pendingResultScrollRef.current) return;
 
     pendingResultScrollRef.current = false;
-    const reduceMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    resultSectionRef.current?.scrollIntoView({
-      behavior: reduceMotion ? "auto" : "smooth",
-      block: "start",
-    });
+    const keyboardMayBeOpen = Boolean(
+      mobileInputWasFocusedRef.current &&
+      window.visualViewport &&
+      window.visualViewport.width < 768,
+    );
+    mobileInputWasFocusedRef.current = false;
+
+    return afterViewportSettles(() => {
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      resultSectionRef.current?.scrollIntoView({
+        behavior: reduceMotion ? "auto" : "smooth",
+        block: "start",
+      });
+    }, keyboardMayBeOpen);
   }, [result]);
 
   function updateValue(field: CompoundInterestField, value: string) {
@@ -180,6 +191,9 @@ export function CompoundInterestCalculator({
     }
 
     const nextResult = calculateCompoundInterest(validation.data);
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
     pendingResultScrollRef.current = true;
     setResult(nextResult);
     setChartAnimationKey((current) => current + 1);
@@ -190,6 +204,7 @@ export function CompoundInterestCalculator({
 
   function reset() {
     pendingResultScrollRef.current = false;
+    mobileInputWasFocusedRef.current = false;
     setValues(INITIAL_COMPOUND_INTEREST_VALUES);
     setErrors({});
     setResult(null);
@@ -205,7 +220,15 @@ export function CompoundInterestCalculator({
           ref={formRef}
           noValidate
           onSubmit={handleSubmit}
-          className={compactCalculatorSettingsClass}
+          onFocusCapture={(event) => {
+            if (
+              event.target instanceof HTMLInputElement &&
+              event.target.inputMode === "decimal"
+            ) {
+              mobileInputWasFocusedRef.current = true;
+            }
+          }}
+          className={`${compactCalculatorSettingsClass} min-w-0`}
         >
           <div className="mb-5">
             <h2
@@ -416,7 +439,7 @@ export function CompoundInterestCalculator({
             </div>
           </details>
         </form>
-        <div className="space-y-3">
+        <div className="min-w-0 space-y-3">
           <section
             ref={resultSectionRef}
             aria-labelledby="result-title"
