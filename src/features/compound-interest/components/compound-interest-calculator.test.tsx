@@ -57,6 +57,7 @@ describe("CompoundInterestCalculator", () => {
       const input = screen.getByLabelText(label);
       expect(input).toHaveValue("");
       expect(input).toHaveAttribute("placeholder", placeholder);
+      expect(input).toHaveClass("text-base", "sm:text-sm");
     }
 
     const principal = screen.getByLabelText("초기 투자금 *");
@@ -171,6 +172,20 @@ describe("CompoundInterestCalculator", () => {
         block: "start",
       }),
     );
+  });
+
+  it("releases numeric input focus before scrolling submitted results", async () => {
+    const user = userEvent.setup();
+    render(<CompoundInterestCalculator />);
+    await fillRequired(user);
+
+    const rateInput = screen.getByLabelText("연 이자율 *");
+    rateInput.focus();
+    expect(rateInput).toHaveFocus();
+    await user.keyboard("{Enter}");
+
+    expect(rateInput).not.toHaveFocus();
+    await waitFor(() => expect(scrollIntoViewMock).toHaveBeenCalledOnce());
   });
 
   it("reset restores empty inputs and the open yearly empty state", async () => {
