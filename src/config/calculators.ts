@@ -81,4 +81,12 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/employment/net-salary",
   },
+  {
+    id: "hourly-wage",
+    name: "시급 계산기",
+    description: "시급·일급·주급·월급·연봉을 같은 시간급 기준으로 환산합니다.",
+    keywords: ["시급", "월급", "연봉", "임금 환산", "hourly wage"],
+    category: "금융",
+    href: "/ko/employment/hourly-wage",
+  },
 ] as const satisfies readonly PublishedCalculator[];

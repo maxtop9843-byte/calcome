@@ -167,4 +167,17 @@ describe("LanguageSelector", () => {
       "/en/employment/unemployment-benefits",
     );
   });
+
+  it("preserves the localized hourly-wage destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector locale="ko" pathname="/ko/employment/hourly-wage" />,
+    );
+
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/employment/hourly-wage",
+    );
+  });
 });
