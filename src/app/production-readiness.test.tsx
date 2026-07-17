@@ -29,6 +29,14 @@ describe("production metadata routes", () => {
     });
     expect(metadata.twitter).toMatchObject({ card: "summary_large_image" });
     expect(metadata.robots).toMatchObject({ index: true, follow: true });
+    expect(metadata.verification).toEqual({
+      other: {
+        "naver-site-verification": [
+          "61d4b932c5e6b51be3b7221317d9f6e71ac9343a",
+          "a29b19e1e2434d8a1f3165e813e4abfbf791bf23",
+        ],
+      },
+    });
   });
 
   it("provides a Korean web app manifest with branded icons", () => {
