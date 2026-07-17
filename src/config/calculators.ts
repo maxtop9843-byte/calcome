@@ -60,6 +60,14 @@ export const publishedCalculators = [
     href: "/ko/employment/severance-pay",
   },
   {
+    id: "unemployment-benefits",
+    name: "실업급여 계산기",
+    description: "평균임금과 고용보험 가입기간으로 예상 구직급여를 계산합니다.",
+    keywords: ["실업급여", "구직급여", "고용보험", "unemployment"],
+    category: "금융",
+    href: "/ko/employment/unemployment-benefits",
+  },
+  {
     id: "net-salary",
     name: "실수령액 계산기",
     description:

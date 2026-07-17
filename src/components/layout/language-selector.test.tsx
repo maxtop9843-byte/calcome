@@ -152,4 +152,19 @@ describe("LanguageSelector", () => {
       "/en/employment/net-salary",
     );
   });
+
+  it("preserves the localized unemployment-benefits destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector
+        locale="ko"
+        pathname="/ko/employment/unemployment-benefits"
+      />,
+    );
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/employment/unemployment-benefits",
+    );
+  });
 });

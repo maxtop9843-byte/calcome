@@ -11,6 +11,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: absoluteUrl("/ko/employment/unemployment-benefits"),
+      changeFrequency: "monthly",
+      priority: 0.9,
+      alternates: {
+        languages: {
+          ko: absoluteUrl("/ko/employment/unemployment-benefits"),
+          en: absoluteUrl("/en/employment/unemployment-benefits"),
+        },
+      },
+    },
+    {
+      url: absoluteUrl("/en/employment/unemployment-benefits"),
+      changeFrequency: "monthly",
+      priority: 0.9,
+      alternates: {
+        languages: {
+          ko: absoluteUrl("/ko/employment/unemployment-benefits"),
+          en: absoluteUrl("/en/employment/unemployment-benefits"),
+        },
+      },
+    },
+    {
       url: absoluteUrl("/ko/employment/severance-pay"),
       changeFrequency: "monthly",
       priority: 0.9,

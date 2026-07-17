@@ -64,6 +64,28 @@ describe("production metadata routes", () => {
         priority: 0.9,
       },
       {
+        url: "https://calcome.com/ko/employment/unemployment-benefits",
+        changeFrequency: "monthly",
+        priority: 0.9,
+        alternates: {
+          languages: {
+            ko: "https://calcome.com/ko/employment/unemployment-benefits",
+            en: "https://calcome.com/en/employment/unemployment-benefits",
+          },
+        },
+      },
+      {
+        url: "https://calcome.com/en/employment/unemployment-benefits",
+        changeFrequency: "monthly",
+        priority: 0.9,
+        alternates: {
+          languages: {
+            ko: "https://calcome.com/ko/employment/unemployment-benefits",
+            en: "https://calcome.com/en/employment/unemployment-benefits",
+          },
+        },
+      },
+      {
         url: "https://calcome.com/ko/employment/severance-pay",
         changeFrequency: "monthly",
         priority: 0.9,
