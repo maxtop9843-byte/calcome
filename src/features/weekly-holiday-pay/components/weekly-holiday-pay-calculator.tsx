@@ -1,6 +1,5 @@
 "use client";
 
-import Decimal from "decimal.js";
 import { type FormEvent, useState } from "react";
 import {
   PrimaryResults,
@@ -19,6 +18,7 @@ import {
   weeklyHolidayPayContent,
   type WeeklyHolidayPayLocale,
 } from "../content";
+import { validateWeeklyHolidayPayInput } from "../validation";
 
 const fieldClass =
   "mt-1.5 h-11 w-full rounded-lg border bg-background px-3 text-base tabular-nums outline-none placeholder:text-muted-foreground/70 focus-visible:ring-3 focus-visible:ring-ring/30 sm:text-sm";
@@ -43,13 +43,11 @@ export function WeeklyHolidayPayCalculator({
   } = useStableResultScroll(result);
   function submit(event: FormEvent) {
     event.preventDefault();
-    const hourlyWage = new Decimal(wage.replaceAll(",", "") || 0);
-    const weeklyHours = new Decimal(hours || 0);
-    if (
-      !hourlyWage.isPositive() ||
-      !weeklyHours.isPositive() ||
-      weeklyHours.gt(40)
-    ) {
+    const validated = validateWeeklyHolidayPayInput({
+      hourlyWage: wage,
+      weeklyHours: hours,
+    });
+    if (!validated) {
       setError(
         locale === "ko"
           ? "시급과 1~40시간의 주 소정근로시간을 입력하세요."
@@ -61,8 +59,7 @@ export function WeeklyHolidayPayCalculator({
     requestResultScroll();
     setResult(
       calculateWeeklyHolidayPay({
-        hourlyWage,
-        weeklyHours,
+        ...validated,
         completedScheduledDays: attendance,
       }),
     );
