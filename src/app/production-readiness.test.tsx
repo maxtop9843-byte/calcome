@@ -75,6 +75,28 @@ describe("production metadata routes", () => {
         },
       },
       {
+        url: "https://calcome.com/ko/employment/net-salary",
+        changeFrequency: "monthly",
+        priority: 0.9,
+        alternates: {
+          languages: {
+            ko: "https://calcome.com/ko/employment/net-salary",
+            en: "https://calcome.com/en/employment/net-salary",
+          },
+        },
+      },
+      {
+        url: "https://calcome.com/en/employment/net-salary",
+        changeFrequency: "monthly",
+        priority: 0.9,
+        alternates: {
+          languages: {
+            ko: "https://calcome.com/ko/employment/net-salary",
+            en: "https://calcome.com/en/employment/net-salary",
+          },
+        },
+      },
+      {
         url: "https://calcome.com/en/employment/severance-pay",
         changeFrequency: "monthly",
         priority: 0.9,

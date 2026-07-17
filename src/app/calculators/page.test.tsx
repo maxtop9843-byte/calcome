@@ -22,7 +22,7 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(6);
+    ).toHaveLength(7);
     expect(screen.getByRole("link", { name: /CAGR 계산기/ })).toHaveAttribute(
       "href",
       "/ko/finance/cagr",
@@ -47,6 +47,9 @@ describe("calculator directory", () => {
       "href",
       "/ko/employment/severance-pay",
     );
+    expect(
+      screen.getByRole("link", { name: /실수령액 계산기/ }),
+    ).toHaveAttribute("href", "/ko/employment/net-salary");
 
     const jsonLd = container.querySelector(
       'script[type="application/ld+json"]',
@@ -55,7 +58,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 6,
+        numberOfItems: 7,
         itemListElement: [
           {
             position: 1,
@@ -86,6 +89,11 @@ describe("calculator directory", () => {
             position: 6,
             name: "퇴직금 계산기",
             url: "https://calcome.com/ko/employment/severance-pay",
+          },
+          {
+            position: 7,
+            name: "실수령액 계산기",
+            url: "https://calcome.com/ko/employment/net-salary",
           },
         ],
       },

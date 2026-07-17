@@ -22,6 +22,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
       },
     },
     {
+      url: absoluteUrl("/ko/employment/net-salary"),
+      changeFrequency: "monthly",
+      priority: 0.9,
+      alternates: {
+        languages: {
+          ko: absoluteUrl("/ko/employment/net-salary"),
+          en: absoluteUrl("/en/employment/net-salary"),
+        },
+      },
+    },
+    {
+      url: absoluteUrl("/en/employment/net-salary"),
+      changeFrequency: "monthly",
+      priority: 0.9,
+      alternates: {
+        languages: {
+          ko: absoluteUrl("/ko/employment/net-salary"),
+          en: absoluteUrl("/en/employment/net-salary"),
+        },
+      },
+    },
+    {
       url: absoluteUrl("/en/employment/severance-pay"),
       changeFrequency: "monthly",
       priority: 0.9,

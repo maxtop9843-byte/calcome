@@ -140,4 +140,16 @@ describe("LanguageSelector", () => {
       "/en/employment/severance-pay",
     );
   });
+
+  it("preserves the localized net-salary destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector locale="ko" pathname="/ko/employment/net-salary" />,
+    );
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/employment/net-salary",
+    );
+  });
 });

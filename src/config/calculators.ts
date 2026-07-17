@@ -59,4 +59,13 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/employment/severance-pay",
   },
+  {
+    id: "net-salary",
+    name: "실수령액 계산기",
+    description:
+      "급여에서 4대보험과 예상 세금을 뺀 월·연 실수령액을 계산합니다.",
+    keywords: ["연봉", "월급", "실수령액", "4대보험", "take home pay"],
+    category: "금융",
+    href: "/ko/employment/net-salary",
+  },
 ] as const satisfies readonly PublishedCalculator[];
