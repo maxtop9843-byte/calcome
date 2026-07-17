@@ -244,6 +244,13 @@ For feature tasks:
 - implement only the selected task
 - do not implement another TASK_QUEUE entry in the same execution
 
+## Sitemap invariant
+
+When a P task adds a public calculator route, register it through the canonical
+calculator source and run the sitemap validation. Preserve the standards-compliant
+XML sitemap, its `https://www.calcome.com` canonical URLs, and its `<loc>` entries;
+never replace it with line-based plain-text output.
+
 ---
 
 # Required Validation
