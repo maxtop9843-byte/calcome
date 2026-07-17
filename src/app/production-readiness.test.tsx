@@ -49,217 +49,234 @@ describe("production metadata routes", () => {
   it("publishes crawl rules and only canonical public routes", () => {
     expect(robots()).toEqual({
       rules: { userAgent: "*", allow: "/" },
-      sitemap: "https://calcome.com/sitemap.xml",
-      host: "https://calcome.com",
+      sitemap: "https://www.calcome.com/sitemap.xml",
+      host: "https://www.calcome.com",
     });
     expect(sitemap()).toEqual([
       {
-        url: "https://calcome.com/",
+        url: "https://www.calcome.com/",
         changeFrequency: "monthly",
         priority: 1,
       },
       {
-        url: "https://calcome.com/calculators",
+        url: "https://www.calcome.com/calculators",
         changeFrequency: "monthly",
         priority: 0.9,
       },
       {
-        url: "https://calcome.com/ko/employment/unemployment-benefits",
-        changeFrequency: "monthly",
-        priority: 0.9,
-        alternates: {
-          languages: {
-            ko: "https://calcome.com/ko/employment/unemployment-benefits",
-            en: "https://calcome.com/en/employment/unemployment-benefits",
-          },
-        },
-      },
-      {
-        url: "https://calcome.com/en/employment/unemployment-benefits",
+        url: "https://www.calcome.com/ko/employment/unemployment-benefits",
         changeFrequency: "monthly",
         priority: 0.9,
         alternates: {
           languages: {
-            ko: "https://calcome.com/ko/employment/unemployment-benefits",
-            en: "https://calcome.com/en/employment/unemployment-benefits",
+            ko: "https://www.calcome.com/ko/employment/unemployment-benefits",
+            en: "https://www.calcome.com/en/employment/unemployment-benefits",
           },
         },
       },
       {
-        url: "https://calcome.com/ko/employment/severance-pay",
+        url: "https://www.calcome.com/en/employment/unemployment-benefits",
         changeFrequency: "monthly",
         priority: 0.9,
         alternates: {
           languages: {
-            ko: "https://calcome.com/ko/employment/severance-pay",
-            en: "https://calcome.com/en/employment/severance-pay",
+            ko: "https://www.calcome.com/ko/employment/unemployment-benefits",
+            en: "https://www.calcome.com/en/employment/unemployment-benefits",
           },
         },
       },
       {
-        url: "https://calcome.com/ko/employment/net-salary",
+        url: "https://www.calcome.com/ko/employment/severance-pay",
         changeFrequency: "monthly",
         priority: 0.9,
         alternates: {
           languages: {
-            ko: "https://calcome.com/ko/employment/net-salary",
-            en: "https://calcome.com/en/employment/net-salary",
+            ko: "https://www.calcome.com/ko/employment/severance-pay",
+            en: "https://www.calcome.com/en/employment/severance-pay",
           },
         },
       },
       {
-        url: "https://calcome.com/en/employment/net-salary",
+        url: "https://www.calcome.com/ko/employment/net-salary",
         changeFrequency: "monthly",
         priority: 0.9,
         alternates: {
           languages: {
-            ko: "https://calcome.com/ko/employment/net-salary",
-            en: "https://calcome.com/en/employment/net-salary",
+            ko: "https://www.calcome.com/ko/employment/net-salary",
+            en: "https://www.calcome.com/en/employment/net-salary",
           },
         },
       },
       {
-        url: "https://calcome.com/en/employment/severance-pay",
+        url: "https://www.calcome.com/en/employment/net-salary",
         changeFrequency: "monthly",
         priority: 0.9,
         alternates: {
           languages: {
-            ko: "https://calcome.com/ko/employment/severance-pay",
-            en: "https://calcome.com/en/employment/severance-pay",
+            ko: "https://www.calcome.com/ko/employment/net-salary",
+            en: "https://www.calcome.com/en/employment/net-salary",
           },
         },
       },
       {
-        url: "https://calcome.com/ko/finance/cagr",
+        url: "https://www.calcome.com/en/employment/severance-pay",
         changeFrequency: "monthly",
         priority: 0.9,
         alternates: {
           languages: {
-            ko: "https://calcome.com/ko/finance/cagr",
-            en: "https://calcome.com/en/finance/cagr",
+            ko: "https://www.calcome.com/ko/employment/severance-pay",
+            en: "https://www.calcome.com/en/employment/severance-pay",
           },
         },
       },
       {
-        url: "https://calcome.com/en/finance/cagr",
+        url: "https://www.calcome.com/ko/finance/cagr",
         changeFrequency: "monthly",
         priority: 0.9,
         alternates: {
           languages: {
-            ko: "https://calcome.com/ko/finance/cagr",
-            en: "https://calcome.com/en/finance/cagr",
+            ko: "https://www.calcome.com/ko/finance/cagr",
+            en: "https://www.calcome.com/en/finance/cagr",
           },
         },
       },
       {
-        url: "https://calcome.com/ko/finance/compound-interest",
+        url: "https://www.calcome.com/en/finance/cagr",
         changeFrequency: "monthly",
         priority: 0.9,
         alternates: {
           languages: {
-            ko: "https://calcome.com/ko/finance/compound-interest",
-            en: "https://calcome.com/en/finance/compound-interest",
+            ko: "https://www.calcome.com/ko/finance/cagr",
+            en: "https://www.calcome.com/en/finance/cagr",
           },
         },
       },
       {
-        url: "https://calcome.com/en/finance/compound-interest",
+        url: "https://www.calcome.com/ko/finance/compound-interest",
         changeFrequency: "monthly",
         priority: 0.9,
         alternates: {
           languages: {
-            ko: "https://calcome.com/ko/finance/compound-interest",
-            en: "https://calcome.com/en/finance/compound-interest",
+            ko: "https://www.calcome.com/ko/finance/compound-interest",
+            en: "https://www.calcome.com/en/finance/compound-interest",
           },
         },
       },
       {
-        url: "https://calcome.com/ko/finance/savings",
+        url: "https://www.calcome.com/en/finance/compound-interest",
         changeFrequency: "monthly",
         priority: 0.9,
         alternates: {
           languages: {
-            ko: "https://calcome.com/ko/finance/savings",
-            en: "https://calcome.com/en/finance/savings",
+            ko: "https://www.calcome.com/ko/finance/compound-interest",
+            en: "https://www.calcome.com/en/finance/compound-interest",
           },
         },
       },
       {
-        url: "https://calcome.com/en/finance/savings",
+        url: "https://www.calcome.com/ko/finance/savings",
         changeFrequency: "monthly",
         priority: 0.9,
         alternates: {
           languages: {
-            ko: "https://calcome.com/ko/finance/savings",
-            en: "https://calcome.com/en/finance/savings",
+            ko: "https://www.calcome.com/ko/finance/savings",
+            en: "https://www.calcome.com/en/finance/savings",
           },
         },
       },
       {
-        url: "https://calcome.com/ko/finance/fixed-deposit",
+        url: "https://www.calcome.com/en/finance/savings",
         changeFrequency: "monthly",
         priority: 0.9,
         alternates: {
           languages: {
-            ko: "https://calcome.com/ko/finance/fixed-deposit",
-            en: "https://calcome.com/en/finance/fixed-deposit",
+            ko: "https://www.calcome.com/ko/finance/savings",
+            en: "https://www.calcome.com/en/finance/savings",
           },
         },
       },
       {
-        url: "https://calcome.com/en/finance/fixed-deposit",
+        url: "https://www.calcome.com/ko/finance/fixed-deposit",
         changeFrequency: "monthly",
         priority: 0.9,
         alternates: {
           languages: {
-            ko: "https://calcome.com/ko/finance/fixed-deposit",
-            en: "https://calcome.com/en/finance/fixed-deposit",
+            ko: "https://www.calcome.com/ko/finance/fixed-deposit",
+            en: "https://www.calcome.com/en/finance/fixed-deposit",
           },
         },
       },
       {
-        url: "https://calcome.com/ko/finance/loan",
+        url: "https://www.calcome.com/en/finance/fixed-deposit",
         changeFrequency: "monthly",
         priority: 0.9,
         alternates: {
           languages: {
-            ko: "https://calcome.com/ko/finance/loan",
-            en: "https://calcome.com/en/finance/loan",
+            ko: "https://www.calcome.com/ko/finance/fixed-deposit",
+            en: "https://www.calcome.com/en/finance/fixed-deposit",
           },
         },
       },
       {
-        url: "https://calcome.com/en/finance/loan",
+        url: "https://www.calcome.com/ko/finance/loan",
         changeFrequency: "monthly",
         priority: 0.9,
         alternates: {
           languages: {
-            ko: "https://calcome.com/ko/finance/loan",
-            en: "https://calcome.com/en/finance/loan",
+            ko: "https://www.calcome.com/ko/finance/loan",
+            en: "https://www.calcome.com/en/finance/loan",
           },
         },
       },
       {
-        url: "https://calcome.com/about",
+        url: "https://www.calcome.com/en/finance/loan",
+        changeFrequency: "monthly",
+        priority: 0.9,
+        alternates: {
+          languages: {
+            ko: "https://www.calcome.com/ko/finance/loan",
+            en: "https://www.calcome.com/en/finance/loan",
+          },
+        },
+      },
+      {
+        url: "https://www.calcome.com/about",
         changeFrequency: "yearly",
         priority: 0.5,
       },
       {
-        url: "https://calcome.com/privacy",
+        url: "https://www.calcome.com/privacy",
         changeFrequency: "yearly",
         priority: 0.3,
       },
       {
-        url: "https://calcome.com/terms",
+        url: "https://www.calcome.com/terms",
         changeFrequency: "yearly",
         priority: 0.3,
       },
       {
-        url: "https://calcome.com/contact",
+        url: "https://www.calcome.com/contact",
         changeFrequency: "yearly",
         priority: 0.4,
       },
     ]);
+  });
+
+  it("keeps sitemap and hreflang URLs on the production host", () => {
+    const productionHost = new URL(robots().host!).host;
+
+    for (const entry of sitemap()) {
+      expect(new URL(entry.url).host).toBe(productionHost);
+
+      for (const alternate of Object.values(
+        entry.alternates?.languages ?? {},
+      )) {
+        expect(alternate).toBeDefined();
+        if (!alternate) continue;
+
+        expect(new URL(alternate).host).toBe(productionHost);
+      }
+    }
   });
 });
 
@@ -319,7 +336,7 @@ describe("production recovery and navigation", () => {
     expect(JSON.parse(jsonLd!.textContent!)).toMatchObject({
       "@type": "WebSite",
       name: "CalCome",
-      url: "https://calcome.com/",
+      url: "https://www.calcome.com/",
     });
   });
 
