@@ -64,6 +64,28 @@ describe("production metadata routes", () => {
         priority: 0.9,
       },
       {
+        url: "https://calcome.com/ko/employment/severance-pay",
+        changeFrequency: "monthly",
+        priority: 0.9,
+        alternates: {
+          languages: {
+            ko: "https://calcome.com/ko/employment/severance-pay",
+            en: "https://calcome.com/en/employment/severance-pay",
+          },
+        },
+      },
+      {
+        url: "https://calcome.com/en/employment/severance-pay",
+        changeFrequency: "monthly",
+        priority: 0.9,
+        alternates: {
+          languages: {
+            ko: "https://calcome.com/ko/employment/severance-pay",
+            en: "https://calcome.com/en/employment/severance-pay",
+          },
+        },
+      },
+      {
         url: "https://calcome.com/ko/finance/cagr",
         changeFrequency: "monthly",
         priority: 0.9,

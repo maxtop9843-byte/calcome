@@ -4,7 +4,10 @@ export type PublishedCalculator = {
   description: string;
   keywords: readonly string[];
   category: "금융";
-  href: `/finance/${string}` | `/${"ko" | "en"}/finance/${string}`;
+  href:
+    | `/finance/${string}`
+    | `/${"ko" | "en"}/finance/${string}`
+    | `/${"ko" | "en"}/employment/${string}`;
 };
 
 export const publishedCalculators = [
@@ -47,5 +50,13 @@ export const publishedCalculators = [
     keywords: ["복리", "compound interest", "투자", "저축", "이자"],
     category: "금융",
     href: "/finance/compound-interest",
+  },
+  {
+    id: "severance-pay",
+    name: "퇴직금 계산기",
+    description: "평균임금과 계속근로기간으로 예상 법정 퇴직금을 계산합니다.",
+    keywords: ["퇴직금", "severance", "평균임금", "근속기간"],
+    category: "금융",
+    href: "/ko/employment/severance-pay",
   },
 ] as const satisfies readonly PublishedCalculator[];

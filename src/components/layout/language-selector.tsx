@@ -11,6 +11,9 @@ function localizedDestination(pathname: string, locale: CompoundLocale) {
   const localizedCalculator = pathname.match(
     /^\/(?:ko|en)\/finance\/(compound-interest|savings|fixed-deposit|loan|cagr)$/,
   );
+  if (/^\/(?:ko|en)\/employment\/severance-pay$/.test(pathname)) {
+    return `/${locale}/employment/severance-pay`;
+  }
   if (localizedCalculator) {
     return `/${locale}/finance/${localizedCalculator[1]}`;
   }

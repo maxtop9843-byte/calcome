@@ -11,6 +11,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: absoluteUrl("/ko/employment/severance-pay"),
+      changeFrequency: "monthly",
+      priority: 0.9,
+      alternates: {
+        languages: {
+          ko: absoluteUrl("/ko/employment/severance-pay"),
+          en: absoluteUrl("/en/employment/severance-pay"),
+        },
+      },
+    },
+    {
+      url: absoluteUrl("/en/employment/severance-pay"),
+      changeFrequency: "monthly",
+      priority: 0.9,
+      alternates: {
+        languages: {
+          ko: absoluteUrl("/ko/employment/severance-pay"),
+          en: absoluteUrl("/en/employment/severance-pay"),
+        },
+      },
+    },
+    {
       url: absoluteUrl("/ko/finance/cagr"),
       changeFrequency: "monthly",
       priority: 0.9,

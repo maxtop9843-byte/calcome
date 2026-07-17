@@ -128,4 +128,16 @@ describe("LanguageSelector", () => {
       "/ko/finance/cagr",
     );
   });
+
+  it("preserves the localized severance destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector locale="ko" pathname="/ko/employment/severance-pay" />,
+    );
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/employment/severance-pay",
+    );
+  });
 });
