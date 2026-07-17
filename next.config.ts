@@ -63,6 +63,11 @@ const nextConfig: NextConfig = {
         destination: "/ko/employment/average-wage",
         permanent: true,
       },
+      {
+        source: "/employment/salary-raise",
+        destination: "/ko/employment/salary-raise",
+        permanent: true,
+      },
     ];
   },
 };

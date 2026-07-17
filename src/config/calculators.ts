@@ -112,4 +112,12 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/employment/average-wage",
   },
+  {
+    id: "salary-raise",
+    name: "연봉 인상률 계산기",
+    description: "현재 급여와 인상률로 인상 후 연봉·월급과 증가액을 계산합니다.",
+    keywords: ["연봉 인상률", "급여 인상", "연봉 협상", "salary raise"],
+    category: "금융",
+    href: "/ko/employment/salary-raise",
+  },
 ] as const satisfies readonly PublishedCalculator[];

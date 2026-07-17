@@ -69,6 +69,11 @@ describe("legacy calculator redirects", () => {
         destination: "/ko/employment/average-wage",
         permanent: true,
       },
+      {
+        source: "/employment/salary-raise",
+        destination: "/ko/employment/salary-raise",
+        permanent: true,
+      },
     ]);
   });
 });
