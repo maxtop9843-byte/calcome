@@ -83,6 +83,28 @@ describe("production metadata routes", () => {
         },
       },
       {
+        url: "https://www.calcome.com/ko/employment/weekly-holiday-pay",
+        changeFrequency: "monthly",
+        priority: 0.9,
+        alternates: {
+          languages: {
+            ko: "https://www.calcome.com/ko/employment/weekly-holiday-pay",
+            en: "https://www.calcome.com/en/employment/weekly-holiday-pay",
+          },
+        },
+      },
+      {
+        url: "https://www.calcome.com/en/employment/weekly-holiday-pay",
+        changeFrequency: "monthly",
+        priority: 0.9,
+        alternates: {
+          languages: {
+            ko: "https://www.calcome.com/ko/employment/weekly-holiday-pay",
+            en: "https://www.calcome.com/en/employment/weekly-holiday-pay",
+          },
+        },
+      },
+      {
         url: "https://www.calcome.com/en/employment/unemployment-benefits",
         changeFrequency: "monthly",
         priority: 0.9,

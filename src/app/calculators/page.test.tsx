@@ -22,7 +22,10 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(8);
+    ).toHaveLength(9);
+    expect(
+      screen.getByRole("link", { name: /주휴수당 계산기/ }),
+    ).toHaveAttribute("href", "/ko/employment/weekly-holiday-pay");
     expect(screen.getByRole("link", { name: /CAGR 계산기/ })).toHaveAttribute(
       "href",
       "/ko/finance/cagr",
@@ -61,45 +64,50 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 8,
+        numberOfItems: 9,
         itemListElement: [
           {
             position: 1,
+            name: "주휴수당 계산기",
+            url: "https://www.calcome.com/ko/employment/weekly-holiday-pay",
+          },
+          {
+            position: 2,
             name: "CAGR 계산기",
             url: "https://www.calcome.com/ko/finance/cagr",
           },
           {
-            position: 2,
+            position: 3,
             name: "예금 계산기",
             url: "https://www.calcome.com/ko/finance/fixed-deposit",
           },
           {
-            position: 3,
+            position: 4,
             name: "적금 계산기",
             url: "https://www.calcome.com/ko/finance/savings",
           },
           {
-            position: 4,
+            position: 5,
             name: "대출 계산기",
             url: "https://www.calcome.com/ko/finance/loan",
           },
           {
-            position: 5,
+            position: 6,
             name: "복리 계산기",
             url: "https://www.calcome.com/ko/finance/compound-interest",
           },
           {
-            position: 6,
+            position: 7,
             name: "퇴직금 계산기",
             url: "https://www.calcome.com/ko/employment/severance-pay",
           },
           {
-            position: 7,
+            position: 8,
             name: "실업급여 계산기",
             url: "https://www.calcome.com/ko/employment/unemployment-benefits",
           },
           {
-            position: 8,
+            position: 9,
             name: "실수령액 계산기",
             url: "https://www.calcome.com/ko/employment/net-salary",
           },

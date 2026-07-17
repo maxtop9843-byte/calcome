@@ -11,6 +11,14 @@ export type PublishedCalculator = {
 
 export const publishedCalculators = [
   {
+    id: "weekly-holiday-pay",
+    name: "주휴수당 계산기",
+    description: "시급과 주 소정근로시간으로 예상 주휴수당을 계산합니다.",
+    keywords: ["주휴수당", "시급", "주급", "근로시간", "weekly holiday pay"],
+    category: "금융",
+    href: "/ko/employment/weekly-holiday-pay",
+  },
+  {
     id: "cagr",
     name: "CAGR 계산기",
     description: "시작값과 종료값의 연평균 복합성장률과 총수익률을 계산합니다.",

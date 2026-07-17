@@ -43,6 +43,11 @@ const nextConfig: NextConfig = {
         destination: "/ko/employment/unemployment-benefits",
         permanent: true,
       },
+      {
+        source: "/employment/weekly-holiday-pay",
+        destination: "/ko/employment/weekly-holiday-pay",
+        permanent: true,
+      },
     ];
   },
 };
