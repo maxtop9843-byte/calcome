@@ -35,6 +35,13 @@ describe("DepositCalculator", () => {
     );
     expect(screen.getByLabelText("예치 기간 *")).toHaveValue("");
     expect(screen.getByLabelText("연 이자율 *")).toHaveValue("");
+    for (const input of [
+      screen.getByLabelText("예치 원금 *"),
+      screen.getByLabelText("예치 기간 *"),
+      screen.getByLabelText("연 이자율 *"),
+    ]) {
+      expect(input).toHaveClass("text-base", "sm:text-sm");
+    }
     expect(
       within(screen.getByTestId("primary-results")).getAllByText("-"),
     ).toHaveLength(3);
@@ -106,6 +113,16 @@ describe("DepositCalculator", () => {
     expect(screen.getByRole("alert")).toBeVisible();
     expect(scrollIntoView).not.toHaveBeenCalled();
   });
+  it("dismisses numeric input focus after a successful keyboard submit", async () => {
+    const user = userEvent.setup();
+    render(<DepositCalculator />);
+    await fillRequired(user);
+    const rate = screen.getByLabelText("연 이자율 *");
+    rate.focus();
+    await user.keyboard("{Enter}");
+    expect(rate).not.toHaveFocus();
+    await waitFor(() => expect(scrollIntoView).toHaveBeenCalledOnce());
+  });
   it("replays on recalculation and reset restores the empty state", async () => {
     const user = userEvent.setup();
     render(<DepositCalculator />);
@@ -114,7 +131,9 @@ describe("DepositCalculator", () => {
       name: "만기 결과 계산하기",
     });
     await user.click(calculate);
+    await waitFor(() => expect(scrollIntoView).toHaveBeenCalledTimes(1));
     await user.click(calculate);
+    await waitFor(() => expect(scrollIntoView).toHaveBeenCalledTimes(2));
     expect(screen.getByTestId("deposit-growth-chart")).toHaveAttribute(
       "data-animation-run",
       "2",
@@ -149,9 +168,11 @@ describe("DepositCalculator", () => {
     expect(screen.getAllByTestId("animated-won")[1]).toHaveTextContent(
       "₩10,000,000",
     );
-    expect(scrollIntoView).toHaveBeenCalledWith({
-      behavior: "auto",
-      block: "start",
-    });
+    await waitFor(() =>
+      expect(scrollIntoView).toHaveBeenCalledWith({
+        behavior: "auto",
+        block: "start",
+      }),
+    );
   });
 });

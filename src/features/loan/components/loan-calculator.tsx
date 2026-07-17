@@ -1,13 +1,7 @@
 "use client";
 
 import Decimal from "decimal.js";
-import {
-  type ChangeEvent,
-  type FormEvent,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { type ChangeEvent, type FormEvent, useRef, useState } from "react";
 
 import {
   PrimaryResults,
@@ -16,6 +10,7 @@ import {
 } from "@/components/calculators/calculator-workspace";
 import { Button } from "@/components/ui/button";
 import { AnimatedWon } from "@/features/compound-interest/components/animated-won";
+import { useStableResultScroll } from "@/hooks/use-stable-result-scroll";
 import { formatMoneyInput } from "@/lib/input/money";
 
 import { calculateLoan } from "../calculate";
@@ -38,7 +33,7 @@ const INITIAL_VALUES: LoanFormValues = {
   loanPeriod: "",
 };
 const controlClass =
-  "mt-1.5 h-10 w-full rounded-lg border bg-background px-3 text-sm tabular-nums shadow-sm outline-none transition placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive";
+  "mt-1.5 h-10 w-full rounded-lg border bg-background px-3 text-base tabular-nums shadow-sm outline-none transition placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive sm:text-sm";
 
 function NumberField({
   field,
@@ -120,19 +115,12 @@ export function LoanCalculator({ locale = "ko" }: { locale?: LoanLocale }) {
   const [animationKey, setAnimationKey] = useState(0);
   const [announcement, setAnnouncement] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
-  const resultRef = useRef<HTMLElement>(null);
-  const pendingScroll = useRef(false);
-
-  useEffect(() => {
-    if (!result || !pendingScroll.current) return;
-    pendingScroll.current = false;
-    const reduced =
-      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
-    resultRef.current?.scrollIntoView?.({
-      behavior: reduced ? "auto" : "smooth",
-      block: "start",
-    });
-  }, [result]);
+  const {
+    resultRef,
+    noteNumericInputFocus,
+    requestResultScroll,
+    cancelResultScroll,
+  } = useStableResultScroll(result);
   function updateValue(field: LoanField, value: string) {
     setValues((current) => ({ ...current, [field]: value }));
   }
@@ -166,7 +154,7 @@ export function LoanCalculator({ locale = "ko" }: { locale?: LoanLocale }) {
       ...validation.data,
       repaymentType: "equal-principal",
     });
-    pendingScroll.current = true;
+    requestResultScroll();
     setResult(next);
     setComparison({ equalPayment, equalPrincipal });
     setAppliedType(validation.data.repaymentType);
@@ -178,7 +166,7 @@ export function LoanCalculator({ locale = "ko" }: { locale?: LoanLocale }) {
     setAnnouncement(copy.complete(formatLoanWon(next.monthlyPayment)));
   }
   function reset() {
-    pendingScroll.current = false;
+    cancelResultScroll();
     setValues(INITIAL_VALUES);
     setErrors({});
     setResult(null);
@@ -217,7 +205,8 @@ export function LoanCalculator({ locale = "ko" }: { locale?: LoanLocale }) {
           ref={formRef}
           noValidate
           onSubmit={submit}
-          className={compactCalculatorSettingsClass}
+          onFocusCapture={noteNumericInputFocus}
+          className={`${compactCalculatorSettingsClass} min-w-0`}
         >
           <p className="text-sm font-semibold text-primary">
             {copy.inputEyebrow}
