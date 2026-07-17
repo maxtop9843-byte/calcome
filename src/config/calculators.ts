@@ -5,7 +5,6 @@ export type PublishedCalculator = {
   keywords: readonly string[];
   category: "금융";
   href:
-    | `/finance/${string}`
     | `/${"ko" | "en"}/finance/${string}`
     | `/${"ko" | "en"}/employment/${string}`;
 };
@@ -49,7 +48,7 @@ export const publishedCalculators = [
     description: "초기 투자금과 정기 납입액의 예상 복리 성장을 계산합니다.",
     keywords: ["복리", "compound interest", "투자", "저축", "이자"],
     category: "금융",
-    href: "/finance/compound-interest",
+    href: "/ko/finance/compound-interest",
   },
   {
     id: "severance-pay",

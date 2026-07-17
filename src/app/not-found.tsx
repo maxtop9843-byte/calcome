@@ -28,7 +28,7 @@ export default function NotFound() {
             홈으로 돌아가기
           </Link>
           <Link
-            href="/finance/compound-interest"
+            href="/ko/finance/compound-interest"
             className={cn(
               buttonVariants({ variant: "outline", size: "lg" }),
               "h-11 px-5",

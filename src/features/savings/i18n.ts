@@ -56,7 +56,7 @@ const ko = {
         "초기 원금과 정기 납입의 장기 복리 성장을 계산합니다.",
       ],
       [
-        "/finance/deposit",
+        "/ko/finance/fixed-deposit",
         "예금 계산기",
         "목돈 예치의 세전·세후 만기액을 계산합니다.",
       ],
@@ -225,7 +225,7 @@ const en = {
         "Estimate long-term compound growth with recurring contributions.",
       ],
       [
-        "/finance/deposit",
+        "/en/finance/fixed-deposit",
         "Deposit Calculator",
         "Estimate before- and after-tax maturity for a lump-sum deposit.",
       ],
