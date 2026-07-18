@@ -104,4 +104,12 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/employment/social-insurance",
   },
+  {
+    id: "average-wage",
+    name: "평균임금 계산기",
+    description: "임금총액과 산정기간 총일수로 1일 평균임금을 계산합니다.",
+    keywords: ["평균임금", "임금총액", "퇴직금", "average wage"],
+    category: "금융",
+    href: "/ko/employment/average-wage",
+  },
 ] as const satisfies readonly PublishedCalculator[];
