@@ -59,6 +59,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/finance/jeonse-loan-interest",
+        destination: "/ko/finance/jeonse-loan-interest",
+        permanent: true,
+      },
+      {
         source: "/employment/net-salary",
         destination: "/ko/employment/net-salary",
         permanent: true,
