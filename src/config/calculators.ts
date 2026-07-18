@@ -178,4 +178,12 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/employment/retirement-pension",
   },
+  {
+    id: "gross-up-salary",
+    name: "세전 급여 역산 계산기",
+    description: "목표 실수령액과 공제율로 필요한 세전 연봉·월급을 역산합니다.",
+    keywords: ["세전 급여", "급여 역산", "실수령액", "gross up salary"],
+    category: "금융",
+    href: "/ko/employment/gross-up-salary",
+  },
 ] as const satisfies readonly PublishedCalculator[];

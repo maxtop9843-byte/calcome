@@ -12,7 +12,7 @@ function localizedDestination(pathname: string, locale: CompoundLocale) {
     /^\/(?:ko|en)\/finance\/(compound-interest|savings|fixed-deposit|loan|cagr)$/,
   );
   const employmentCalculator = pathname.match(
-    /^\/(?:ko|en)\/employment\/(severance-pay|net-salary|unemployment-benefits|weekly-holiday-pay|annual-leave-allowance|hourly-wage|social-insurance|average-wage|salary-raise|salary-conversion|overtime-pay|night-work-pay|holiday-work-pay|minimum-wage|retirement-pension)$/,
+    /^\/(?:ko|en)\/employment\/(severance-pay|net-salary|unemployment-benefits|weekly-holiday-pay|annual-leave-allowance|hourly-wage|social-insurance|average-wage|salary-raise|salary-conversion|gross-up-salary|overtime-pay|night-work-pay|holiday-work-pay|minimum-wage|retirement-pension)$/,
   );
   if (employmentCalculator) {
     return `/${locale}/employment/${employmentCalculator[1]}`;

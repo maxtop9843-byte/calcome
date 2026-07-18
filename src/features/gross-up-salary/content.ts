@@ -1,0 +1,126 @@
+export type GrossUpSalaryLocale = "ko" | "en";
+
+export const grossUpSalaryContent = {
+  ko: {
+    title: "세전 급여 역산 계산기",
+    metaTitle: "세전 급여 역산 계산기 | 목표 실수령액 계산",
+    description:
+      "목표 실수령액과 예상 공제율을 입력해 필요한 세전 연봉·월급과 예상 공제액을 역산합니다.",
+    category: "근로·급여 계산기",
+    intro:
+      "원하는 실수령액을 받기 위해 필요한 세전 급여를 간단한 공제율 가정으로 확인하세요.",
+    input: "목표 급여 조건",
+    annual: "연간 실수령액",
+    monthly: "월 실수령액",
+    salary: "목표 실수령액",
+    annualPlaceholder: "예: 45,000,000",
+    monthlyPlaceholder: "예: 3,500,000",
+    deductionRate: "예상 공제율",
+    ratePlaceholder: "예: 12",
+    calculate: "필요 세전 급여 계산하기",
+    reset: "초기화",
+    error: "입력값을 확인해 주세요.",
+    result: "예상 결과",
+    annualGross: "필요 세전 연봉",
+    monthlyGross: "필요 세전 월급",
+    annualDeductions: "연간 예상 공제액",
+    note: "입력한 단일 공제율을 적용한 단순 역산이며 실제 세금·4대보험 계산이 아닙니다.",
+    details: "목표와 공제 상세",
+    annualNet: "목표 연 실수령액",
+    monthlyNet: "목표 월 실수령액",
+    monthlyDeductions: "월 예상 공제액",
+    appliedRate: "적용 공제율",
+    empty: "계산하면 필요한 세전 급여와 예상 공제액이 표시됩니다.",
+    explanationTitle: "계산 방법",
+    explanation: [
+      "필요 세전 급여는 목표 실수령액을 (1 - 예상 공제율 ÷ 100)으로 나눕니다.",
+      "연간 입력은 12로 나누어 월 금액을, 월 입력은 12를 곱해 연 금액을 계산합니다.",
+      "예상 공제액은 필요 세전 급여에서 목표 실수령액을 뺀 값입니다.",
+    ],
+    cautionsTitle: "중요한 주의사항",
+    cautions: [
+      "실제 공제는 소득세 누진구간, 지방소득세, 4대보험, 비과세 수당과 부양가족에 따라 달라집니다.",
+      "공제율은 사용자가 직접 가정하는 값이며 특정 연봉의 실제 실효세율을 보장하지 않습니다.",
+      "연봉 협상이나 계약 전에는 회사 급여명세와 세무·노무 기준을 확인하세요.",
+    ],
+    faq: [
+      [
+        "급여 역산이란 무엇인가요?",
+        "받고 싶은 실수령액에서 출발해 가정한 공제율을 반영한 세전 급여를 구하는 방식입니다.",
+      ],
+      [
+        "공제율에는 무엇을 넣어야 하나요?",
+        "소득세와 4대보험 등을 합친 예상 비율을 입력하되 과거 급여명세의 실효 공제율을 참고할 수 있습니다.",
+      ],
+      [
+        "실제 실수령액과 같나요?",
+        "아닙니다. 누진세와 개인별 공제 조건을 단일 비율로 단순화한 계획용 추정치입니다.",
+      ],
+      [
+        "월급 기준으로 계산할 수 있나요?",
+        "네. 월 실수령액을 선택하면 필요한 월급과 연봉을 함께 보여드립니다.",
+      ],
+    ],
+  },
+  en: {
+    title: "Gross-Up Salary Calculator",
+    metaTitle: "Gross-Up Salary Calculator",
+    description:
+      "Enter a target take-home salary and estimated deduction rate to calculate the required gross annual and monthly pay.",
+    category: "Employment calculator",
+    intro:
+      "Estimate the gross salary needed to reach a take-home target using a simple deduction-rate assumption.",
+    input: "Target pay inputs",
+    annual: "Annual take-home",
+    monthly: "Monthly take-home",
+    salary: "Target take-home salary",
+    annualPlaceholder: "e.g. 45,000,000",
+    monthlyPlaceholder: "e.g. 3,500,000",
+    deductionRate: "Estimated deduction rate",
+    ratePlaceholder: "e.g. 12",
+    calculate: "Calculate required gross pay",
+    reset: "Reset",
+    error: "Check the highlighted values.",
+    result: "Estimated result",
+    annualGross: "Required annual gross",
+    monthlyGross: "Required monthly gross",
+    annualDeductions: "Estimated annual deductions",
+    note: "A simple gross-up using one deduction rate, not an actual tax or social-insurance calculation.",
+    details: "Target and deductions",
+    annualNet: "Target annual take-home",
+    monthlyNet: "Target monthly take-home",
+    monthlyDeductions: "Estimated monthly deductions",
+    appliedRate: "Applied deduction rate",
+    empty: "Calculate to see the required gross pay and estimated deductions.",
+    explanationTitle: "How it is calculated",
+    explanation: [
+      "Required gross pay equals target take-home pay divided by (1 - estimated deduction rate ÷ 100).",
+      "Annual input is divided by 12 for monthly figures; monthly input is multiplied by 12 for annual figures.",
+      "Estimated deductions equal required gross pay minus target take-home pay.",
+    ],
+    cautionsTitle: "Important cautions",
+    cautions: [
+      "Actual deductions vary with progressive income tax, local tax, social insurance, tax-free allowances, and dependents.",
+      "You supply the deduction rate; the calculator does not guarantee an effective rate for any salary.",
+      "Confirm payroll, tax, and employment terms before negotiations or contracts.",
+    ],
+    faq: [
+      [
+        "What does grossing up salary mean?",
+        "It starts with desired take-home pay and estimates gross pay after applying an assumed deduction rate.",
+      ],
+      [
+        "What deduction rate should I enter?",
+        "Use an estimate covering tax and contributions; a recent payslip's effective deduction rate can be a reference.",
+      ],
+      [
+        "Will this match my actual take-home pay?",
+        "Not exactly. It simplifies progressive taxes and individual deductions into one planning rate.",
+      ],
+      [
+        "Can I start with a monthly target?",
+        "Yes. Select monthly take-home to see both required monthly and annual gross pay.",
+      ],
+    ],
+  },
+} as const;
