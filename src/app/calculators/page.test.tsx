@@ -22,7 +22,7 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(28);
+    ).toHaveLength(29);
     expect(
       screen.getByRole("link", { name: /대출 이자 비교 계산기/ }),
     ).toHaveAttribute("href", "/ko/finance/loan-interest-comparison");
@@ -38,6 +38,9 @@ describe("calculator directory", () => {
     expect(
       screen.getByRole("link", { name: /전세대출 이자 계산기/ }),
     ).toHaveAttribute("href", "/ko/finance/jeonse-loan-interest");
+    expect(
+      screen.getByRole("link", { name: /신용대출 이자 계산기/ }),
+    ).toHaveAttribute("href", "/ko/finance/credit-loan-interest");
     expect(screen.getByRole("link", { name: /LTV 계산기/ })).toHaveAttribute(
       "href",
       "/ko/finance/ltv",
@@ -121,7 +124,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 28,
+        numberOfItems: 29,
         itemListElement: [
           {
             position: 1,
@@ -262,6 +265,11 @@ describe("calculator directory", () => {
             position: 28,
             name: "전세대출 이자 계산기",
             url: "https://www.calcome.com/ko/finance/jeonse-loan-interest",
+          },
+          {
+            position: 29,
+            name: "신용대출 이자 계산기",
+            url: "https://www.calcome.com/ko/finance/credit-loan-interest",
           },
         ],
       },
