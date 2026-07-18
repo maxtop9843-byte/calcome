@@ -179,6 +179,18 @@ describe("LanguageSelector", () => {
     );
   });
 
+  it("preserves the localized balloon payment destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector locale="ko" pathname="/ko/finance/balloon-payment" />,
+    );
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/finance/balloon-payment",
+    );
+  });
+
   it("preserves the localized severance destination", async () => {
     const user = userEvent.setup();
     render(

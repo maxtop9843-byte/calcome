@@ -49,6 +49,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/finance/balloon-payment",
+        destination: "/ko/finance/balloon-payment",
+        permanent: true,
+      },
+      {
         source: "/employment/net-salary",
         destination: "/ko/employment/net-salary",
         permanent: true,
