@@ -209,4 +209,20 @@ describe("LanguageSelector", () => {
       "/en/employment/salary-conversion",
     );
   });
+
+  it("preserves the localized annual-leave destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector
+        locale="ko"
+        pathname="/ko/employment/annual-leave-allowance"
+      />,
+    );
+
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/employment/annual-leave-allowance",
+    );
+  });
 });

@@ -49,6 +49,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/employment/annual-leave-allowance",
+        destination: "/ko/employment/annual-leave-allowance",
+        permanent: true,
+      },
+      {
         source: "/employment/hourly-wage",
         destination: "/ko/employment/hourly-wage",
         permanent: true,

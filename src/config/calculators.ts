@@ -161,4 +161,13 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/employment/minimum-wage",
   },
+  {
+    id: "annual-leave-allowance",
+    name: "연차수당 계산기",
+    description:
+      "근속·출근 조건과 통상시급으로 예상 미사용 연차수당을 계산합니다.",
+    keywords: ["연차", "유급휴가", "연차 일수", "annual leave"],
+    category: "금융",
+    href: "/ko/employment/annual-leave-allowance",
+  },
 ] as const satisfies readonly PublishedCalculator[];
