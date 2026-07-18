@@ -225,4 +225,20 @@ describe("LanguageSelector", () => {
       "/en/employment/annual-leave-allowance",
     );
   });
+
+  it("preserves the localized gross-up salary destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector
+        locale="ko"
+        pathname="/ko/employment/gross-up-salary"
+      />,
+    );
+
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/employment/gross-up-salary",
+    );
+  });
 });

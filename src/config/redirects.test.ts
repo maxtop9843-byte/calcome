@@ -80,6 +80,11 @@ describe("legacy calculator redirects", () => {
         permanent: true,
       },
       {
+        source: "/employment/gross-up-salary",
+        destination: "/ko/employment/gross-up-salary",
+        permanent: true,
+      },
+      {
         source: "/employment/salary-conversion",
         destination: "/ko/employment/salary-conversion",
         permanent: true,
