@@ -22,7 +22,7 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(17);
+    ).toHaveLength(18);
     expect(
       screen.getByRole("link", { name: /주휴수당 계산기/ }),
     ).toHaveAttribute("href", "/ko/employment/weekly-holiday-pay");
@@ -70,6 +70,9 @@ describe("calculator directory", () => {
       screen.getByRole("link", { name: /연봉 인상률 계산기/ }),
     ).toHaveAttribute("href", "/ko/employment/salary-raise");
     expect(
+      screen.getByRole("link", { name: /연봉·월급 환산 계산기/ }),
+    ).toHaveAttribute("href", "/ko/employment/salary-conversion");
+    expect(
       screen.getByRole("link", { name: /연장근로수당 계산기/ }),
     ).toHaveAttribute("href", "/ko/employment/overtime-pay");
     expect(
@@ -86,7 +89,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 17,
+        numberOfItems: 18,
         itemListElement: [
           {
             position: 1,
@@ -155,21 +158,26 @@ describe("calculator directory", () => {
           },
           {
             position: 14,
+            name: "연봉·월급 환산 계산기",
+            url: "https://www.calcome.com/ko/employment/salary-conversion",
+          },
+          {
+            position: 15,
             name: "연장근로수당 계산기",
             url: "https://www.calcome.com/ko/employment/overtime-pay",
           },
           {
-            position: 15,
+            position: 16,
             name: "야간근로수당 계산기",
             url: "https://www.calcome.com/ko/employment/night-work-pay",
           },
           {
-            position: 16,
+            position: 17,
             name: "휴일근로수당 계산기",
             url: "https://www.calcome.com/ko/employment/holiday-work-pay",
           },
           {
-            position: 17,
+            position: 18,
             name: "최저임금 계산기",
             url: "https://www.calcome.com/ko/employment/minimum-wage",
           },

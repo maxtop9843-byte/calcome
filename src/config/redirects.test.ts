@@ -75,6 +75,11 @@ describe("legacy calculator redirects", () => {
         permanent: true,
       },
       {
+        source: "/employment/salary-conversion",
+        destination: "/ko/employment/salary-conversion",
+        permanent: true,
+      },
+      {
         source: "/employment/overtime-pay",
         destination: "/ko/employment/overtime-pay",
         permanent: true,

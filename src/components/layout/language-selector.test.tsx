@@ -193,4 +193,20 @@ describe("LanguageSelector", () => {
       "/en/employment/minimum-wage",
     );
   });
+
+  it("preserves the localized salary-conversion destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector
+        locale="ko"
+        pathname="/ko/employment/salary-conversion"
+      />,
+    );
+
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/employment/salary-conversion",
+    );
+  });
 });

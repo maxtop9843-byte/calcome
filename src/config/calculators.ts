@@ -122,6 +122,14 @@ export const publishedCalculators = [
     href: "/ko/employment/salary-raise",
   },
   {
+    id: "salary-conversion",
+    name: "연봉·월급 환산 계산기",
+    description: "연봉과 월급을 같은 급여 기준으로 간편하게 환산합니다.",
+    keywords: ["연봉 환산", "월급 환산", "급여 환산", "salary conversion"],
+    category: "금융",
+    href: "/ko/employment/salary-conversion",
+  },
+  {
     id: "overtime-pay",
     name: "연장근로수당 계산기",
     description: "통상시급과 연장근로시간으로 예상 시간외수당을 계산합니다.",
