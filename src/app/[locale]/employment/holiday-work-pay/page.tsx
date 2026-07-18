@@ -7,7 +7,9 @@ import {
   createPageStructuredData,
   JsonLdScript,
 } from "@/lib/seo/structured-data";
+
 const locales = ["ko", "en"] as const;
+
 export async function generateMetadata({
   params,
 }: {
@@ -18,6 +20,7 @@ export async function generateMetadata({
     ? createMetadata(locale as Locale)
     : {};
 }
+
 export default async function Page({
   params,
 }: {
@@ -25,8 +28,12 @@ export default async function Page({
 }) {
   const { locale } = await params;
   if (!locales.includes(locale as Locale)) notFound();
-  const c = content[locale as Locale],
-    path = `/${locale}/employment/holiday-work-pay`;
+  const selectedLocale = locale as Locale;
+  const c = content[selectedLocale];
+  const path = `/${locale}/employment/holiday-work-pay`;
+  const home = locale === "ko" ? "홈" : "Home";
+  const calculators = locale === "ko" ? "계산기" : "Calculators";
+
   return (
     <main id="main-content" className="flex-1">
       <JsonLdScript
@@ -34,19 +41,28 @@ export default async function Page({
           name: c.title,
           description: c.description,
           path,
-          locale: locale as Locale,
+          locale: selectedLocale,
           breadcrumbs: [
-            { name: locale === "ko" ? "홈" : "Home", path: "/" },
+            { name: home, path: "/" },
+            { name: calculators, path: "/calculators" },
             { name: c.title, path },
           ],
         })}
       />
       <div className="mx-auto w-full max-w-[1440px] px-5 py-8">
         <h1 className="text-4xl font-semibold">{c.title}</h1>
-        <p>{c.description}</p>
+        <p className="mt-3 text-muted-foreground">{c.description}</p>
         <div className="mt-6">
-          <HolidayWorkPayCalculator locale={locale as Locale} />
+          <HolidayWorkPayCalculator locale={selectedLocale} />
         </div>
+        <section className="mt-8 rounded-xl border bg-card p-5">
+          <h2 className="text-xl font-semibold">{c.cautionTitle}</h2>
+          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-muted-foreground">
+            {c.cautions.map((caution) => (
+              <li key={caution}>{caution}</li>
+            ))}
+          </ul>
+        </section>
       </div>
     </main>
   );
