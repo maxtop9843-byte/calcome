@@ -16,6 +16,7 @@ describe("SalaryRaiseCalculator", () => {
     expect(screen.getByText("현재 연봉")).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "초기화" }));
     expect(salary).toHaveValue("");
+    expect(screen.getByRole("radio", { name: /연봉/ })).toBeChecked();
   });
   it("renders localized validation errors", () => {
     render(<SalaryRaiseCalculator locale="en" />);
