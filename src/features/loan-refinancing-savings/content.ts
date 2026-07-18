@@ -1,0 +1,126 @@
+export type LoanRefinancingLocale = "ko" | "en";
+
+export const loanRefinancingContent = {
+  ko: {
+    title: "대출 대환 절감 계산기",
+    metaTitle: "대출 대환 절감 계산기 | 갈아타기 손익 비교",
+    description:
+      "현재 대출과 신규 금리의 월 상환액, 이자 절감액, 대환비용 반영 순절감액과 손익분기점을 계산합니다.",
+    category: "대출 계산기",
+    intro:
+      "남은 원금과 기간이 같다는 조건에서 대환대출의 실질적인 절감 효과를 확인하세요.",
+    input: "대환 조건",
+    remainingBalance: "현재 대출잔액",
+    currentAnnualRate: "현재 연이율",
+    newAnnualRate: "신규 연이율",
+    remainingMonths: "잔여 상환기간",
+    refinancingCosts: "대환비용",
+    months: "개월",
+    calculate: "대환 절감액 계산하기",
+    reset: "초기화",
+    error: "입력값을 확인해 주세요.",
+    result: "대환 비교 결과",
+    netSavings: "대환비용 반영 순절감액",
+    monthlySavings: "월 상환액 절감",
+    breakEven: "예상 손익분기점",
+    noBreakEven: "손익분기점 없음",
+    grossSavings: "총이자 절감액",
+    currentLoan: "현재 대출",
+    newLoan: "대환 대출",
+    monthlyPayment: "월 상환액",
+    totalInterest: "남은 총이자",
+    empty: "계산하면 대환 전후의 상환액과 절감 효과를 표시합니다.",
+    note: "두 대출 모두 남은 기간 동안 원리금균등상환하고 금리가 일정하다고 가정한 계획용 추정치입니다.",
+    explanationTitle: "계산 방법",
+    explanation: [
+      "현재 대출잔액과 동일한 원금을 같은 잔여기간 동안 각각의 금리로 상환한다고 가정합니다.",
+      "총이자 차이에서 중도상환수수료·인지세 등 입력한 대환비용을 빼 순절감액을 계산합니다.",
+      "대환비용을 월 상환액 절감분으로 나눠 예상 손익분기점을 계산합니다.",
+    ],
+    cautionsTitle: "중요한 주의사항",
+    cautions: [
+      "신규 대출한도, 심사 결과, 우대금리 조건과 실제 부대비용을 금융기관에서 확인하세요.",
+      "변동금리, 거치기간, 상환방식 또는 남은 기간이 달라지면 실제 결과도 달라집니다.",
+      "순절감액이 0 이하이면 입력한 조건에서는 대환의 금전적 이점이 없습니다.",
+    ],
+    faq: [
+      [
+        "대환비용에는 무엇을 넣나요?",
+        "중도상환수수료, 인지세, 설정·해지 비용 등 대환 때문에 추가로 드는 비용을 합산하세요.",
+      ],
+      [
+        "신규 대출 기간을 늘리는 경우도 비교하나요?",
+        "아닙니다. 기간 연장 효과를 숨기지 않도록 현재 남은 기간과 같은 기간을 사용합니다.",
+      ],
+      [
+        "손익분기점은 무엇인가요?",
+        "누적 월 상환액 절감분이 입력한 대환비용과 같아지는 예상 시점입니다.",
+      ],
+      [
+        "금리가 더 높아도 계산할 수 있나요?",
+        "네. 이 경우 절감액이 음수이고 손익분기점이 없다고 표시될 수 있습니다.",
+      ],
+    ],
+  },
+  en: {
+    title: "Loan Refinancing Savings Calculator",
+    metaTitle: "Loan Refinancing Savings Calculator",
+    description:
+      "Compare current and refinanced monthly payments, interest savings, net savings after costs, and estimated break-even timing.",
+    category: "Loan calculator",
+    intro:
+      "Estimate the financial effect of refinancing with the same remaining balance and term.",
+    input: "Refinancing inputs",
+    remainingBalance: "Remaining loan balance",
+    currentAnnualRate: "Current annual rate",
+    newAnnualRate: "New annual rate",
+    remainingMonths: "Remaining term",
+    refinancingCosts: "Refinancing costs",
+    months: "months",
+    calculate: "Calculate refinancing savings",
+    reset: "Reset",
+    error: "Check the highlighted values.",
+    result: "Refinancing comparison",
+    netSavings: "Net savings after costs",
+    monthlySavings: "Monthly payment savings",
+    breakEven: "Estimated break-even",
+    noBreakEven: "No break-even",
+    grossSavings: "Gross interest savings",
+    currentLoan: "Current loan",
+    newLoan: "Refinanced loan",
+    monthlyPayment: "Monthly payment",
+    totalInterest: "Remaining total interest",
+    empty: "Calculate to compare payments and refinancing savings.",
+    note: "A planning estimate assuming fully amortizing payments and constant rates over the same remaining term.",
+    explanationTitle: "How it is calculated",
+    explanation: [
+      "The same remaining balance is amortized over the same remaining term at each rate.",
+      "Net savings equals the difference in total interest minus the refinancing costs entered.",
+      "Estimated break-even divides refinancing costs by monthly payment savings.",
+    ],
+    cautionsTitle: "Important cautions",
+    cautions: [
+      "Confirm approval, discounts, loan limits, and actual fees with the lender.",
+      "Variable rates, interest-only periods, repayment method, or a changed term will change actual results.",
+      "Net savings at or below zero means the entered refinance has no estimated financial benefit.",
+    ],
+    faq: [
+      [
+        "Which refinancing costs should I enter?",
+        "Include prepayment penalties, taxes, registration, discharge, and other incremental closing costs.",
+      ],
+      [
+        "Does this compare extending the loan term?",
+        "No. It uses the current remaining term so a lower payment is not created merely by extending repayment.",
+      ],
+      [
+        "What is break-even?",
+        "It is the estimated point when cumulative monthly payment savings equal refinancing costs.",
+      ],
+      [
+        "Can the new rate be higher?",
+        "Yes. Savings may be negative and no break-even will be shown.",
+      ],
+    ],
+  },
+} as const;
