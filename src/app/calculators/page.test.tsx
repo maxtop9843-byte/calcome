@@ -22,7 +22,7 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(14);
+    ).toHaveLength(15);
     expect(
       screen.getByRole("link", { name: /주휴수당 계산기/ }),
     ).toHaveAttribute("href", "/ko/employment/weekly-holiday-pay");
@@ -80,7 +80,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 14,
+        numberOfItems: 15,
         itemListElement: [
           {
             position: 1,
@@ -151,6 +151,11 @@ describe("calculator directory", () => {
             position: 14,
             name: "연장근로수당 계산기",
             url: "https://www.calcome.com/ko/employment/overtime-pay",
+          },
+          {
+            position: 15,
+            name: "야간근로수당 계산기",
+            url: "https://www.calcome.com/ko/employment/night-work-pay",
           },
         ],
       },
