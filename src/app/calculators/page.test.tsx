@@ -22,7 +22,7 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(26);
+    ).toHaveLength(27);
     expect(
       screen.getByRole("link", { name: /대출 이자 비교 계산기/ }),
     ).toHaveAttribute("href", "/ko/finance/loan-interest-comparison");
@@ -32,6 +32,9 @@ describe("calculator directory", () => {
     expect(
       screen.getByRole("link", { name: /만기 일시상환액 계산기/ }),
     ).toHaveAttribute("href", "/ko/finance/balloon-payment");
+    expect(
+      screen.getByRole("link", { name: /주택담보대출 상환액 계산기/ }),
+    ).toHaveAttribute("href", "/ko/finance/mortgage-payment");
     expect(screen.getByRole("link", { name: /LTV 계산기/ })).toHaveAttribute(
       "href",
       "/ko/finance/ltv",
@@ -115,7 +118,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 26,
+        numberOfItems: 27,
         itemListElement: [
           {
             position: 1,
@@ -246,6 +249,11 @@ describe("calculator directory", () => {
             position: 26,
             name: "만기 일시상환액 계산기",
             url: "https://www.calcome.com/ko/finance/balloon-payment",
+          },
+          {
+            position: 27,
+            name: "주택담보대출 상환액 계산기",
+            url: "https://www.calcome.com/ko/finance/mortgage-payment",
           },
         ],
       },
