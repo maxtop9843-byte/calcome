@@ -145,4 +145,12 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/employment/holiday-work-pay",
   },
+  {
+    id: "minimum-wage",
+    name: "최저임금 계산기",
+    description: "주 소정근로시간별 2026년 최저 주급과 월 환산액을 계산합니다.",
+    keywords: ["최저임금", "최저시급", "최저 주급", "minimum wage"],
+    category: "금융",
+    href: "/ko/employment/minimum-wage",
+  },
 ] as const satisfies readonly PublishedCalculator[];

@@ -83,6 +83,11 @@ const nextConfig: NextConfig = {
         destination: "/ko/employment/holiday-work-pay",
         permanent: true,
       },
+      {
+        source: "/employment/minimum-wage",
+        destination: "/ko/employment/minimum-wage",
+        permanent: true,
+      },
     ];
   },
 };

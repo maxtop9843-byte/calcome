@@ -180,4 +180,17 @@ describe("LanguageSelector", () => {
       "/en/employment/hourly-wage",
     );
   });
+
+  it("preserves the localized minimum-wage destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector locale="ko" pathname="/ko/employment/minimum-wage" />,
+    );
+
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/employment/minimum-wage",
+    );
+  });
 });
