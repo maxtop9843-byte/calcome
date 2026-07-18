@@ -9,6 +9,14 @@ export type PublishedCalculator = {
 
 export const publishedCalculators = [
   {
+    id: "ltv",
+    name: "LTV 계산기",
+    description: "담보가치와 대출금액으로 예상 LTV와 대출 여력을 계산합니다.",
+    keywords: ["LTV", "담보인정비율", "주택담보대출", "loan to value"],
+    category: "금융",
+    href: "/ko/finance/ltv",
+  },
+  {
     id: "dsr",
     name: "DSR 계산기",
     description: "연소득과 대출 원리금 상환액으로 예상 DSR을 계산합니다.",

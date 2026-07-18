@@ -139,6 +139,16 @@ describe("LanguageSelector", () => {
     );
   });
 
+  it("preserves the localized LTV destination", async () => {
+    const user = userEvent.setup();
+    render(<LanguageSelector locale="ko" pathname="/ko/finance/ltv" />);
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/finance/ltv",
+    );
+  });
+
   it("preserves the localized severance destination", async () => {
     const user = userEvent.setup();
     render(
