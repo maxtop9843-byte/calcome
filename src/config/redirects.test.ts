@@ -54,6 +54,11 @@ describe("legacy calculator redirects", () => {
         destination: "/ko/employment/weekly-holiday-pay",
         permanent: true,
       },
+      {
+        source: "/employment/hourly-wage",
+        destination: "/ko/employment/hourly-wage",
+        permanent: true,
+      },
     ]);
   });
 });
