@@ -19,6 +19,7 @@ import type {
   SocialInsuranceFormValues,
   SocialInsuranceLocale,
   SocialInsuranceResult,
+  WorkplaceSize,
 } from "../types";
 import { validateSocialInsurance } from "../validation";
 
@@ -142,6 +143,36 @@ export function SocialInsuranceCalculator({
             onChange={(e) => update("accidentRate", e.target.value)}
             unit={copy.percent}
           />
+          <div className="mt-3">
+            <label htmlFor="workplaceSize" className="text-sm font-medium">
+              {copy.workplaceSize}
+            </label>
+            <select
+              id="workplaceSize"
+              value={values.workplaceSize}
+              onChange={(event) =>
+                update("workplaceSize", event.target.value as WorkplaceSize)
+              }
+              aria-invalid={Boolean(errors.workplaceSize)}
+              aria-describedby={
+                errors.workplaceSize ? "workplaceSize-error" : undefined
+              }
+              className={inputClass}
+            >
+              <option value="under150">{copy.under150}</option>
+              <option value="priority150">{copy.priority150}</option>
+              <option value="between150And999">{copy.between150And999}</option>
+              <option value="over1000OrPublic">{copy.over1000OrPublic}</option>
+            </select>
+            {errors.workplaceSize ? (
+              <p
+                id="workplaceSize-error"
+                className="mt-1 text-sm text-destructive"
+              >
+                {errors.workplaceSize}
+              </p>
+            ) : null}
+          </div>
           <div className="mt-4 grid grid-cols-[minmax(0,1fr)_auto] gap-2">
             <Button type="submit" size="lg" className="h-11">
               {copy.calculate}
@@ -227,7 +258,7 @@ export function SocialInsuranceCalculator({
                     {rows.map((key) => (
                       <tr key={key} className="border-b last:border-0">
                         <th className="py-2 text-left font-normal">
-                          {copy[key]}
+                          {key === "employment" ? copy.employment : copy[key]}
                         </th>
                         <td className="py-2 text-right tabular-nums">
                           {formatSalaryWon(
@@ -244,6 +275,9 @@ export function SocialInsuranceCalculator({
                     ))}
                   </tbody>
                 </table>
+                <p className="mt-3 text-xs leading-5 text-muted-foreground">
+                  {copy.employerEmploymentNote}
+                </p>
               </div>
             ) : (
               <p className="mt-3 text-sm text-muted-foreground">{copy.empty}</p>

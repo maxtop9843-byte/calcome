@@ -6,6 +6,7 @@ import {
   PENSION_EMPLOYEE_RATE,
   PENSION_MONTHLY_CAP,
 } from "@/features/net-salary/constants";
+import { EMPLOYMENT_ADDITIONAL_RATES } from "./constants";
 import type { SocialInsuranceInput, SocialInsuranceResult } from "./types";
 
 const money = (value: Decimal) =>
@@ -33,7 +34,18 @@ export function calculateSocialInsurance(
   const industrialAccident = money(
     contributionBase.mul(input.accidentRate).div(100),
   );
-  const employerTotal = employeeTotal.plus(industrialAccident);
+  const employmentAdditionalRate =
+    EMPLOYMENT_ADDITIONAL_RATES[input.workplaceSize];
+  const employerEmployment = money(
+    contributionBase
+      .mul(EMPLOYMENT_EMPLOYEE_RATE.mul(100).plus(employmentAdditionalRate))
+      .div(100),
+  );
+  const employerTotal = pension
+    .plus(health)
+    .plus(longTermCare)
+    .plus(employerEmployment)
+    .plus(industrialAccident);
   return {
     contributionBase,
     employee: {
@@ -47,7 +59,8 @@ export function calculateSocialInsurance(
       pension,
       health,
       longTermCare,
-      employment,
+      employment: employerEmployment,
+      employmentAdditionalRate,
       industrialAccident,
       total: employerTotal,
     },

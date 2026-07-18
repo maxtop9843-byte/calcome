@@ -1,5 +1,8 @@
 import Link from "next/link";
-import { absoluteUrl, siteConfig } from "@/config/site";
+import {
+  JsonLdScript,
+  createPageStructuredData,
+} from "@/lib/seo/structured-data";
 import { getSocialInsuranceDictionary } from "../i18n";
 import type { SocialInsuranceLocale } from "../types";
 import { SocialInsuranceCalculator } from "./social-insurance-calculator";
@@ -20,6 +23,11 @@ const sources = [
     "고용노동부",
     "Ministry of Employment and Labor",
   ],
+  [
+    "https://edrm.ei.go.kr/ei/eim/eg/ei/eiEminsr/retrieveEi0301Info.do",
+    "고용보험",
+    "Employment Insurance",
+  ],
 ] as const;
 export function LocalizedSocialInsurancePage({
   locale,
@@ -28,53 +36,20 @@ export function LocalizedSocialInsurancePage({
 }) {
   const copy = getSocialInsuranceDictionary(locale).page;
   const path = `/${locale}/employment/social-insurance`;
-  const data = [
-    {
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      name: copy.title,
-      description: copy.metaDescription,
-      inLanguage: locale === "ko" ? "ko-KR" : "en-US",
-      url: absoluteUrl(path),
-      isPartOf: {
-        "@type": "WebSite",
-        name: siteConfig.name,
-        url: absoluteUrl(),
-      },
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: copy.home,
-          item: absoluteUrl(),
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: copy.calculators,
-          item: absoluteUrl("/calculators"),
-        },
-        {
-          "@type": "ListItem",
-          position: 3,
-          name: copy.title,
-          item: absoluteUrl(path),
-        },
-      ],
-    },
-  ];
+  const structuredData = createPageStructuredData({
+    name: copy.title,
+    description: copy.metaDescription,
+    path,
+    locale,
+    breadcrumbs: [
+      { name: copy.home, path: "/" },
+      { name: copy.calculators, path: "/calculators" },
+      { name: copy.title, path },
+    ],
+  });
   return (
     <main id="main-content" className="flex-1">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(data).replaceAll("<", "\\u003c"),
-        }}
-      />
+      <JsonLdScript data={structuredData} />
       <div className="mx-auto w-full max-w-[1440px] px-5 py-8 sm:px-6 sm:py-10">
         <nav
           aria-label={copy.breadcrumb}

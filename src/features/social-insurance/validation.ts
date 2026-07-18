@@ -1,4 +1,5 @@
 import Decimal from "decimal.js";
+import { EMPLOYMENT_ADDITIONAL_RATES } from "./constants";
 import type {
   SocialInsuranceErrors,
   SocialInsuranceFormValues,
@@ -21,6 +22,7 @@ export function validateSocialInsurance(
   let monthlyPay = new Decimal(0),
     nonTaxablePay = new Decimal(0),
     accidentRate = new Decimal(0);
+  const workplaceSize = values.workplaceSize;
   try {
     monthlyPay = parse(values.monthlyPay);
     if (monthlyPay.lte(0) || monthlyPay.gt(1_000_000_000))
@@ -56,7 +58,16 @@ export function validateSocialInsurance(
     errors.accidentRate =
       locale === "ko" ? "올바른 요율을 입력해 주세요." : "Enter a valid rate.";
   }
+  if (!(workplaceSize in EMPLOYMENT_ADDITIONAL_RATES)) {
+    errors.workplaceSize =
+      locale === "ko"
+        ? "사업장 규모를 선택해 주세요."
+        : "Choose a workplace size.";
+  }
   return Object.keys(errors).length
     ? { errors }
-    : { errors, data: { monthlyPay, nonTaxablePay, accidentRate } };
+    : {
+        errors,
+        data: { monthlyPay, nonTaxablePay, accidentRate, workplaceSize },
+      };
 }
