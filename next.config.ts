@@ -53,6 +53,11 @@ const nextConfig: NextConfig = {
         destination: "/ko/employment/hourly-wage",
         permanent: true,
       },
+      {
+        source: "/employment/social-insurance",
+        destination: "/ko/employment/social-insurance",
+        permanent: true,
+      },
     ];
   },
 };

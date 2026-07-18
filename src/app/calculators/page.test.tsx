@@ -22,7 +22,7 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(10);
+    ).toHaveLength(11);
     expect(
       screen.getByRole("link", { name: /주휴수당 계산기/ }),
     ).toHaveAttribute("href", "/ko/employment/weekly-holiday-pay");
@@ -60,6 +60,9 @@ describe("calculator directory", () => {
       "href",
       "/ko/employment/hourly-wage",
     );
+    expect(
+      screen.getByRole("link", { name: /4대보험 계산기/ }),
+    ).toHaveAttribute("href", "/ko/employment/social-insurance");
 
     const jsonLd = container.querySelector(
       'script[type="application/ld+json"]',
@@ -68,7 +71,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 10,
+        numberOfItems: 11,
         itemListElement: [
           {
             position: 1,
@@ -119,6 +122,11 @@ describe("calculator directory", () => {
             position: 10,
             name: "시급 계산기",
             url: "https://www.calcome.com/ko/employment/hourly-wage",
+          },
+          {
+            position: 11,
+            name: "4대보험 계산기",
+            url: "https://www.calcome.com/ko/employment/social-insurance",
           },
         ],
       },

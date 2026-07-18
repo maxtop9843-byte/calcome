@@ -12,7 +12,7 @@ function localizedDestination(pathname: string, locale: CompoundLocale) {
     /^\/(?:ko|en)\/finance\/(compound-interest|savings|fixed-deposit|loan|cagr)$/,
   );
   const employmentCalculator = pathname.match(
-    /^\/(?:ko|en)\/employment\/(severance-pay|net-salary|unemployment-benefits|hourly-wage)$/,
+    /^\/(?:ko|en)\/employment\/(severance-pay|net-salary|unemployment-benefits|weekly-holiday-pay|hourly-wage|social-insurance)$/,
   );
   if (employmentCalculator) {
     return `/${locale}/employment/${employmentCalculator[1]}`;
