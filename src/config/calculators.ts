@@ -242,4 +242,13 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/balloon-payment",
   },
+  {
+    id: "mortgage-payment",
+    name: "주택담보대출 상환액 계산기",
+    description:
+      "주택가격과 자기자금으로 월 원리금과 예상 주거비를 계산합니다.",
+    keywords: ["주택담보대출", "모기지", "월 상환액", "mortgage payment"],
+    category: "금융",
+    href: "/ko/finance/mortgage-payment",
+  },
 ] as const satisfies readonly PublishedCalculator[];
