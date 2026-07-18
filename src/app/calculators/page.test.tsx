@@ -22,10 +22,13 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(24);
+    ).toHaveLength(25);
     expect(
       screen.getByRole("link", { name: /대출 이자 비교 계산기/ }),
     ).toHaveAttribute("href", "/ko/finance/loan-interest-comparison");
+    expect(
+      screen.getByRole("link", { name: /대출 대환 절감 계산기/ }),
+    ).toHaveAttribute("href", "/ko/finance/loan-refinancing-savings");
     expect(screen.getByRole("link", { name: /LTV 계산기/ })).toHaveAttribute(
       "href",
       "/ko/finance/ltv",
@@ -109,7 +112,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 24,
+        numberOfItems: 25,
         itemListElement: [
           {
             position: 1,
@@ -230,6 +233,11 @@ describe("calculator directory", () => {
             position: 24,
             name: "대출 이자 비교 계산기",
             url: "https://www.calcome.com/ko/finance/loan-interest-comparison",
+          },
+          {
+            position: 25,
+            name: "대출 대환 절감 계산기",
+            url: "https://www.calcome.com/ko/finance/loan-refinancing-savings",
           },
         ],
       },

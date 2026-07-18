@@ -221,4 +221,12 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/loan-interest-comparison",
   },
+  {
+    id: "loan-refinancing-savings",
+    name: "대출 대환 절감 계산기",
+    description: "대환 전후의 이자와 비용을 비교해 순절감액을 계산합니다.",
+    keywords: ["대환대출", "대출 갈아타기", "이자 절감", "refinancing"],
+    category: "금융",
+    href: "/ko/finance/loan-refinancing-savings",
+  },
 ] as const satisfies readonly PublishedCalculator[];

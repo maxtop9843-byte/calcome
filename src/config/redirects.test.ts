@@ -50,6 +50,11 @@ describe("legacy calculator redirects", () => {
         permanent: true,
       },
       {
+        source: "/finance/loan-refinancing-savings",
+        destination: "/ko/finance/loan-refinancing-savings",
+        permanent: true,
+      },
+      {
         source: "/employment/net-salary",
         destination: "/ko/employment/net-salary",
         permanent: true,
