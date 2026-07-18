@@ -8,8 +8,9 @@ Rules
 - An OPEN task with a recorded incomplete Branch must resume that branch.
 - A task with an open Draft Pull Request is effectively IN_REVIEW and must be skipped.
 - A failed task remains OPEN and must be retried before any later task.
-- Never merge automatically.
-- Always create a Draft Pull Request after validation succeeds.
+- Never merge directly from the feature agent.
+- After validation succeeds, create one non-Draft Pull Request containing the exact `AUTO_MERGE: true` marker.
+- The repository Auto Merge workflow may merge only after CI and Vercel Preview succeed.
 - If there are no effectively OPEN tasks, reply exactly:
   NO OPEN TASKS
 

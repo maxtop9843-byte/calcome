@@ -1,0 +1,32 @@
+name: Production Smoke
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-smoke
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Wait for and verify production
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          curl --fail --silent --show-error --location             --retry 24 --retry-delay 15 --retry-all-errors             --output /tmp/home.html             https://www.calcome.com/
+
+          curl --fail --silent --show-error --location             --retry 24 --retry-delay 15 --retry-all-errors             --output /tmp/sitemap.xml             https://www.calcome.com/sitemap.xml
+
+          test -s /tmp/home.html
+          test -s /tmp/sitemap.xml
+          grep -Eq '<(urlset|sitemapindex)([[:space:]>])' /tmp/sitemap.xml
+          grep -q '<loc>https://www.calcome.com' /tmp/sitemap.xml
