@@ -2,369 +2,280 @@
 
 ## Purpose
 
-This document defines the permanent operating rules for autonomous development in the CalCome repository.
+This document defines the permanent rules for autonomous development in CalCome.
 
-These rules always take priority over implementation details.
+The automation must turn exactly one eligible `TASK_QUEUE.md` entry into a validated Pull Request and then merge it automatically only after repository checks and the Vercel preview succeed.
 
-The automation exists to turn TASK_QUEUE tasks into independent Draft Pull Requests and accumulate those Draft Pull Requests without merging them. A user or a separate review task validates the accumulated Draft Pull Requests later.
-
-Feature automation must never merge a Pull Request.
+No user approval is required for an eligible automation Pull Request that satisfies every rule below.
 
 ---
 
-# Core Principles
+## Non-negotiable rules
 
-1. Never commit directly to main.
-
-2. Never merge a Pull Request automatically.
-
-3. Complete exactly one task per scheduled execution.
-
-4. Create at most one feature branch and one Draft Pull Request per scheduled execution.
-
-5. TASK_QUEUE.md is a static ordered backlog, not the sole source of runtime task state.
-
-6. Calculate effective task status from TASK_QUEUE.md, GitHub Pull Requests, and recoverable task branches.
-
-7. An unmerged Draft Pull Request for an earlier task must not block the next effectively OPEN task.
-
-8. Never create duplicate branches or duplicate Pull Requests for the same task.
+1. Never commit directly to `main`.
+2. Complete exactly one task per scheduled execution.
+3. Never start a second task in the same execution.
+4. Never create a duplicate task branch or Pull Request.
+5. Start new work from the latest `origin/main`.
+6. Preserve all unrelated behavior already present on `main`.
+7. Run `npm run check`, `npm run build`, and `git diff --check`.
+8. Never bypass, weaken, remove, or falsify validation.
+9. Only explicitly opted-in automation Pull Requests may merge automatically.
+10. A failed implementation must never be merged.
 
 ---
 
-# Scheduled Execution Startup
+## Startup and stale-operation cleanup
 
-Every scheduled execution starts in this order:
+At the start of every scheduled execution:
 
-1. Check for recoverable incomplete work from a previous failed execution.
-2. Fetch the latest origin references.
-3. Use the latest origin/main as the baseline.
-4. Read AUTOMATION.md from origin/main.
-5. Read TASK_QUEUE.md from origin/main.
-6. Query GitHub for open, Draft, closed, and merged Pull Requests.
-7. Inspect local and remote task branches.
-8. Match TASK_QUEUE task IDs to existing Pull Requests and branches.
-9. Calculate the effective status of every task.
-10. Resume the earliest recoverable IN_PROGRESS task, or select the first effectively OPEN task when no recoverable work exists.
+1. Fetch all origin references.
+2. Inspect whether a rebase, merge, cherry-pick, or revert is already in progress.
+3. Identify the task ID associated with any interrupted operation.
+4. Verify matching Pull Requests directly through GitHub.
+5. Read this file and `TASK_QUEUE.md` from the latest `origin/main`.
+6. Reconcile task status with Pull Requests and local and remote task branches.
 
-Do not select work from AUTOMATION.md or TASK_QUEUE.md changes that exist only in an unmerged feature branch.
+If an interrupted operation belongs to a task with a merged Pull Request:
 
-If there is no recoverable IN_PROGRESS task and no effectively OPEN task, reply exactly:
+- treat the task as `DONE`
+- abort only that stale interrupted operation
+- switch to `main`
+- fast-forward to the latest `origin/main`
+- continue task selection
 
-NO OPEN TASKS
+If it belongs to a task with an open Pull Request:
 
----
+- treat the task as `IN_REVIEW`
+- abort the stale local operation unless the open Pull Request itself explicitly requires recovery
+- never create a duplicate Pull Request
+- continue task selection
 
-# Task ID Matching
+Resume an interrupted operation only when the task has no matching merged or open Pull Request and has genuinely recoverable branch work.
 
-Each TASK_QUEUE entry has a stable task ID such as P-001.
-
-A Pull Request matches a task when the exact task ID appears in its title or body as a standalone identifier.
-
-A branch matches a task when its name includes the task ID or when its known task slug clearly identifies that queue entry.
-
-Every autonomous feature Pull Request must include the exact task ID in both its title and body.
-
-Recommended title format:
-
-feat(P-002): add weekly holiday pay calculator
+Never stop merely to report that an operation or validation command is still in progress.
 
 ---
 
-# Effective Status Calculation
+## Effective task status
 
-Never select a task using only the Status written in TASK_QUEUE.md.
+Match the exact task ID, such as `P-012`, in Pull Request titles and bodies. Also inspect corresponding task branches.
 
-Calculate effective status in this priority order:
+Use this priority:
 
-## DONE
+### DONE
 
-A task is effectively DONE when:
+A matching Pull Request is merged, or `TASK_QUEUE.md` explicitly declares the task `DONE`.
 
-- a Pull Request whose title or body contains the task ID has been merged, or
-- TASK_QUEUE.md declares the task DONE.
+### IN_REVIEW
 
-## IN_REVIEW
+The task is not `DONE` and has a matching open Draft or normal Pull Request.
 
-A task is effectively IN_REVIEW when it is not DONE and:
+### IN_PROGRESS
 
-- an open Draft Pull Request whose title or body contains the task ID exists, or
-- an open non-Draft Pull Request whose title or body contains the task ID exists, or
-- TASK_QUEUE.md declares IN_REVIEW and a corresponding valid open Pull Request exists.
+The task is neither `DONE` nor `IN_REVIEW` and has a recoverable local or remote task branch without an open Pull Request.
 
-## IN_PROGRESS
+### OPEN
 
-A task is effectively IN_PROGRESS when it is neither DONE nor IN_REVIEW and:
+All of the following are true:
 
-- a recoverable local or remote task branch exists without a Pull Request, or
-- TASK_QUEUE.md declares IN_PROGRESS and the corresponding task branch actually exists.
-
-## OPEN
-
-A task is effectively OPEN only when all of the following are true:
-
+- `TASK_QUEUE.md` declares the task `OPEN`
 - no matching merged Pull Request exists
 - no matching open Pull Request exists
-- no recoverable matching task branch exists
-- TASK_QUEUE.md declares the task OPEN
+- no recoverable task branch exists
 
-GitHub Pull Request state and actual branch state take precedence over stale Status text in TASK_QUEUE.md.
+GitHub state and actual branch state take precedence over stale queue text.
 
-Examples:
-
-- If TASK_QUEUE.md still says P-001 is IN_REVIEW but P-001 PR #35 is merged, P-001 is effectively DONE.
-- If TASK_QUEUE.md says P-002 is OPEN but a P-002 Draft Pull Request is open, P-002 is effectively IN_REVIEW.
-- In that case, P-002 is skipped and P-003 becomes the next candidate.
+A stale branch belonging to a merged task is not recoverable `IN_PROGRESS`.
 
 ---
 
-# Task Selection Algorithm
+## Task selection
 
-Use this deterministic algorithm:
+1. Reconcile tasks in `TASK_QUEUE.md` order.
+2. Resume the earliest genuinely recoverable `IN_PROGRESS` task if one exists.
+3. Otherwise select the first effectively `OPEN` task.
+4. Stop scanning after selecting one task.
+5. Implement only that task.
 
-1. Read TASK_QUEUE.md in file order.
-2. Reconcile every task with merged Pull Requests, open Pull Requests, closed unmerged Pull Requests, local branches, and remote branches.
-3. Calculate effective status using the defined priority.
-4. If a recoverable IN_PROGRESS task exists, resume the earliest such task and do not select later work.
-5. Otherwise skip every DONE task.
-6. Skip every IN_REVIEW task.
-7. Select the first OPEN task.
-8. Stop scanning after one task is selected.
-9. Implement only the selected task.
+If no recoverable `IN_PROGRESS` task and no effectively `OPEN` task exist, reply exactly:
 
-One execution may never select a second task.
+`NO OPEN TASKS`
 
 ---
 
-# Accumulated Draft Pull Request Workflow
+## Branch and scope
 
-Draft Pull Requests intentionally accumulate without being merged.
+For a new `OPEN` task:
 
-Expected sequence:
+- create one task-specific branch from the latest `origin/main`
+- include the task ID in the branch name when practical
+- never use another unmerged task branch as the baseline
 
-- First execution: implement P-002, validate it, create a P-002 Draft Pull Request, then stop.
-- Next execution: detect the open P-002 Draft Pull Request, calculate P-002 as IN_REVIEW, select P-003, create a P-003 Draft Pull Request, then stop.
-- Later execution: reconcile all existing Draft and merged Pull Requests, then select only the next effectively OPEN task.
+For a recoverable `IN_PROGRESS` task:
 
-An earlier Draft Pull Request being unmerged is not a reason to block later effectively OPEN tasks.
+- resume the existing branch
+- do not create a replacement branch
 
-After creating one Draft Pull Request, terminate the execution immediately. Do not begin another task.
+Implementation must:
 
----
+- follow the current architecture
+- reuse shared components
+- remain limited to the selected task
+- avoid unrelated refactoring
+- avoid unnecessary dependencies
+- preserve all existing calculators, routes, redirects, metadata, navigation, tests, and SEO behavior
 
-# Role of TASK_QUEUE.md
-
-TASK_QUEUE.md provides:
-
-- task ID
-- task title
-- priority
-- declared static Status
-- queue order
-
-TASK_QUEUE.md does not provide authoritative runtime IN_REVIEW or DONE state by itself.
-
-Do not require each feature branch to update TASK_QUEUE.md after successful implementation. Multiple feature branches modifying the same queue file would create unnecessary conflicts between accumulated Draft Pull Requests.
-
-Calculate actual IN_REVIEW and DONE state from GitHub Pull Requests on every scheduled execution.
-
-Record task ID, implementation summary, and validation results in the Draft Pull Request title and body.
-
-TASK_QUEUE.md modification is not a success condition for a feature task.
+Do not modify `TASK_QUEUE.md` merely to record runtime review or completion state. GitHub Pull Requests are the authoritative runtime record.
 
 ---
 
-# Duplicate Prevention
+## Shared-file and conflict safety
 
-Before creating a feature branch, check for:
+Before editing a shared file, inspect its latest `origin/main` version.
 
-- an open Draft Pull Request containing the task ID
-- an open non-Draft Pull Request containing the task ID
-- a merged Pull Request containing the task ID
-- a local branch corresponding to the task ID or task slug
-- a remote branch corresponding to the task ID or task slug
+Shared files include registries, redirects, navigation, language selection, sitemap, robots, metadata, structured-data utilities, shared schemas, shared tests, configuration, and package files.
 
-If a matching open Pull Request exists:
+Every shared-file change must:
 
-- do not create a branch
-- do not create a Pull Request
-- treat the task as IN_REVIEW
-- continue scanning for the next effectively OPEN task
+- preserve all unrelated current content
+- be the smallest additive change required
+- preserve every newer entry from `origin/main`
+- add the selected task exactly once where applicable
 
-If a matching merged Pull Request exists:
+If the task branch predates `origin/main`, rebase it.
 
-- treat the task as DONE
-- never implement it again
+A conflict alone is not a reason to stop. Inspect `origin/main`, the task version, the common ancestor, and related tests. Preserve all main behavior and reapply only the selected task.
 
-If only a recoverable branch exists and no Pull Request exists:
+Never resolve a conflict by accepting an entire stale shared-file version or by deleting newer main entries.
 
-- do not create a duplicate branch
-- inspect the existing work and previous failure
-- resume that branch
-- work only on that task during the execution
+After rewritten history, update an existing remote task branch using `--force-with-lease` only. Never use an unconditional force push.
 
-Closed, unmerged Pull Requests do not make a task DONE or IN_REVIEW. Inspect their branches and failure context before deciding whether the work is recoverable.
+Stop only when the correct combined behavior remains genuinely ambiguous after inspecting the repository and tests.
 
 ---
 
-# Branch and Pull Request Rules
+## SEO and sitemap invariants
 
-For a newly selected OPEN task:
+When adding a public calculator route:
 
-- create a task-specific branch from the latest origin/main
-- use a branch name that identifies the task ID when practical
-- never commit directly to main
+- register it through the existing canonical calculator or route source
+- preserve every existing public URL
+- add the selected public route exactly once
+- use only `https://www.calcome.com` as the production origin
+- preserve the existing standards-compliant XML sitemap
+- preserve `urlset` or `sitemapindex`, `loc` elements, and XML-compatible response behavior
+- never replace the sitemap with plain text
+- never add localhost, preview, duplicate, internal, private, or non-canonical URLs
+- never fabricate `lastmod`, `changefreq`, or `priority`
 
-After successful validation:
-
-- review the full diff
-- confirm only the selected task is included
-- commit the implementation
-- push the feature branch to origin
-- create a Draft Pull Request against main
-- never create a normal Pull Request
-- include the exact task ID in both the Pull Request title and body
-- include an implementation summary and validation results in the body
-- confirm the Pull Request is Draft
-- stop the execution immediately
-- never merge the Pull Request
+If the task does not require shared SEO or sitemap changes, do not modify them for cleanup.
 
 ---
 
-# Development Scope
+## Validation and recovery
 
-For feature tasks:
+Before validation:
 
-- follow the existing architecture
-- reuse shared components whenever possible
-- keep code style consistent
-- prefer small focused commits
-- do not introduce unnecessary dependencies
-- do not perform unrelated refactoring
-- implement only the selected task
-- do not implement another TASK_QUEUE entry in the same execution
+1. Confirm the branch contains the latest `origin/main`.
+2. Inspect the complete diff against `origin/main`.
+3. Confirm only the selected task is included.
+4. Confirm no existing entry or behavior disappeared.
+5. Confirm no Git operation remains unresolved.
+6. Resolve `.next` and verify it is inside the repository workspace.
+7. Delete only that repository-local `.next`.
 
-## Sitemap invariant
+Run:
 
-When a P task adds a public calculator route, register it through the canonical
-calculator source and run the sitemap validation. Preserve the standards-compliant
-XML sitemap, its `https://www.calcome.com` canonical URLs, and its `<loc>` entries;
-never replace it with line-based plain-text output.
-
----
-
-# Required Validation
-
-Before validating a feature implementation, resolve and verify that `.next` is inside the repository workspace, then delete only that `.next` directory to remove stale Next.js output.
-
-Run both commands:
-
+```bash
 npm run check
-
 npm run build
+git diff --check
+```
 
-Both commands must succeed before creating a Draft Pull Request.
+Run every existing relevant route, sitemap, SEO, metadata, and structured-data test when those areas change.
 
-After validation succeeds:
+The first validation failure is not automatically terminal.
 
-1. Review the full diff.
-2. Confirm only the selected task is included.
-3. Create the implementation commit.
-4. Push the branch.
-5. Create one Draft Pull Request.
-6. Include the task ID in the title and body.
-7. Record `npm run check` and `npm run build` results in the body.
-8. Stop the execution.
+When validation fails:
 
----
+1. Read and diagnose the exact error.
+2. Fix it if it is within the selected task or necessary integration.
+3. Re-run the failed validation.
+4. Continue the diagnose-fix-validate cycle until validation succeeds or a genuine terminal blocker is proven.
 
-# Failure and Retry Rules
+Fix repository-formatter failures with the configured formatter. Update legitimate exact-list, count, registry, redirect, route, sitemap, and metadata expectations additively while preserving every existing expectation.
 
-If implementation or validation fails:
+Never weaken or remove a test to obtain a passing result.
 
-- stop the current execution immediately
-- do not continue to another task
-- report the failure clearly
-- do not create a Draft Pull Request for failed work
-- do not treat the failed implementation as successful
-- preserve a recoverable task branch and worktree
-- on the next scheduled execution, inspect that existing task branch first
-- fix the previous failure before validating again
-- rerun all required validation from a clean `.next` state
-- never create a duplicate branch or Pull Request for the retry
+Wait for every command to reach a final exit status. Poll long-running commands at intervals no longer than 60 seconds. A running command is not a final result.
 
-A failed task cannot be skipped in favor of a later task while recoverable IN_PROGRESS work remains.
-
-Once validation succeeds and a Draft Pull Request is created, the task becomes effectively IN_REVIEW. Later executions skip it and proceed to the next effectively OPEN task.
+A terminal blocker exists only when safe completion is impossible because of missing permission or credentials, persistent external-service failure, materially ambiguous requirements, missing required history, unrelated required changes, or unauthorized destructive action.
 
 ---
 
-# Success Condition
+## Pull Request and automatic merge
 
-One scheduled feature execution succeeds only when all of the following are true:
+After all local validation succeeds:
 
-- exactly one effectively OPEN or recoverable IN_PROGRESS task was selected
+1. Review the complete diff against the latest `origin/main`.
+2. Commit the selected task.
+3. Push the task branch.
+4. Create exactly one non-Draft Pull Request against `main`.
+5. Include the exact task ID in both title and body.
+6. Add this exact standalone line to the Pull Request body:
+
+`AUTO_MERGE: true`
+
+7. Include implementation and shared-file summaries.
+8. Include results for `npm run check`, `npm run build`, and `git diff --check`.
+9. Directly verify the Pull Request, branch, base, body marker, and URL.
+
+The repository's Auto Merge workflow is the only component authorized to merge.
+
+It may merge only when all are true:
+
+- base branch is `main`
+- head branch belongs to this repository
+- Pull Request is not Draft
+- body contains the exact `AUTO_MERGE: true` marker
+- GitHub Actions CI completed successfully for the exact head SHA
+- Vercel reported a successful preview for the exact head SHA
+- the Pull Request is mergeable
+- no unresolved required review or protection blocks the merge
+
+If checks are pending, leave the Pull Request open and let the Auto Merge workflow finish. Do not start another task during the same scheduled execution.
+
+Never add the marker to experimental, manual-review, or unvalidated Pull Requests.
+
+---
+
+## Post-merge behavior
+
+A successful automatic merge triggers:
+
+- CI on `main`
+- Vercel production deployment
+- the Production Smoke workflow
+
+The Production Smoke workflow checks the public homepage and sitemap. A production-smoke failure must be treated as a blocker before later automation continues.
+
+The next scheduled execution must inspect the latest `main` workflow state. If the latest production smoke failed, do not select another feature task; report the failure for recovery.
+
+---
+
+## Success result
+
+A scheduled feature execution succeeds when:
+
+- exactly one eligible task was selected
 - only that task was implemented
-- npm run check passed
-- npm run build passed
-- the full diff was reviewed
-- an implementation commit was created
-- the branch was pushed
-- exactly one Draft Pull Request was created
-- the exact task ID appears in both the Pull Request title and body
-- validation results appear in the Pull Request body
-- no merge was performed
-- execution stopped without selecting another task
+- all required local validation passed
+- one commit and one task branch were pushed
+- exactly one eligible non-Draft Pull Request was created
+- the exact task ID and `AUTO_MERGE: true` marker were verified
+- no second task was started
 
-TASK_QUEUE.md modification is not a feature-task success condition.
+The scheduled execution does not need to remain active while GitHub waits for CI and Vercel. The repository workflow completes the merge asynchronously.
 
----
-
-# Prohibited Actions
-
-Never:
-
-- commit directly to main
-- merge a Pull Request automatically
-- create a non-Draft Pull Request
-- implement multiple tasks in one execution
-- create multiple Draft Pull Requests in one execution
-- create a duplicate branch for the same task
-- create a duplicate Pull Request for the same task
-- block later OPEN tasks merely because an earlier Draft Pull Request is unmerged
-- trust unmerged TASK_QUEUE.md changes as the sole runtime state
-- implement an unselected task
-- perform unrelated code or documentation changes
-- continue to another task after validation failure
-
----
-
-# Reference Scenarios
-
-## Scenario A
-
-- P-001 PR #35 is merged.
-- TASK_QUEUE.md may still describe P-001 as IN_REVIEW.
-- P-001 effective status is DONE.
-- P-001 is never implemented again.
-
-## Scenario B
-
-- P-002 has no matching open or merged Pull Request and no recoverable branch.
-- TASK_QUEUE.md declares P-002 OPEN.
-- P-002 effective status is OPEN.
-- The next feature execution selects P-002.
-
-## Scenario C
-
-- A P-002 Draft Pull Request is open but unmerged.
-- P-002 effective status is IN_REVIEW.
-- No duplicate P-002 branch or Pull Request is created.
-- The next feature execution selects P-003 when P-003 is effectively OPEN.
-
-## Scenario D
-
-- P-002 and P-003 Draft Pull Requests are both open.
-- Both tasks are effectively IN_REVIEW.
-- Select the next effectively OPEN task if one exists.
-- Otherwise reply exactly `NO OPEN TASKS`.
+Final reporting must contain only verified facts and must never present a progress statement as completed work.
