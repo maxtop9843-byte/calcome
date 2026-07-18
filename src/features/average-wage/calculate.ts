@@ -3,24 +3,31 @@ import Decimal from "decimal.js";
 export type AverageWageInput = {
   wageTotal: Decimal;
   calendarDays: Decimal;
+  ordinaryDailyWage?: Decimal;
 };
 
 export type AverageWageResult = {
   wageTotal: Decimal;
   calendarDays: Decimal;
-  averageDailyWage: Decimal;
+  calculatedDailyWage: Decimal;
+  ordinaryDailyWage?: Decimal;
+  appliedDailyWage?: Decimal;
+  ordinaryWageCompared: boolean;
   thirtyDayWage: Decimal;
-  annualizedWage: Decimal;
 };
 
 export function calculateAverageWage(
   input: AverageWageInput,
 ): AverageWageResult {
-  const averageDailyWage = input.wageTotal.div(input.calendarDays);
+  const calculatedDailyWage = input.wageTotal.div(input.calendarDays);
+  const appliedDailyWage = input.ordinaryDailyWage
+    ? Decimal.max(calculatedDailyWage, input.ordinaryDailyWage)
+    : undefined;
   return {
     ...input,
-    averageDailyWage,
-    thirtyDayWage: averageDailyWage.mul(30),
-    annualizedWage: averageDailyWage.mul(365),
+    calculatedDailyWage,
+    appliedDailyWage,
+    ordinaryWageCompared: Boolean(input.ordinaryDailyWage),
+    thirtyDayWage: (appliedDailyWage ?? calculatedDailyWage).mul(30),
   };
 }

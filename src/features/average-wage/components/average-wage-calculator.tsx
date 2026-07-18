@@ -35,6 +35,7 @@ export function AverageWageCalculator({
   const copy = averageWageContent[locale];
   const [wageTotal, setWageTotal] = useState("");
   const [calendarDays, setCalendarDays] = useState("");
+  const [ordinaryDailyWage, setOrdinaryDailyWage] = useState("");
   const [errors, setErrors] = useState<AverageWageErrors>({});
   const [result, setResult] = useState<AverageWageResult | null>(null);
   const [animationKey, setAnimationKey] = useState(0);
@@ -46,7 +47,10 @@ export function AverageWageCalculator({
   } = useStableResultScroll(result);
   function submit(event: FormEvent) {
     event.preventDefault();
-    const checked = validateAverageWage({ wageTotal, calendarDays }, locale);
+    const checked = validateAverageWage(
+      { wageTotal, calendarDays, ordinaryDailyWage },
+      locale,
+    );
     setErrors(checked.errors);
     if (!checked.data) return;
     requestResultScroll();
@@ -57,6 +61,7 @@ export function AverageWageCalculator({
     cancelResultScroll();
     setWageTotal("");
     setCalendarDays("");
+    setOrdinaryDailyWage("");
     setErrors({});
     setResult(null);
   }
@@ -117,6 +122,42 @@ export function AverageWageCalculator({
               {errors.calendarDays}
             </p>
           ) : null}
+          <label
+            htmlFor="ordinary-daily-wage"
+            className="mt-4 block text-sm font-medium"
+          >
+            {copy.ordinaryDailyWage}
+            <span
+              aria-hidden="true"
+              className="ml-1 text-xs font-normal text-muted-foreground"
+            >
+              {copy.optional}
+            </span>
+            <input
+              id="ordinary-daily-wage"
+              aria-invalid={Boolean(errors.ordinaryDailyWage)}
+              aria-describedby={
+                errors.ordinaryDailyWage ? "ordinary-wage-error" : undefined
+              }
+              inputMode="decimal"
+              value={ordinaryDailyWage}
+              placeholder={copy.ordinaryPlaceholder}
+              onChange={(event) =>
+                setOrdinaryDailyWage(
+                  formatMoneyInput(event.target.value, ordinaryDailyWage),
+                )
+              }
+              className={fieldClass}
+            />
+          </label>
+          {errors.ordinaryDailyWage ? (
+            <p
+              id="ordinary-wage-error"
+              className="mt-1 text-sm text-destructive"
+            >
+              {errors.ordinaryDailyWage}
+            </p>
+          ) : null}
           <div className="mt-4 grid grid-cols-[1fr_auto] gap-2">
             <Button type="submit">{copy.calculate}</Button>
             <Button type="button" variant="outline" onClick={reset}>
@@ -136,14 +177,25 @@ export function AverageWageCalculator({
             <PrimaryResults
               metrics={[
                 {
-                  label: copy.daily,
+                  label: copy.calculatedDaily,
                   value: (
                     <AnimatedWon
-                      value={result?.averageDailyWage ?? null}
+                      value={result?.calculatedDailyWage ?? null}
                       animationKey={animationKey}
                     />
                   ),
                   featured: true,
+                },
+                {
+                  label: copy.appliedDaily,
+                  value: result?.appliedDailyWage ? (
+                    <AnimatedWon
+                      value={result.appliedDailyWage}
+                      animationKey={animationKey}
+                    />
+                  ) : (
+                    copy.notCompared
+                  ),
                 },
                 {
                   label: copy.thirtyDay,
@@ -154,25 +206,22 @@ export function AverageWageCalculator({
                     />
                   ),
                 },
-                {
-                  label: copy.annualized,
-                  value: (
-                    <AnimatedWon
-                      value={result?.annualizedWage ?? null}
-                      animationKey={animationKey}
-                    />
-                  ),
-                },
               ]}
             />
-            <p className="mt-3 text-sm text-muted-foreground">{copy.note}</p>
+            {result ? (
+              <p className="mt-3 text-sm text-muted-foreground">
+                {result.ordinaryWageCompared
+                  ? copy.comparedNote
+                  : copy.notComparedNote}
+              </p>
+            ) : null}
           </section>
           <details open className="rounded-xl border bg-card p-4 shadow-sm">
             <summary className="min-h-10 cursor-pointer content-center font-semibold">
               {copy.details}
             </summary>
             {result ? (
-              <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-3">
+              <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
                 <div>
                   <dt className="text-muted-foreground">{copy.total}</dt>
                   <dd className="mt-1 font-semibold tabular-nums">
@@ -188,7 +237,17 @@ export function AverageWageCalculator({
                 <div>
                   <dt className="text-muted-foreground">{copy.formula}</dt>
                   <dd className="mt-1 font-semibold tabular-nums">
-                    {won(result.averageDailyWage, locale)}
+                    {won(result.calculatedDailyWage, locale)}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-muted-foreground">
+                    {copy.ordinaryDailyWage}
+                  </dt>
+                  <dd className="mt-1 font-semibold tabular-nums">
+                    {result.ordinaryDailyWage
+                      ? won(result.ordinaryDailyWage, locale)
+                      : copy.notProvided}
                   </dd>
                 </div>
               </dl>

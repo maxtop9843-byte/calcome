@@ -1,5 +1,8 @@
 import Link from "next/link";
-import { absoluteUrl, siteConfig } from "@/config/site";
+import {
+  JsonLdScript,
+  createPageStructuredData,
+} from "@/lib/seo/structured-data";
 import { averageWageContent, type AverageWageLocale } from "../content";
 import { AverageWageCalculator } from "./average-wage-calculator";
 
@@ -10,53 +13,28 @@ export function LocalizedAverageWagePage({
 }) {
   const copy = averageWageContent[locale];
   const path = `/${locale}/employment/average-wage`;
-  const structuredData = [
-    {
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      name: copy.title,
-      description: copy.description,
-      inLanguage: locale === "ko" ? "ko-KR" : "en-US",
-      url: absoluteUrl(path),
-      isPartOf: {
-        "@type": "WebSite",
-        name: siteConfig.name,
-        url: absoluteUrl(),
-      },
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: locale === "ko" ? "홈" : "Home",
-          item: absoluteUrl(),
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: copy.title,
-          item: absoluteUrl(path),
-        },
-      ],
-    },
-  ];
+  const home = locale === "ko" ? "홈" : "Home";
+  const calculators = locale === "ko" ? "계산기" : "Calculators";
+  const structuredData = createPageStructuredData({
+    name: copy.title,
+    description: copy.description,
+    path,
+    locale,
+    breadcrumbs: [
+      { name: home, path: "/" },
+      { name: calculators, path: "/calculators" },
+      { name: copy.title, path },
+    ],
+  });
   return (
     <main id="main-content" className="flex-1">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(structuredData).replaceAll("<", "\\u003c"),
-        }}
-      />
+      <JsonLdScript data={structuredData} />
       <div className="mx-auto w-full max-w-[1440px] px-5 py-8 sm:px-6 sm:py-10">
         <nav
           aria-label={locale === "ko" ? "경로" : "Breadcrumb"}
           className="text-sm text-muted-foreground"
         >
-          <Link href="/">{locale === "ko" ? "홈" : "Home"}</Link> /{" "}
+          <Link href="/">{home}</Link> /{" "}
           <span aria-current="page">{copy.title}</span>
         </nav>
         <header className="mt-5 max-w-3xl">

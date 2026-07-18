@@ -1,7 +1,11 @@
 import Decimal from "decimal.js";
 import type { AverageWageInput } from "./calculate";
 
-export type AverageWageValues = { wageTotal: string; calendarDays: string };
+export type AverageWageValues = {
+  wageTotal: string;
+  calendarDays: string;
+  ordinaryDailyWage: string;
+};
 export type AverageWageErrors = Partial<
   Record<keyof AverageWageValues, string>
 >;
@@ -16,8 +20,10 @@ export function validateAverageWage(
   const errors: AverageWageErrors = {};
   const wageText = values.wageTotal.trim();
   const dayText = values.calendarDays.trim();
+  const ordinaryText = values.ordinaryDailyWage.trim();
   let wageTotal: Decimal | null = null;
   let calendarDays: Decimal | null = null;
+  let ordinaryDailyWage: Decimal | undefined;
   if (MONEY.test(wageText))
     wageTotal = new Decimal(wageText.replaceAll(",", ""));
   if (!wageTotal || wageTotal.lte(0) || wageTotal.gt(10_000_000_000))
@@ -31,7 +37,20 @@ export function validateAverageWage(
       locale === "ko"
         ? "산정기간 총일수를 1~92일로 입력해 주세요."
         : "Enter 1 to 92 calendar days.";
+  if (ordinaryText) {
+    if (MONEY.test(ordinaryText))
+      ordinaryDailyWage = new Decimal(ordinaryText.replaceAll(",", ""));
+    if (
+      !ordinaryDailyWage ||
+      ordinaryDailyWage.lte(0) ||
+      ordinaryDailyWage.gt(1_000_000_000)
+    )
+      errors.ordinaryDailyWage =
+        locale === "ko"
+          ? "0보다 크고 10억 원 이하인 일급 통상임금을 입력해 주세요."
+          : "Enter ordinary daily wage greater than zero and no more than KRW 1 billion.";
+  }
   return Object.keys(errors).length || !wageTotal || !calendarDays
     ? { errors }
-    : { errors, data: { wageTotal, calendarDays } };
+    : { errors, data: { wageTotal, calendarDays, ordinaryDailyWage } };
 }
