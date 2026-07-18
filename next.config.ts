@@ -78,6 +78,11 @@ const nextConfig: NextConfig = {
         destination: "/ko/employment/night-work-pay",
         permanent: true,
       },
+      {
+        source: "/employment/holiday-work-pay",
+        destination: "/ko/employment/holiday-work-pay",
+        permanent: true,
+      },
     ];
   },
 };

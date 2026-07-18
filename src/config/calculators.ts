@@ -137,4 +137,12 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/employment/night-work-pay",
   },
+  {
+    id: "holiday-work-pay",
+    name: "휴일근로수당 계산기",
+    description: "통상시급과 휴일근로시간으로 예상 휴일수당을 계산합니다.",
+    keywords: ["휴일근로수당", "휴일수당", "holiday work pay"],
+    category: "금융",
+    href: "/ko/employment/holiday-work-pay",
+  },
 ] as const satisfies readonly PublishedCalculator[];
