@@ -149,6 +149,21 @@ describe("LanguageSelector", () => {
     );
   });
 
+  it("preserves the localized loan interest comparison destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector
+        locale="ko"
+        pathname="/ko/finance/loan-interest-comparison"
+      />,
+    );
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/finance/loan-interest-comparison",
+    );
+  });
+
   it("preserves the localized severance destination", async () => {
     const user = userEvent.setup();
     render(
