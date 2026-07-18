@@ -203,6 +203,21 @@ describe("LanguageSelector", () => {
     );
   });
 
+  it("preserves the localized jeonse loan interest destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector
+        locale="ko"
+        pathname="/ko/finance/jeonse-loan-interest"
+      />,
+    );
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/finance/jeonse-loan-interest",
+    );
+  });
+
   it("preserves the localized severance destination", async () => {
     const user = userEvent.setup();
     render(

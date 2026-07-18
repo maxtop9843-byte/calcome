@@ -251,4 +251,12 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/mortgage-payment",
   },
+  {
+    id: "jeonse-loan-interest",
+    name: "전세대출 이자 계산기",
+    description: "전세보증금과 자기자금으로 월 이자와 총이자를 계산합니다.",
+    keywords: ["전세대출", "전세자금대출", "전세 이자", "jeonse loan"],
+    category: "금융",
+    href: "/ko/finance/jeonse-loan-interest",
+  },
 ] as const satisfies readonly PublishedCalculator[];
