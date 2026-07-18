@@ -289,4 +289,12 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/dti",
   },
+  {
+    id: "real-estate-acquisition-tax",
+    name: "부동산 취득세 계산기",
+    description: "취득가액과 적용 세율로 예상 취득세와 총 비용을 계산합니다.",
+    keywords: ["부동산 취득세", "취득세", "지방교육세", "acquisition tax"],
+    category: "금융",
+    href: "/ko/finance/real-estate-acquisition-tax",
+  },
 ] as const satisfies readonly PublishedCalculator[];

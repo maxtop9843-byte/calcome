@@ -22,7 +22,10 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(31);
+    ).toHaveLength(32);
+    expect(
+      screen.getByRole("link", { name: /부동산 취득세 계산기/ }),
+    ).toHaveAttribute("href", "/ko/finance/real-estate-acquisition-tax");
     expect(screen.getByRole("link", { name: /DTI 계산기/ })).toHaveAttribute(
       "href",
       "/ko/finance/dti",
@@ -131,7 +134,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 31,
+        numberOfItems: 32,
         itemListElement: [
           {
             position: 1,
@@ -287,6 +290,11 @@ describe("calculator directory", () => {
             position: 31,
             name: "DTI 계산기",
             url: "https://www.calcome.com/ko/finance/dti",
+          },
+          {
+            position: 32,
+            name: "부동산 취득세 계산기",
+            url: "https://www.calcome.com/ko/finance/real-estate-acquisition-tax",
           },
         ],
       },

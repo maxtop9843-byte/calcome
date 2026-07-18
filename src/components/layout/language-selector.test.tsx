@@ -371,4 +371,20 @@ describe("LanguageSelector", () => {
       "/en/finance/early-loan-repayment-fee",
     );
   });
+
+  it("preserves the localized real estate acquisition tax destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector
+        locale="ko"
+        pathname="/ko/finance/real-estate-acquisition-tax"
+      />,
+    );
+
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/finance/real-estate-acquisition-tax",
+    );
+  });
 });
