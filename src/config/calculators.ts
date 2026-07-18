@@ -207,4 +207,18 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/employment/gross-up-salary",
   },
+  {
+    id: "loan-interest-comparison",
+    name: "대출 이자 비교 계산기",
+    description:
+      "같은 원금과 기간에서 두 금리의 월 상환액과 총이자를 비교합니다.",
+    keywords: [
+      "대출 이자 비교",
+      "대출 금리 비교",
+      "이자 절감",
+      "loan comparison",
+    ],
+    category: "금융",
+    href: "/ko/finance/loan-interest-comparison",
+  },
 ] as const satisfies readonly PublishedCalculator[];

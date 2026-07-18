@@ -22,7 +22,10 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(23);
+    ).toHaveLength(24);
+    expect(
+      screen.getByRole("link", { name: /대출 이자 비교 계산기/ }),
+    ).toHaveAttribute("href", "/ko/finance/loan-interest-comparison");
     expect(screen.getByRole("link", { name: /LTV 계산기/ })).toHaveAttribute(
       "href",
       "/ko/finance/ltv",
@@ -106,7 +109,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 23,
+        numberOfItems: 24,
         itemListElement: [
           {
             position: 1,
@@ -222,6 +225,11 @@ describe("calculator directory", () => {
             position: 23,
             name: "세전 급여 역산 계산기",
             url: "https://www.calcome.com/ko/employment/gross-up-salary",
+          },
+          {
+            position: 24,
+            name: "대출 이자 비교 계산기",
+            url: "https://www.calcome.com/ko/finance/loan-interest-comparison",
           },
         ],
       },
