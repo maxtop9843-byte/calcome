@@ -259,4 +259,12 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/jeonse-loan-interest",
   },
+  {
+    id: "credit-loan-interest",
+    name: "신용대출 이자 계산기",
+    description: "대출금과 금리로 월 이자와 기간 전체 비용을 계산합니다.",
+    keywords: ["신용대출", "신용대출 이자", "개인신용대출", "credit loan"],
+    category: "금융",
+    href: "/ko/finance/credit-loan-interest",
+  },
 ] as const satisfies readonly PublishedCalculator[];
