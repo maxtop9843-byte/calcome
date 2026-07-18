@@ -34,6 +34,8 @@ export function MinimumWageCalculator({
     requestResultScroll,
     cancelResultScroll,
   } = useStableResultScroll(result);
+  const parsedHours = validateMinimumWageHours(hours);
+  const belowFifteen = Boolean(parsedHours?.lt(15));
 
   function submit(event: FormEvent) {
     event.preventDefault();
@@ -47,7 +49,6 @@ export function MinimumWageCalculator({
     setResult(calculateMinimumWage({ weeklyHours, includesPaidWeeklyHoliday }));
     setAnimationKey((value) => value + 1);
   }
-
   function reset() {
     cancelResultScroll();
     setHours("");
@@ -94,12 +95,18 @@ export function MinimumWageCalculator({
             <input
               type="checkbox"
               checked={includesPaidWeeklyHoliday}
+              disabled={belowFifteen}
               onChange={(event) =>
                 setIncludesPaidWeeklyHoliday(event.target.checked)
               }
             />
             {copy.holiday}
           </label>
+          {belowFifteen ? (
+            <p className="mt-2 text-sm text-muted-foreground">
+              {copy.underFifteenNotice}
+            </p>
+          ) : null}
           <div className="mt-4 grid grid-cols-[1fr_auto] gap-2">
             <Button type="submit">{copy.calculate}</Button>
             <Button type="button" variant="outline" onClick={reset}>
@@ -147,11 +154,50 @@ export function MinimumWageCalculator({
               },
             ]}
           />
-          <p className="mt-3 text-sm text-muted-foreground">
-            {result ? copy.resultNote : copy.description}
-          </p>
+          {result ? (
+            <>
+              <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+                <Detail
+                  label={copy.weeklyHoursResult}
+                  value={`${result.totalWeeklyPaidHours.minus(result.paidWeeklyHolidayHours)}h`}
+                />
+                <Detail
+                  label={copy.paidHolidayHours}
+                  value={`${result.paidWeeklyHolidayHours}h`}
+                />
+                <Detail
+                  label={copy.totalPaidHours}
+                  value={`${result.totalWeeklyPaidHours}h`}
+                />
+                <Detail
+                  label={copy.officialMonthly}
+                  value={`₩${result.officialMonthlyMinimum.toString()}`}
+                />
+              </dl>
+              <p className="mt-3 text-sm text-muted-foreground">
+                {copy.resultNote}
+              </p>
+              <p className="mt-2 text-sm text-muted-foreground">
+                {result.weeklyHolidayApplied
+                  ? copy.holidayAppliedNotice
+                  : copy.underFifteenNotice}
+              </p>
+            </>
+          ) : (
+            <p className="mt-3 text-sm text-muted-foreground">
+              {copy.description}
+            </p>
+          )}
         </section>
       </div>
     </section>
+  );
+}
+function Detail({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt className="text-muted-foreground">{label}</dt>
+      <dd className="font-semibold">{value}</dd>
+    </div>
   );
 }
