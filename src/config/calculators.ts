@@ -281,4 +281,12 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/early-loan-repayment-fee",
   },
+  {
+    id: "dti",
+    name: "DTI 계산기",
+    description: "연소득과 부채 상환액으로 예상 DTI를 계산합니다.",
+    keywords: ["DTI", "총부채상환비율", "주택담보대출", "debt to income"],
+    category: "금융",
+    href: "/ko/finance/dti",
+  },
 ] as const satisfies readonly PublishedCalculator[];

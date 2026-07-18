@@ -34,6 +34,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/finance/dti",
+        destination: "/ko/finance/dti",
+        permanent: true,
+      },
+      {
         source: "/finance/ltv",
         destination: "/ko/finance/ltv",
         permanent: true,

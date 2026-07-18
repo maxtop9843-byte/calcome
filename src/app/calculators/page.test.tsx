@@ -22,7 +22,11 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(30);
+    ).toHaveLength(31);
+    expect(screen.getByRole("link", { name: /DTI 계산기/ })).toHaveAttribute(
+      "href",
+      "/ko/finance/dti",
+    );
     expect(
       screen.getByRole("link", { name: /대출 이자 비교 계산기/ }),
     ).toHaveAttribute("href", "/ko/finance/loan-interest-comparison");
@@ -127,7 +131,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 30,
+        numberOfItems: 31,
         itemListElement: [
           {
             position: 1,
@@ -278,6 +282,11 @@ describe("calculator directory", () => {
             position: 30,
             name: "대출 중도상환수수료 계산기",
             url: "https://www.calcome.com/ko/finance/early-loan-repayment-fee",
+          },
+          {
+            position: 31,
+            name: "DTI 계산기",
+            url: "https://www.calcome.com/ko/finance/dti",
           },
         ],
       },

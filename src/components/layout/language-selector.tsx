@@ -9,7 +9,7 @@ import { sharedLayoutCopy } from "./layout-i18n";
 
 function localizedDestination(pathname: string, locale: CompoundLocale) {
   const localizedCalculator = pathname.match(
-    /^\/(?:ko|en)\/finance\/(compound-interest|savings|fixed-deposit|loan|cagr|dsr|ltv|loan-interest-comparison|loan-refinancing-savings|balloon-payment|mortgage-payment|jeonse-loan-interest|credit-loan-interest|early-loan-repayment-fee)$/,
+    /^\/(?:ko|en)\/finance\/(compound-interest|savings|fixed-deposit|loan|cagr|dsr|dti|ltv|loan-interest-comparison|loan-refinancing-savings|balloon-payment|mortgage-payment|jeonse-loan-interest|credit-loan-interest|early-loan-repayment-fee)$/,
   );
   const employmentCalculator = pathname.match(
     /^\/(?:ko|en)\/employment\/(severance-pay|net-salary|unemployment-benefits|weekly-holiday-pay|annual-leave-allowance|hourly-wage|social-insurance|average-wage|salary-raise|salary-conversion|gross-up-salary|overtime-pay|night-work-pay|holiday-work-pay|minimum-wage|retirement-pension)$/,

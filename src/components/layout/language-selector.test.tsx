@@ -139,6 +139,16 @@ describe("LanguageSelector", () => {
     );
   });
 
+  it("preserves the localized DTI destination", async () => {
+    const user = userEvent.setup();
+    render(<LanguageSelector locale="ko" pathname="/ko/finance/dti" />);
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/finance/dti",
+    );
+  });
+
   it("preserves the localized LTV destination", async () => {
     const user = userEvent.setup();
     render(<LanguageSelector locale="ko" pathname="/ko/finance/ltv" />);
