@@ -229,4 +229,17 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/loan-refinancing-savings",
   },
+  {
+    id: "balloon-payment",
+    name: "만기 일시상환액 계산기",
+    description: "월 납입액과 만기에 남는 큰 상환액, 총이자를 계산합니다.",
+    keywords: [
+      "만기 일시상환",
+      "벌룬 페이먼트",
+      "대출 상환",
+      "balloon payment",
+    ],
+    category: "금융",
+    href: "/ko/finance/balloon-payment",
+  },
 ] as const satisfies readonly PublishedCalculator[];
