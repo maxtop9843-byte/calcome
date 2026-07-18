@@ -129,5 +129,12 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/employment/overtime-pay",
   },
-  { id: "night-work-pay", name: "야간근로수당 계산기", description: "통상시급과 야간근로시간으로 예상 야간수당을 계산합니다.", keywords: ["야간근로수당", "야간수당", "가산임금", "night work pay"], category: "금융", href: "/ko/employment/night-work-pay" },
+  {
+    id: "night-work-pay",
+    name: "야간근로수당 계산기",
+    description: "통상시급과 야간근로시간으로 예상 야간수당을 계산합니다.",
+    keywords: ["야간근로수당", "야간수당", "가산임금", "night work pay"],
+    category: "금융",
+    href: "/ko/employment/night-work-pay",
+  },
 ] as const satisfies readonly PublishedCalculator[];
