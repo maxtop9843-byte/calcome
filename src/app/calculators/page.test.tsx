@@ -22,7 +22,7 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(29);
+    ).toHaveLength(30);
     expect(
       screen.getByRole("link", { name: /대출 이자 비교 계산기/ }),
     ).toHaveAttribute("href", "/ko/finance/loan-interest-comparison");
@@ -41,6 +41,9 @@ describe("calculator directory", () => {
     expect(
       screen.getByRole("link", { name: /신용대출 이자 계산기/ }),
     ).toHaveAttribute("href", "/ko/finance/credit-loan-interest");
+    expect(
+      screen.getByRole("link", { name: /대출 중도상환수수료 계산기/ }),
+    ).toHaveAttribute("href", "/ko/finance/early-loan-repayment-fee");
     expect(screen.getByRole("link", { name: /LTV 계산기/ })).toHaveAttribute(
       "href",
       "/ko/finance/ltv",
@@ -124,7 +127,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 29,
+        numberOfItems: 30,
         itemListElement: [
           {
             position: 1,
@@ -270,6 +273,11 @@ describe("calculator directory", () => {
             position: 29,
             name: "신용대출 이자 계산기",
             url: "https://www.calcome.com/ko/finance/credit-loan-interest",
+          },
+          {
+            position: 30,
+            name: "대출 중도상환수수료 계산기",
+            url: "https://www.calcome.com/ko/finance/early-loan-repayment-fee",
           },
         ],
       },

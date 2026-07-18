@@ -345,4 +345,20 @@ describe("LanguageSelector", () => {
       "/en/employment/gross-up-salary",
     );
   });
+
+  it("preserves the localized early repayment fee destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector
+        locale="ko"
+        pathname="/ko/finance/early-loan-repayment-fee"
+      />,
+    );
+
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/finance/early-loan-repayment-fee",
+    );
+  });
 });

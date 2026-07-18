@@ -75,6 +75,11 @@ describe("legacy calculator redirects", () => {
         permanent: true,
       },
       {
+        source: "/finance/early-loan-repayment-fee",
+        destination: "/ko/finance/early-loan-repayment-fee",
+        permanent: true,
+      },
+      {
         source: "/employment/net-salary",
         destination: "/ko/employment/net-salary",
         permanent: true,

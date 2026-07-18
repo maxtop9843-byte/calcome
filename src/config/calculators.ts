@@ -267,4 +267,18 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/credit-loan-interest",
   },
+  {
+    id: "early-loan-repayment-fee",
+    name: "대출 중도상환수수료 계산기",
+    description:
+      "상환금액과 남은 약정기간으로 예상 중도상환수수료를 계산합니다.",
+    keywords: [
+      "중도상환수수료",
+      "대출 조기상환",
+      "상환 수수료",
+      "prepayment fee",
+    ],
+    category: "금융",
+    href: "/ko/finance/early-loan-repayment-fee",
+  },
 ] as const satisfies readonly PublishedCalculator[];
