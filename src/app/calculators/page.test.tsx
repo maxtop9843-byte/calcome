@@ -22,7 +22,11 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(34);
+    ).toHaveLength(35);
+    expect(screen.getByRole("link", { name: /상속세 계산기/ })).toHaveAttribute(
+      "href",
+      "/ko/finance/inheritance-tax",
+    );
     expect(screen.getByRole("link", { name: /증여세 계산기/ })).toHaveAttribute(
       "href",
       "/ko/finance/gift-tax",
@@ -141,7 +145,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 34,
+        numberOfItems: 35,
         itemListElement: [
           {
             position: 1,
@@ -312,6 +316,11 @@ describe("calculator directory", () => {
             position: 34,
             name: "증여세 계산기",
             url: "https://www.calcome.com/ko/finance/gift-tax",
+          },
+          {
+            position: 35,
+            name: "상속세 계산기",
+            url: "https://www.calcome.com/ko/finance/inheritance-tax",
           },
         ],
       },

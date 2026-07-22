@@ -315,4 +315,13 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/gift-tax",
   },
+  {
+    id: "inheritance-tax",
+    name: "상속세 계산기",
+    description:
+      "총상속재산과 확인한 채무·비용·공제액·세율로 예상 상속세를 계산합니다.",
+    keywords: ["상속세", "상속공제", "과세표준", "inheritance tax"],
+    category: "금융",
+    href: "/ko/finance/inheritance-tax",
+  },
 ] as const satisfies readonly PublishedCalculator[];
