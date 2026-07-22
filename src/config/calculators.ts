@@ -453,4 +453,13 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/jeonse-monthly-rent-conversion",
   },
+  {
+    id: "real-estate-brokerage-fee",
+    name: "부동산 중개보수 계산기",
+    description:
+      "거래금액과 확인한 중개보수율, 부가세율로 예상 중개비를 계산합니다.",
+    keywords: ["부동산 중개보수", "중개비", "복비", "brokerage fee"],
+    category: "금융",
+    href: "/ko/finance/real-estate-brokerage-fee",
+  },
 ] as const satisfies readonly PublishedCalculator[];

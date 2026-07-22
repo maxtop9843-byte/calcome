@@ -22,7 +22,10 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(46);
+    ).toHaveLength(47);
+    expect(
+      screen.getByRole("link", { name: /부동산 중개보수 계산기/ }),
+    ).toHaveAttribute("href", "/ko/finance/real-estate-brokerage-fee");
     expect(
       screen.getByRole("link", { name: /전세 월세 전환 계산기/ }),
     ).toHaveAttribute("href", "/ko/finance/jeonse-monthly-rent-conversion");
@@ -182,7 +185,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 46,
+        numberOfItems: 47,
         itemListElement: [
           {
             position: 1,
@@ -413,6 +416,11 @@ describe("calculator directory", () => {
             position: 46,
             name: "전세 월세 전환 계산기",
             url: "https://www.calcome.com/ko/finance/jeonse-monthly-rent-conversion",
+          },
+          {
+            position: 47,
+            name: "부동산 중개보수 계산기",
+            url: "https://www.calcome.com/ko/finance/real-estate-brokerage-fee",
           },
         ],
       },

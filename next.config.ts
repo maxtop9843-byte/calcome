@@ -154,6 +154,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/finance/real-estate-brokerage-fee",
+        destination: "/ko/finance/real-estate-brokerage-fee",
+        permanent: true,
+      },
+      {
         source: "/employment/net-salary",
         destination: "/ko/employment/net-salary",
         permanent: true,
