@@ -333,4 +333,18 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/property-tax",
   },
+  {
+    id: "comprehensive-real-estate-holding-tax",
+    name: "종합부동산세 계산기",
+    description:
+      "합산 공시가격과 확인한 공제액·비율·세율로 예상 종합부동산세를 계산합니다.",
+    keywords: [
+      "종합부동산세",
+      "종부세",
+      "공시가격",
+      "comprehensive real estate holding tax",
+    ],
+    category: "금융",
+    href: "/ko/finance/comprehensive-real-estate-holding-tax",
+  },
 ] as const satisfies readonly PublishedCalculator[];

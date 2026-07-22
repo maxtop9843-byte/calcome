@@ -22,7 +22,13 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(36);
+    ).toHaveLength(37);
+    expect(
+      screen.getByRole("link", { name: /종합부동산세 계산기/ }),
+    ).toHaveAttribute(
+      "href",
+      "/ko/finance/comprehensive-real-estate-holding-tax",
+    );
     expect(screen.getByRole("link", { name: /재산세 계산기/ })).toHaveAttribute(
       "href",
       "/ko/finance/property-tax",
@@ -149,7 +155,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 36,
+        numberOfItems: 37,
         itemListElement: [
           {
             position: 1,
@@ -330,6 +336,11 @@ describe("calculator directory", () => {
             position: 36,
             name: "재산세 계산기",
             url: "https://www.calcome.com/ko/finance/property-tax",
+          },
+          {
+            position: 37,
+            name: "종합부동산세 계산기",
+            url: "https://www.calcome.com/ko/finance/comprehensive-real-estate-holding-tax",
           },
         ],
       },

@@ -435,4 +435,19 @@ describe("LanguageSelector", () => {
       "/en/finance/property-tax",
     );
   });
+
+  it("preserves the localized comprehensive holding tax destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector
+        locale="ko"
+        pathname="/ko/finance/comprehensive-real-estate-holding-tax"
+      />,
+    );
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/finance/comprehensive-real-estate-holding-tax",
+    );
+  });
 });
