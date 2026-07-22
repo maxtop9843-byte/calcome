@@ -114,6 +114,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/finance/comprehensive-income-tax",
+        destination: "/ko/finance/comprehensive-income-tax",
+        permanent: true,
+      },
+      {
         source: "/employment/net-salary",
         destination: "/ko/employment/net-salary",
         permanent: true,

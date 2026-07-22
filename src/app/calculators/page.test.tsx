@@ -22,7 +22,10 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(38);
+    ).toHaveLength(39);
+    expect(
+      screen.getByRole("link", { name: /종합소득세 계산기/ }),
+    ).toHaveAttribute("href", "/ko/finance/comprehensive-income-tax");
     expect(
       screen.getByRole("link", { name: /부가가치세 계산기/ }),
     ).toHaveAttribute("href", "/ko/finance/value-added-tax");
@@ -158,7 +161,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 38,
+        numberOfItems: 39,
         itemListElement: [
           {
             position: 1,
@@ -349,6 +352,11 @@ describe("calculator directory", () => {
             position: 38,
             name: "부가가치세 계산기",
             url: "https://www.calcome.com/ko/finance/value-added-tax",
+          },
+          {
+            position: 39,
+            name: "종합소득세 계산기",
+            url: "https://www.calcome.com/ko/finance/comprehensive-income-tax",
           },
         ],
       },

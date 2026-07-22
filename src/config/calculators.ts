@@ -356,4 +356,13 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/value-added-tax",
   },
+  {
+    id: "comprehensive-income-tax",
+    name: "종합소득세 계산기",
+    description:
+      "총수입금액과 필요경비, 확인한 공제액·세율로 예상 종합소득세를 계산합니다.",
+    keywords: ["종합소득세", "종합소득", "과세표준", "income tax"],
+    category: "금융",
+    href: "/ko/finance/comprehensive-income-tax",
+  },
 ] as const satisfies readonly PublishedCalculator[];

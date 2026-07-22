@@ -462,4 +462,19 @@ describe("LanguageSelector", () => {
       "/en/finance/value-added-tax",
     );
   });
+
+  it("preserves the localized comprehensive income tax destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector
+        locale="ko"
+        pathname="/ko/finance/comprehensive-income-tax"
+      />,
+    );
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/finance/comprehensive-income-tax",
+    );
+  });
 });
