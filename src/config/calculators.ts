@@ -471,4 +471,13 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/stock-average-cost",
   },
+  {
+    id: "stock-profit-loss",
+    name: "주식 수익률 계산기",
+    description:
+      "보유 수량과 평균 매수가격, 현재 가격으로 평가 손익과 수익률을 계산합니다.",
+    keywords: ["주식 수익률", "주식 손익", "평가 손익", "stock profit loss"],
+    category: "금융",
+    href: "/ko/finance/stock-profit-loss",
+  },
 ] as const satisfies readonly PublishedCalculator[];
