@@ -22,7 +22,10 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(41);
+    ).toHaveLength(42);
+    expect(
+      screen.getByRole("link", { name: /대출 한도 계산기/ }),
+    ).toHaveAttribute("href", "/ko/finance/loan-affordability");
     expect(
       screen.getByRole("link", { name: /프리랜서 3.3% 세금 계산기/ }),
     ).toHaveAttribute("href", "/ko/finance/freelancer-3-3-tax");
@@ -167,7 +170,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 41,
+        numberOfItems: 42,
         itemListElement: [
           {
             position: 1,
@@ -373,6 +376,11 @@ describe("calculator directory", () => {
             position: 41,
             name: "프리랜서 3.3% 세금 계산기",
             url: "https://www.calcome.com/ko/finance/freelancer-3-3-tax",
+          },
+          {
+            position: 42,
+            name: "대출 한도 계산기",
+            url: "https://www.calcome.com/ko/finance/loan-affordability",
           },
         ],
       },
