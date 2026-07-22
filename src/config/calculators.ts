@@ -397,4 +397,18 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/loan-affordability",
   },
+  {
+    id: "debt-repayment-period",
+    name: "대출 상환 기간 계산기",
+    description:
+      "대출 잔액과 금리, 매월 상환액으로 예상 완납 기간과 총 이자를 계산합니다.",
+    keywords: [
+      "대출 상환 기간",
+      "대출 완납",
+      "총 이자",
+      "debt repayment period",
+    ],
+    category: "금융",
+    href: "/ko/finance/debt-repayment-period",
+  },
 ] as const satisfies readonly PublishedCalculator[];
