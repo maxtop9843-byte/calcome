@@ -411,4 +411,18 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/debt-repayment-period",
   },
+  {
+    id: "credit-card-installment-interest",
+    name: "신용카드 할부 수수료 계산기",
+    description:
+      "카드 결제 금액과 할부 개월, 연 수수료율로 예상 할부 수수료와 월 납부액을 계산합니다.",
+    keywords: [
+      "신용카드 할부",
+      "할부 수수료",
+      "할부 이자",
+      "card installment interest",
+    ],
+    category: "금융",
+    href: "/ko/finance/credit-card-installment-interest",
+  },
 ] as const satisfies readonly PublishedCalculator[];

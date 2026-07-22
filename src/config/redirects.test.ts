@@ -145,6 +145,11 @@ describe("legacy calculator redirects", () => {
         permanent: true,
       },
       {
+        source: "/finance/credit-card-installment-interest",
+        destination: "/ko/finance/credit-card-installment-interest",
+        permanent: true,
+      },
+      {
         source: "/employment/net-salary",
         destination: "/ko/employment/net-salary",
         permanent: true,
