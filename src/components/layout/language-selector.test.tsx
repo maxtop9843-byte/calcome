@@ -594,4 +594,16 @@ describe("LanguageSelector", () => {
       "/en/finance/stock-average-cost",
     );
   });
+
+  it("preserves the localized stock profit and loss destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector locale="ko" pathname="/ko/finance/stock-profit-loss" />,
+    );
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/finance/stock-profit-loss",
+    );
+  });
 });

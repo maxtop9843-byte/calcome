@@ -164,6 +164,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/finance/stock-profit-loss",
+        destination: "/ko/finance/stock-profit-loss",
+        permanent: true,
+      },
+      {
         source: "/employment/net-salary",
         destination: "/ko/employment/net-salary",
         permanent: true,

@@ -22,7 +22,10 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(48);
+    ).toHaveLength(49);
+    expect(
+      screen.getByRole("link", { name: /주식 수익률 계산기/ }),
+    ).toHaveAttribute("href", "/ko/finance/stock-profit-loss");
     expect(
       screen.getByRole("link", { name: /주식 물타기 계산기/ }),
     ).toHaveAttribute("href", "/ko/finance/stock-average-cost");
@@ -188,7 +191,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 48,
+        numberOfItems: 49,
         itemListElement: [
           {
             position: 1,
@@ -429,6 +432,11 @@ describe("calculator directory", () => {
             position: 48,
             name: "주식 물타기 계산기",
             url: "https://www.calcome.com/ko/finance/stock-average-cost",
+          },
+          {
+            position: 49,
+            name: "주식 수익률 계산기",
+            url: "https://www.calcome.com/ko/finance/stock-profit-loss",
           },
         ],
       },
