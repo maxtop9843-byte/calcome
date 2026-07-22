@@ -22,7 +22,11 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(49);
+    ).toHaveLength(50);
+    expect(screen.getByRole("link", { name: /배당금 계산기/ })).toHaveAttribute(
+      "href",
+      "/ko/finance/dividend",
+    );
     expect(
       screen.getByRole("link", { name: /주식 수익률 계산기/ }),
     ).toHaveAttribute("href", "/ko/finance/stock-profit-loss");
@@ -191,7 +195,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 49,
+        numberOfItems: 50,
         itemListElement: [
           {
             position: 1,
@@ -437,6 +441,11 @@ describe("calculator directory", () => {
             position: 49,
             name: "주식 수익률 계산기",
             url: "https://www.calcome.com/ko/finance/stock-profit-loss",
+          },
+          {
+            position: 50,
+            name: "배당금 계산기",
+            url: "https://www.calcome.com/ko/finance/dividend",
           },
         ],
       },

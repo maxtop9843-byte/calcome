@@ -606,4 +606,14 @@ describe("LanguageSelector", () => {
       "/en/finance/stock-profit-loss",
     );
   });
+
+  it("preserves the localized dividend destination", async () => {
+    const user = userEvent.setup();
+    render(<LanguageSelector locale="ko" pathname="/ko/finance/dividend" />);
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/finance/dividend",
+    );
+  });
 });

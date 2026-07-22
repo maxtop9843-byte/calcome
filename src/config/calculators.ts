@@ -480,4 +480,13 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/stock-profit-loss",
   },
+  {
+    id: "dividend",
+    name: "배당금 계산기",
+    description:
+      "보유 수량과 주당 연간 배당금, 지급 횟수, 원천징수율로 예상 배당 현금흐름을 계산합니다.",
+    keywords: ["배당금", "세후 배당금", "배당 소득", "dividend calculator"],
+    category: "금융",
+    href: "/ko/finance/dividend",
+  },
 ] as const satisfies readonly PublishedCalculator[];
