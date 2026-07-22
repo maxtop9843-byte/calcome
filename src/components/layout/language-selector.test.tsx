@@ -564,4 +564,19 @@ describe("LanguageSelector", () => {
       "/en/finance/jeonse-monthly-rent-conversion",
     );
   });
+
+  it("preserves the localized real estate brokerage fee destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector
+        locale="ko"
+        pathname="/ko/finance/real-estate-brokerage-fee"
+      />,
+    );
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/finance/real-estate-brokerage-fee",
+    );
+  });
 });
