@@ -383,4 +383,18 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/freelancer-3-3-tax",
   },
+  {
+    id: "loan-affordability",
+    name: "대출 한도 계산기",
+    description:
+      "연소득과 기존 부채, 목표 부채상환 비율로 예상 대출 가능 금액을 계산합니다.",
+    keywords: [
+      "대출 한도",
+      "대출 가능 금액",
+      "상환 여력",
+      "loan affordability",
+    ],
+    category: "금융",
+    href: "/ko/finance/loan-affordability",
+  },
 ] as const satisfies readonly PublishedCalculator[];

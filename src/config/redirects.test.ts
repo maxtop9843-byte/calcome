@@ -135,6 +135,11 @@ describe("legacy calculator redirects", () => {
         permanent: true,
       },
       {
+        source: "/finance/loan-affordability",
+        destination: "/ko/finance/loan-affordability",
+        permanent: true,
+      },
+      {
         source: "/employment/net-salary",
         destination: "/ko/employment/net-salary",
         permanent: true,
