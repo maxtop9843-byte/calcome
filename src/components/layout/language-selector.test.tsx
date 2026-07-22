@@ -579,4 +579,19 @@ describe("LanguageSelector", () => {
       "/en/finance/real-estate-brokerage-fee",
     );
   });
+
+  it("preserves the localized stock average cost destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector
+        locale="ko"
+        pathname="/ko/finance/stock-average-cost"
+      />,
+    );
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/finance/stock-average-cost",
+    );
+  });
 });

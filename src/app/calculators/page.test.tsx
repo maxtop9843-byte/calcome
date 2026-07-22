@@ -22,7 +22,10 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(47);
+    ).toHaveLength(48);
+    expect(
+      screen.getByRole("link", { name: /주식 물타기 계산기/ }),
+    ).toHaveAttribute("href", "/ko/finance/stock-average-cost");
     expect(
       screen.getByRole("link", { name: /부동산 중개보수 계산기/ }),
     ).toHaveAttribute("href", "/ko/finance/real-estate-brokerage-fee");
@@ -185,7 +188,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 47,
+        numberOfItems: 48,
         itemListElement: [
           {
             position: 1,
@@ -421,6 +424,11 @@ describe("calculator directory", () => {
             position: 47,
             name: "부동산 중개보수 계산기",
             url: "https://www.calcome.com/ko/finance/real-estate-brokerage-fee",
+          },
+          {
+            position: 48,
+            name: "주식 물타기 계산기",
+            url: "https://www.calcome.com/ko/finance/stock-average-cost",
           },
         ],
       },
