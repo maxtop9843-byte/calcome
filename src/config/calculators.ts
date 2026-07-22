@@ -324,4 +324,13 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/inheritance-tax",
   },
+  {
+    id: "property-tax",
+    name: "재산세 계산기",
+    description:
+      "시가표준액과 확인한 과세표준 비율·세율로 예상 재산세를 계산합니다.",
+    keywords: ["재산세", "과세표준", "지방교육세", "property tax"],
+    category: "금융",
+    href: "/ko/finance/property-tax",
+  },
 ] as const satisfies readonly PublishedCalculator[];

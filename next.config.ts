@@ -99,6 +99,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/finance/property-tax",
+        destination: "/ko/finance/property-tax",
+        permanent: true,
+      },
+      {
         source: "/employment/net-salary",
         destination: "/ko/employment/net-salary",
         permanent: true,

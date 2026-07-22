@@ -423,4 +423,16 @@ describe("LanguageSelector", () => {
       "/en/finance/inheritance-tax",
     );
   });
+
+  it("preserves the localized property tax destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector locale="ko" pathname="/ko/finance/property-tax" />,
+    );
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/finance/property-tax",
+    );
+  });
 });
