@@ -104,6 +104,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/finance/comprehensive-real-estate-holding-tax",
+        destination: "/ko/finance/comprehensive-real-estate-holding-tax",
+        permanent: true,
+      },
+      {
         source: "/employment/net-salary",
         destination: "/ko/employment/net-salary",
         permanent: true,
