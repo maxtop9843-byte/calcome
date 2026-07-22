@@ -519,4 +519,19 @@ describe("LanguageSelector", () => {
       "/en/finance/debt-repayment-period",
     );
   });
+
+  it("preserves the localized credit card installment destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector
+        locale="ko"
+        pathname="/ko/finance/credit-card-installment-interest"
+      />,
+    );
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/finance/credit-card-installment-interest",
+    );
+  });
 });
