@@ -22,7 +22,10 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(39);
+    ).toHaveLength(40);
+    expect(
+      screen.getByRole("link", { name: /원천징수세 계산기/ }),
+    ).toHaveAttribute("href", "/ko/finance/withholding-tax");
     expect(
       screen.getByRole("link", { name: /종합소득세 계산기/ }),
     ).toHaveAttribute("href", "/ko/finance/comprehensive-income-tax");
@@ -161,7 +164,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 39,
+        numberOfItems: 40,
         itemListElement: [
           {
             position: 1,
@@ -357,6 +360,11 @@ describe("calculator directory", () => {
             position: 39,
             name: "종합소득세 계산기",
             url: "https://www.calcome.com/ko/finance/comprehensive-income-tax",
+          },
+          {
+            position: 40,
+            name: "원천징수세 계산기",
+            url: "https://www.calcome.com/ko/finance/withholding-tax",
           },
         ],
       },

@@ -119,6 +119,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/finance/withholding-tax",
+        destination: "/ko/finance/withholding-tax",
+        permanent: true,
+      },
+      {
         source: "/employment/net-salary",
         destination: "/ko/employment/net-salary",
         permanent: true,

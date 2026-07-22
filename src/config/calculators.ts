@@ -365,4 +365,13 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/comprehensive-income-tax",
   },
+  {
+    id: "withholding-tax",
+    name: "원천징수세 계산기",
+    description:
+      "지급액과 확인한 비과세 금액·세율로 예상 원천징수세와 실수령액을 계산합니다.",
+    keywords: ["원천징수", "원천징수세", "소득세", "withholding tax"],
+    category: "금융",
+    href: "/ko/finance/withholding-tax",
+  },
 ] as const satisfies readonly PublishedCalculator[];

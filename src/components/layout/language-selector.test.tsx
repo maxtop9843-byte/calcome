@@ -477,4 +477,16 @@ describe("LanguageSelector", () => {
       "/en/finance/comprehensive-income-tax",
     );
   });
+
+  it("preserves the localized withholding tax destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector locale="ko" pathname="/ko/finance/withholding-tax" />,
+    );
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/finance/withholding-tax",
+    );
+  });
 });
