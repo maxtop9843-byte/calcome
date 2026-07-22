@@ -22,7 +22,10 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(32);
+    ).toHaveLength(33);
+    expect(
+      screen.getByRole("link", { name: /양도소득세 계산기/ }),
+    ).toHaveAttribute("href", "/ko/finance/capital-gains-tax");
     expect(
       screen.getByRole("link", { name: /부동산 취득세 계산기/ }),
     ).toHaveAttribute("href", "/ko/finance/real-estate-acquisition-tax");
@@ -134,7 +137,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 32,
+        numberOfItems: 33,
         itemListElement: [
           {
             position: 1,
@@ -295,6 +298,11 @@ describe("calculator directory", () => {
             position: 32,
             name: "부동산 취득세 계산기",
             url: "https://www.calcome.com/ko/finance/real-estate-acquisition-tax",
+          },
+          {
+            position: 33,
+            name: "양도소득세 계산기",
+            url: "https://www.calcome.com/ko/finance/capital-gains-tax",
           },
         ],
       },

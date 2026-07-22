@@ -297,4 +297,13 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/real-estate-acquisition-tax",
   },
+  {
+    id: "capital-gains-tax",
+    name: "양도소득세 계산기",
+    description:
+      "양도가액과 취득가액, 비용과 확인한 세율로 예상 세금을 계산합니다.",
+    keywords: ["양도소득세", "양도차익", "자본이득세", "capital gains tax"],
+    category: "금융",
+    href: "/ko/finance/capital-gains-tax",
+  },
 ] as const satisfies readonly PublishedCalculator[];

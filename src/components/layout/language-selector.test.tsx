@@ -387,4 +387,17 @@ describe("LanguageSelector", () => {
       "/en/finance/real-estate-acquisition-tax",
     );
   });
+
+  it("preserves the localized capital gains tax destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector locale="ko" pathname="/ko/finance/capital-gains-tax" />,
+    );
+
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/finance/capital-gains-tax",
+    );
+  });
 });
