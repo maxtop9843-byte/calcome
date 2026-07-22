@@ -534,4 +534,19 @@ describe("LanguageSelector", () => {
       "/en/finance/credit-card-installment-interest",
     );
   });
+
+  it("preserves the localized rent conversion rate destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector
+        locale="ko"
+        pathname="/ko/finance/rent-conversion-rate"
+      />,
+    );
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/finance/rent-conversion-rate",
+    );
+  });
 });

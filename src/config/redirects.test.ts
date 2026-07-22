@@ -150,6 +150,11 @@ describe("legacy calculator redirects", () => {
         permanent: true,
       },
       {
+        source: "/finance/rent-conversion-rate",
+        destination: "/ko/finance/rent-conversion-rate",
+        permanent: true,
+      },
+      {
         source: "/employment/net-salary",
         destination: "/ko/employment/net-salary",
         permanent: true,

@@ -22,7 +22,10 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(44);
+    ).toHaveLength(45);
+    expect(
+      screen.getByRole("link", { name: /전월세 전환율 계산기/ }),
+    ).toHaveAttribute("href", "/ko/finance/rent-conversion-rate");
     expect(
       screen.getByRole("link", { name: /신용카드 할부 수수료 계산기/ }),
     ).toHaveAttribute("href", "/ko/finance/credit-card-installment-interest");
@@ -176,7 +179,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 44,
+        numberOfItems: 45,
         itemListElement: [
           {
             position: 1,
@@ -397,6 +400,11 @@ describe("calculator directory", () => {
             position: 44,
             name: "신용카드 할부 수수료 계산기",
             url: "https://www.calcome.com/ko/finance/credit-card-installment-interest",
+          },
+          {
+            position: 45,
+            name: "전월세 전환율 계산기",
+            url: "https://www.calcome.com/ko/finance/rent-conversion-rate",
           },
         ],
       },

@@ -425,4 +425,18 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/credit-card-installment-interest",
   },
+  {
+    id: "rent-conversion-rate",
+    name: "전월세 전환율 계산기",
+    description:
+      "전세 보증금과 월세 보증금, 월세로 연간 전월세 전환율을 계산합니다.",
+    keywords: [
+      "전월세 전환율",
+      "전세 월세 비교",
+      "월세",
+      "rent conversion rate",
+    ],
+    category: "금융",
+    href: "/ko/finance/rent-conversion-rate",
+  },
 ] as const satisfies readonly PublishedCalculator[];
