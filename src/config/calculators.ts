@@ -439,4 +439,18 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/rent-conversion-rate",
   },
+  {
+    id: "jeonse-monthly-rent-conversion",
+    name: "전세 월세 전환 계산기",
+    description:
+      "전세 보증금과 월세 보증금, 확인한 연 전환율로 예상 월세를 계산합니다.",
+    keywords: [
+      "전세 월세 전환",
+      "예상 월세",
+      "전월세 전환",
+      "jeonse to monthly rent",
+    ],
+    category: "금융",
+    href: "/ko/finance/jeonse-monthly-rent-conversion",
+  },
 ] as const satisfies readonly PublishedCalculator[];

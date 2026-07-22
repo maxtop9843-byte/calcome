@@ -22,7 +22,10 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(45);
+    ).toHaveLength(46);
+    expect(
+      screen.getByRole("link", { name: /전세 월세 전환 계산기/ }),
+    ).toHaveAttribute("href", "/ko/finance/jeonse-monthly-rent-conversion");
     expect(
       screen.getByRole("link", { name: /전월세 전환율 계산기/ }),
     ).toHaveAttribute("href", "/ko/finance/rent-conversion-rate");
@@ -179,7 +182,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 45,
+        numberOfItems: 46,
         itemListElement: [
           {
             position: 1,
@@ -405,6 +408,11 @@ describe("calculator directory", () => {
             position: 45,
             name: "전월세 전환율 계산기",
             url: "https://www.calcome.com/ko/finance/rent-conversion-rate",
+          },
+          {
+            position: 46,
+            name: "전세 월세 전환 계산기",
+            url: "https://www.calcome.com/ko/finance/jeonse-monthly-rent-conversion",
           },
         ],
       },
