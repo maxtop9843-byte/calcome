@@ -462,4 +462,13 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/real-estate-brokerage-fee",
   },
+  {
+    id: "stock-average-cost",
+    name: "주식 물타기 계산기",
+    description:
+      "현재 보유 수량과 평균단가, 추가 매수 수량과 가격으로 새로운 평균단가를 계산합니다.",
+    keywords: ["주식 물타기", "주식 평균단가", "평단가", "stock average cost"],
+    category: "금융",
+    href: "/ko/finance/stock-average-cost",
+  },
 ] as const satisfies readonly PublishedCalculator[];
