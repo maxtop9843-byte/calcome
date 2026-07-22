@@ -115,6 +115,11 @@ describe("legacy calculator redirects", () => {
         permanent: true,
       },
       {
+        source: "/finance/value-added-tax",
+        destination: "/ko/finance/value-added-tax",
+        permanent: true,
+      },
+      {
         source: "/employment/net-salary",
         destination: "/ko/employment/net-salary",
         permanent: true,

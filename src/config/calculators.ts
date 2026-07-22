@@ -347,4 +347,13 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/comprehensive-real-estate-holding-tax",
   },
+  {
+    id: "value-added-tax",
+    name: "부가가치세 계산기",
+    description:
+      "공급가액에 부가세를 더하거나 합계금액에서 공급가액과 부가세를 역산합니다.",
+    keywords: ["부가가치세", "부가세", "공급가액", "VAT"],
+    category: "금융",
+    href: "/ko/finance/value-added-tax",
+  },
 ] as const satisfies readonly PublishedCalculator[];

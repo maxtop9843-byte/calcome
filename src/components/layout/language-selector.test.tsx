@@ -450,4 +450,16 @@ describe("LanguageSelector", () => {
       "/en/finance/comprehensive-real-estate-holding-tax",
     );
   });
+
+  it("preserves the localized value added tax destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector locale="ko" pathname="/ko/finance/value-added-tax" />,
+    );
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/finance/value-added-tax",
+    );
+  });
 });
