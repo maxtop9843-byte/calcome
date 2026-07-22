@@ -489,4 +489,19 @@ describe("LanguageSelector", () => {
       "/en/finance/withholding-tax",
     );
   });
+
+  it("preserves the localized freelancer tax destination", async () => {
+    const user = userEvent.setup();
+    render(
+      <LanguageSelector
+        locale="ko"
+        pathname="/ko/finance/freelancer-3-3-tax"
+      />,
+    );
+    await user.click(screen.getByLabelText("언어 선택"));
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/finance/freelancer-3-3-tax",
+    );
+  });
 });

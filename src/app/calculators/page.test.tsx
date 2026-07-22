@@ -22,7 +22,10 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(40);
+    ).toHaveLength(41);
+    expect(
+      screen.getByRole("link", { name: /프리랜서 3.3% 세금 계산기/ }),
+    ).toHaveAttribute("href", "/ko/finance/freelancer-3-3-tax");
     expect(
       screen.getByRole("link", { name: /원천징수세 계산기/ }),
     ).toHaveAttribute("href", "/ko/finance/withholding-tax");
@@ -164,7 +167,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 40,
+        numberOfItems: 41,
         itemListElement: [
           {
             position: 1,
@@ -365,6 +368,11 @@ describe("calculator directory", () => {
             position: 40,
             name: "원천징수세 계산기",
             url: "https://www.calcome.com/ko/finance/withholding-tax",
+          },
+          {
+            position: 41,
+            name: "프리랜서 3.3% 세금 계산기",
+            url: "https://www.calcome.com/ko/finance/freelancer-3-3-tax",
           },
         ],
       },

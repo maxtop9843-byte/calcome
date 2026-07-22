@@ -374,4 +374,13 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/withholding-tax",
   },
+  {
+    id: "freelancer-3-3-tax",
+    name: "프리랜서 3.3% 세금 계산기",
+    description:
+      "프리랜서 지급액의 3.3% 원천징수세와 예상 실수령액을 계산합니다.",
+    keywords: ["프리랜서 세금", "3.3%", "사업소득", "원천징수"],
+    category: "금융",
+    href: "/ko/finance/freelancer-3-3-tax",
+  },
 ] as const satisfies readonly PublishedCalculator[];

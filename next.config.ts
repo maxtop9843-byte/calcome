@@ -124,6 +124,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/finance/freelancer-3-3-tax",
+        destination: "/ko/finance/freelancer-3-3-tax",
+        permanent: true,
+      },
+      {
         source: "/employment/net-salary",
         destination: "/ko/employment/net-salary",
         permanent: true,
