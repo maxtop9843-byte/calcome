@@ -22,7 +22,11 @@ describe("calculator directory", () => {
       within(screen.getByRole("list", { name: "공개 계산기" })).getAllByRole(
         "listitem",
       ),
-    ).toHaveLength(33);
+    ).toHaveLength(34);
+    expect(screen.getByRole("link", { name: /증여세 계산기/ })).toHaveAttribute(
+      "href",
+      "/ko/finance/gift-tax",
+    );
     expect(
       screen.getByRole("link", { name: /양도소득세 계산기/ }),
     ).toHaveAttribute("href", "/ko/finance/capital-gains-tax");
@@ -137,7 +141,7 @@ describe("calculator directory", () => {
       "@type": "CollectionPage",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: 33,
+        numberOfItems: 34,
         itemListElement: [
           {
             position: 1,
@@ -303,6 +307,11 @@ describe("calculator directory", () => {
             position: 33,
             name: "양도소득세 계산기",
             url: "https://www.calcome.com/ko/finance/capital-gains-tax",
+          },
+          {
+            position: 34,
+            name: "증여세 계산기",
+            url: "https://www.calcome.com/ko/finance/gift-tax",
           },
         ],
       },

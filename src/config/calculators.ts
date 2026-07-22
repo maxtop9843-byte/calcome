@@ -306,4 +306,13 @@ export const publishedCalculators = [
     category: "금융",
     href: "/ko/finance/capital-gains-tax",
   },
+  {
+    id: "gift-tax",
+    name: "증여세 계산기",
+    description:
+      "증여 재산가액과 확인한 공제액·세율로 예상 증여세를 계산합니다.",
+    keywords: ["증여세", "증여재산공제", "과세표준", "gift tax"],
+    category: "금융",
+    href: "/ko/finance/gift-tax",
+  },
 ] as const satisfies readonly PublishedCalculator[];
