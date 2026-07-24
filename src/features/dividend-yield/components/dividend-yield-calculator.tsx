@@ -151,8 +151,14 @@ export function DividendYieldCalculator({
             {result ? (
               <p className="mt-3 text-sm leading-7 text-muted-foreground">
                 {locale === "ko"
-                  ? `현재 주가 대비 주당 연간 배당금의 비율은 ${percent(result.dividendYield, locale)}입니다.`
-                  : `The annual dividend is ${percent(result.dividendYield, locale)} of the current share price.`}
+                  ? `현재 주가 대비 주당 연간 배당금의 비율은 ${percent(
+                      result.dividendYield,
+                      locale,
+                    )}입니다.`
+                  : `The annual dividend is ${percent(
+                      result.dividendYield,
+                      locale,
+                    )} of the current share price.`}
               </p>
             ) : (
               <p className="mt-3 text-sm text-muted-foreground">{copy.empty}</p>
