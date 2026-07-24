@@ -16,10 +16,8 @@ const publicStaticPaths = [
 ] as const;
 
 export function calculatorSitemapEntries(
-  calculators: readonly Pick<
-    PublishedCalculator,
-    "href"
-  >[] = publishedCalculators,
+  calculators: readonly Pick<PublishedCalculator, "href">[] =
+    publishedCalculators,
 ): MetadataRoute.Sitemap {
   return calculators.flatMap(({ href }) => {
     const englishHref = href.replace(/^\/ko\//, "/en/");
