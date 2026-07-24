@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 import {
   publishedCalculators,
   type PublishedCalculator,
-} from "@/config/calculators";
+} from "@/config/published-calculators";
 import { absoluteUrl } from "@/config/site";
 
 const publicStaticPaths = [
