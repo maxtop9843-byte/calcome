@@ -70,7 +70,10 @@ export function DividendYieldCalculator({
           className={`${compactCalculatorSettingsClass} min-w-0`}
         >
           <p className="text-sm font-semibold text-primary">{copy.category}</p>
-          <h2 id="dividend-yield-input-title" className="mt-1 text-xl font-semibold">
+          <h2
+            id="dividend-yield-input-title"
+            className="mt-1 text-xl font-semibold"
+          >
             {copy.input}
           </h2>
           {Object.keys(errors).length ? (
