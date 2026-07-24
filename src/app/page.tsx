@@ -4,7 +4,7 @@ import Link from "next/link";
 import { CalculatorCard } from "@/components/calculators/calculator-card";
 import { CalculatorSearch } from "@/components/calculators/calculator-search";
 import { buttonVariants } from "@/components/ui/button";
-import { publishedCalculators } from "@/config/calculators";
+import { publishedCalculators } from "@/config/published-calculators";
 import {
   JsonLdScript,
   createWebsiteStructuredData,

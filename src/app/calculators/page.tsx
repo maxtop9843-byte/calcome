@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { CalculatorCard } from "@/components/calculators/calculator-card";
-import { publishedCalculators } from "@/config/calculators";
+import { publishedCalculators } from "@/config/published-calculators";
 import { absoluteUrl } from "@/config/site";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { JsonLdScript } from "@/lib/seo/structured-data";

@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 import {
   publishedCalculators,
   type PublishedCalculator,
-} from "@/config/calculators";
+} from "@/config/published-calculators";
 import { absoluteUrl } from "@/config/site";
 
 const publicStaticPaths = [
@@ -16,10 +16,8 @@ const publicStaticPaths = [
 ] as const;
 
 export function calculatorSitemapEntries(
-  calculators: readonly Pick<
-    PublishedCalculator,
-    "href"
-  >[] = publishedCalculators,
+  calculators: readonly Pick<PublishedCalculator, "href">[] =
+    publishedCalculators,
 ): MetadataRoute.Sitemap {
   return calculators.flatMap(({ href }) => {
     const englishHref = href.replace(/^\/ko\//, "/en/");
